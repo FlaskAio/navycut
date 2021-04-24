@@ -1,16 +1,17 @@
 from navycut.core import app, models
 from pathlib import Path
 from os.path import abspath
+# from first_project.first_app import first_app
 
-_Navycut__basedir = Path(abspath(__file__)).parent.parent
+__basedir__ = Path(abspath(__file__)).parent.parent
 
-_Navycut__database = {
+__database__ = {
     "engine" : "sqlite3",
-    "database": _Navycut__basedir / "navycut.sqlite3"
+    "database": __basedir__ / "navycut.sqlite3"
 }
 
-_Navycut__secretkey = "most_secret_key"
+__secretkey__ = "most_secret_key"
 
-_Navycut__installedapp = [
-    
+__installedapp__ = [
+    "first_app.__init__", # should change to "first_app.__init__" to get the app.
 ]
