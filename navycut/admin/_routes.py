@@ -1,5 +1,6 @@
 
 from flask import request, render_template, Blueprint, url_for, redirect
+from flask_login import login_user
 from os.path import abspath
 from pathlib import Path
 from .model import BaseUser
@@ -20,7 +21,9 @@ def _admin_login():
         user = BaseUser.query.filter_by(username=username).first()
         if not user: return "Invalid username"
         if not check_password_hash(user.password, password): return "Invalid password"
-        return redirect(url_for('_routes._admin_login', next=request.url))
+        login_user(user)
+        return redirect('/admin')
+        # return redirect(url_for('_admin_bp._admin_login', next=request.url))
 
 @_admin_bp.route("/adduser")
 def add_user():
