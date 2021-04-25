@@ -1,5 +1,4 @@
-# from .first_project.config import app, models
-from . import settings
+import settings
 
 from navycut.command import command
 

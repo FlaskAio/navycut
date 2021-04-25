@@ -28,6 +28,11 @@ setup(
     ],
     extras_require={},
     python_requires=">=3.6,<4",
+    entry_points={
+        "console_scripts":[
+            "navycut=navycut.__main__:_main"
+        ]
+    },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",

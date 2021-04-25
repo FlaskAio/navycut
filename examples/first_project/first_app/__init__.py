@@ -1,4 +1,4 @@
-from navycut.core import AppInterface, app
+from navycut.core import SisterApp, app
 from .urls import url_patterns
 from .models import models
 
@@ -11,6 +11,6 @@ _config__dict = {
     "models" : models,
 }
 
-first_app = AppInterface(_config__dict)
+first_app = SisterApp(_config__dict)
 
-first_app.addUrlPattern(url_patterns)
+first_app.add_url_pattern(url_patterns)

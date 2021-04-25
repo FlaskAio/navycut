@@ -1,6 +1,7 @@
 from flask_script import prompt_bool, Manager
 from flask_migrate import Migrate, MigrateCommand
 from ..admin.model import BaseUser
+from ..utils._exec_cli import _create_boiler_app
 from werkzeug.security import generate_password_hash
 
 class Command:
@@ -54,6 +55,9 @@ class Command:
                     self.models.session.commit()
                     print("superuser created successfully")
             else: print("superuser creation canceled!")
+        @self.manager.command
+        def createapp(app_name):
+            _create_boiler_app(app_name)
 
     def run(self):
         self.manager.run()
