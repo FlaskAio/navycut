@@ -1,10 +1,10 @@
 import settings
 
-from navycut.command import command
+from navycut.command import Command
 
 settings.app.addConfig(settings)
 
-command.init(settings.app, settings.models)
+command = Command(settings)
 
 if __name__ == '__main__':
     command.run()

@@ -18,7 +18,7 @@ class MethodView(_MethodView):
         if not isinstance(___, dict): raise DataTypeMismatchError(___, "template rendering", "dict")
         if ___ is not None and isinstance( ___, dict):
             context.update(___)
-        if isinstance(template_one_or_list_or_str,list) and template_one_or_list_or_str.startswith("{") and template_one_or_list_or_str.endswith("}"):
+        if isinstance(template_one_or_list_or_str, str) and template_one_or_list_or_str.endswith(".html") or template_one_or_list_or_str.endswith(".htm"):
             return render_template_string(template_one_or_list_or_str, **context)
         else: return render_template(template_one_or_list_or_str, **context)
 

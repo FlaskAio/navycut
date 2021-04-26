@@ -9,7 +9,6 @@ class Console:
         def Info(message:str=None) -> str:
             def _print(message_) -> None:
                 print (_Colours.white+'[ '+_Colours.blue+_Colours.bright+'INFO'+_Colours.reset+_Colours.white+' ] '+_Colours.yellow+message_+_Colours.reset)
-            # _print(_message) if for _message in message.split("\n")
             if "\n" in message:
                 message_line_list:list = message.split("\n")
                 for _message in message_line_list: _print(_message)

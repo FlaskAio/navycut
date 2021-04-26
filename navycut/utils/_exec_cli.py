@@ -35,18 +35,19 @@ def _create_boiler_project(*wargs):
             with open(project_dir / boiler_file, 'w') as wb:
                 if boiler_file == 'settings.py':
                     settings_data = fb.read()
-                    settings_data=settings_data.replace(r"{{[__secretkey__]}}", generate_random_secret_key(53))
+                    #now replace the __secretkey__ with the real one at the new project directory.
+                    settings_data=settings_data.replace("__secretkey_____boiler_var", generate_random_secret_key(53))
                     wb.write(settings_data)
                 else: wb.write(fb.read())
-                Console.log.Info(f'Data from {boiler_file} successfully transferred to {project_dir}/{boiler_file}')
+                Console.log.Info(f'Data from {boilerplate_dir}/{boiler_file} successfully transferred to {project_dir}/{boiler_file}')
 
-def _create_boiler_app(app_name, *wargs):
-    if path.exists(app_name): 
-        Console.log.Error(f"A app already exists with the same name: {app_name}. Try some another name.")
-        raise DirectoryAlreadyExistsError(app_name)
-    mkdir (app_name)
-    Console.log.Info(f"Empty app folder created.\nProject name: {app_name}\nLocation: {str(app_name)}")
-    app_dir = Path(path.realpath(app_name))
+def _create_boiler_app(app_name, project_dir, *wargs):
+    app_dir = project_dir / app_name
+    if path.exists(app_dir): 
+        Console.log.Error(f"A app already exists with the same name: {app_name} at {project_dir}. Try some another name.")
+        raise DirectoryAlreadyExistsError(app_dir)
+    mkdir (app_dir)
+    Console.log.Info(f"Empty app folder named {app_name} created.\nProject name: {app_name}\nLocation: {str(app_dir)}")
     boilerplate_dir = __baseDir__ / 'boiler_create_app'
     Console.log.Info(r'Started writing the default boiler files for app')
     boilerplate_dir__files = listdir(boilerplate_dir)
@@ -56,7 +57,8 @@ def _create_boiler_app(app_name, *wargs):
             with open(app_dir / boiler_file, 'w') as wb:
                 if boiler_file == '__init__.py':
                     settings_data = fb.read()
-                    settings_data=settings_data.replace("['<import_name>']", app_name)
+                    #now replace the import_name with the real one at the new project directory.
+                    settings_data=settings_data.replace("import_name___boiler_var", app_name)
                     wb.write(settings_data)
                 else: wb.write(fb.read())
-                Console.log.Info(f'Data from {boiler_file} successfully transferred to {app_dir}/{boiler_file}')
+                Console.log.Info(f'Data from {boilerplate_dir}/{boiler_file} successfully transferred to {app_dir}/{boiler_file}')

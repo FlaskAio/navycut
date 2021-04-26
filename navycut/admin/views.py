@@ -5,7 +5,7 @@ from flask import redirect
 
 class SecureModelView(ModelView):
     def is_accessible(self):
-        return False
+        return current_user.is_authenticated
     def inaccessible_callback(self, name, **kwargs):
         return redirect('/admin/login')
 
