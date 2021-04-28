@@ -6,7 +6,7 @@ from ._routes import _admin_bp
 
 
 
-class NavykutAdmin:
+class NavycutAdmin:
     def __init__(self, app):
         self.app = app
         self.app.register_blueprint(_admin_bp)

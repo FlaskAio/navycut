@@ -13,12 +13,12 @@ _appConfig__default:dict = {
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 }
 
-class Navykut(Flask):
+class Navycut(Flask):
     def __init__(self, importName,
             models=None):
         self.importName = importName.lower()
         self.models = models
-        super(Navykut, self).__init__(self.importName)
+        super(Navycut, self).__init__(self.importName)
         for key, value in _appConfig__default.items(): self.config[key] = value
         if self.models: models.init_app(self)
 

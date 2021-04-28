@@ -1,5 +1,5 @@
-from navykut.urls import MethodView
-# from navykut.http import JsonResponse
+from navycut.urls import MethodView
+# from navycut.http import JsonResponse
 
 # write your views here.
 

@@ -1,4 +1,4 @@
-from navykut.core import models
+from navycut.core import models
 from datetime import datetime
 
 class Blog(models.Model):

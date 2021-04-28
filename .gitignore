@@ -64,8 +64,8 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Navykut stuff:
-navykut.sqlite3
+# Navycut stuff:
+navycut.sqlite3
 
 # Flask stuff:
 instance/

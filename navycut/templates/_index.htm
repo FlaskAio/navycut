@@ -14,13 +14,13 @@
                           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                         </svg> -->
                         <img src="https://i.ibb.co/cKqG0xY/icons8-eye.gif" height="50px", width="50px">
-                        <span class="ml-3 text-xl">Navykut</span>
+                        <span class="ml-3 text-xl">Navycut</span>
                       </a>
                       <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://thenavykut.com">Website</a>
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://docs.thenavykut.com">Documentation</a>
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://github.com/navykut/navykut">Github</a>
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://pypi.org/project/navykut">Pypi</a>
+                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://thenavycut.com">Website</a>
+                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://docs.thenavycut.com">Documentation</a>
+                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://github.com/navycut/navycut">Github</a>
+                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://pypi.org/project/navycut">Pypi</a>
                       </nav>
                       <!-- <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button
                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
@@ -31,7 +31,7 @@
                   </header>
             </div>
             <div id=intro>
-                <p style="font-family: 'Freckle Face', cursive;" class="text-center text-blue-900 uppercase text-6xl subpixel-antialiased font-bold py-4">Welcome to Navykut</p>
+                <p style="font-family: 'Freckle Face', cursive;" class="text-center text-blue-900 uppercase text-6xl subpixel-antialiased font-bold py-4">Welcome to Navycut</p>
                 <p id="intro__desc" class="text-center text-green-900 text-opacity-50 font-sans text-xl subpixel-antialiased font-semibold py-4"></p>
             </div>
             <div id=statistics>
@@ -176,7 +176,7 @@
         </div> -->
 
         <script type="text/javascript">
-        fetch("https://api.github.com/orgs/navykut/repos").then(req=>req.json()).then(body=>{
+        fetch("https://api.github.com/orgs/navycut/repos").then(req=>req.json()).then(body=>{
             const repo = body[0];
             document.getElementById("intro__desc").innerHTML = repo.description;
             document.getElementById("github__star").innerHTML = repo.watchers;

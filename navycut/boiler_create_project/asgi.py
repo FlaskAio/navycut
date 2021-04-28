@@ -1,5 +1,5 @@
 import settings
-from navykut.utils.server import create_asgi_app
+from navycut.utils.server import create_asgi_app
 
 
 # asynchronous server gateway interface

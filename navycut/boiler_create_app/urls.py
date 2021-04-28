@@ -1,4 +1,4 @@
-from navykut.urls import path
+from navycut.urls import path
 from .views import *
 
 url_patterns = [
