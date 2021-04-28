@@ -4,5 +4,5 @@ from navycut.urls import MethodView
 # write your views here.
 
 # class IndexView(MethodView):
-#     def get(Self):
+#     def get(self):
 #         return JsonResponse(message="Salve Mundi!")

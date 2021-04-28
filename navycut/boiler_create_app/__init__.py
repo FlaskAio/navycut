@@ -16,6 +16,7 @@ _config__dict = {
     "static_url_path" : "/import_name___boiler_var/static/",
     "models" : models,
     "views" : views,
+    "url_prefix" : "/import_name___boiler_var",
 }
 
 import_name___boiler_var = SisterApp(_config__dict)

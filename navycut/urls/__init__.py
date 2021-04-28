@@ -23,7 +23,14 @@ class MethodView(_MethodView):
                 return render_template_string(template_one_or_list_or_str, **context)
             else: return render_template(template_one_or_list_or_str, **context)
 
-def path(url, views, name=None):
-    if not url.startswith('/'): url += "/"
-    name = name or views.__name__
-    return (url, views, name)
+# def path(url, views, name=None):
+#     if not url.startswith('/'): url += "/"
+#     name = name or views.__name__
+#     return (url, views, name)
+
+class path:
+    def __init__(self, url:str, views, name=None):
+        if not url.startswith('/'): url += "/"
+        self.url = "/"+"url" if not url.startswith('/') else url
+        self.views = views
+        self.name = name or self.views.__name__

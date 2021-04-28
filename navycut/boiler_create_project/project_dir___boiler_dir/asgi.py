@@ -1,4 +1,4 @@
-import settings
+from .import settings
 from navycut.utils.server import create_asgi_app
 
 

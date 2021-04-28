@@ -1,4 +1,4 @@
-import settings
+from project_name___boiler_var import settings
 
 from navycut.command import Command
 

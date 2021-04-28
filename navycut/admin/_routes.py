@@ -9,7 +9,7 @@ from werkzeug.security import check_password_hash
 
 class _BaseIndexView(MethodView):
     def get(self):
-        return render_template("index.html")
+        return render_template("_index.html")
 
 _basedir = Path(abspath(__file__)).parent.parent
 

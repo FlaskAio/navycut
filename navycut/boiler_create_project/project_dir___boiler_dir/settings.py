@@ -9,10 +9,10 @@ from os.path import abspath
 # ____end of custom app importing
 
 #defining the base directory
-__basedir__ = Path(abspath(__file__)).parent
+__basedir__ = Path(abspath(__file__)).parent.parent
 
 #app debug state:
-__appdebug__ = False
+__appdebug__ = True
 
 #defining the base database configuration.
 __database__ = {

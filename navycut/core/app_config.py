@@ -56,7 +56,7 @@ class Navycut(Flask):
 
     def _registerApp(self, _appList:list):
         for app in _appList: 
-            self.register_blueprint(app, url_prefix="/"+str(app))
+            self.register_blueprint(app, url_prefix=app.url_prefix)
 
     def debugging(self,flag=False) -> None:
         self.debug = flag
@@ -75,6 +75,7 @@ class SisterApp(Blueprint):
         # self.models = None
         if arg_dict: self._models = arg_dict['models']
         if arg_dict: self._views = arg_dict['views']
+        self.url_prefix = arg_dict['url_prefix']
 
     @property
     def models(self):
@@ -86,8 +87,7 @@ class SisterApp(Blueprint):
     
     def add_url_pattern(self, pattern_list:list):
         for pattern in pattern_list:
-            url, view, name = pattern
-            self.add_url_rule(url, view_func=view.as_view(name), methods=['GET', 'PUT', 'DELETE', 'POST'])
+            self.add_url_rule(rule=pattern.url, view_func=pattern.views.as_view(pattern.name), methods=['GET', 'PUT', 'DELETE', 'POST'])
 
     def __repr__(self):
         return self.import_name
