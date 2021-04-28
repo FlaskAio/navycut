@@ -1,5 +1,5 @@
-from navycut import __version__ as version
-from navycut import __author__ as author
+from navykut import __version__ as version
+from navykut import __author__ as author
 
 from setuptools import setup,find_packages
 
@@ -9,16 +9,16 @@ with open("README.md", "r") as f:
 
 
 setup(
-    name="Navycut",
+    name="Navykut",
     version=version,
-    url="https://github.com/navycut/navycut",
+    url="https://github.com/navykut/navykut",
     license="MIT",
     author=author,
     author_email="aniketsarkar@yahoo.com",
     description="Fullstack web framework using flask",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    keywords=["flask", "django", "Navycut"],
+    keywords=["flask", "django", "Navykut"],
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -30,7 +30,7 @@ setup(
     python_requires=">=3.6,<4",
     entry_points={
         "console_scripts":[
-            "navycut=navycut.__main__:_main"
+            "navykut=navykut.__main__:_main"
         ]
     },
     classifiers=[

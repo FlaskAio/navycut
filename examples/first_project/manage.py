@@ -1,7 +1,7 @@
 # from .first_project.config import app, models
 from . import settings
 
-from navycut.command import command
+from navykut.command import command
 
 settings.app.addConfig(settings)
 

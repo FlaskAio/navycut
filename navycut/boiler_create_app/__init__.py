@@ -1,4 +1,4 @@
-from navycut.core import SisterApp
+from navykut.core import SisterApp
 from os.path import abspath
 from pathlib import Path
 

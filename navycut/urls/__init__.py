@@ -15,12 +15,13 @@ class MethodView(_MethodView):
     
     def render(self, template_one_or_list_or_str, ___:dict=None, **context):
         context = context
-        if not isinstance(___, dict): raise DataTypeMismatchError(___, "template rendering", "dict")
+        if ___ is not None and not isinstance(___, dict): raise DataTypeMismatchError(___, "template rendering", "dict")
         if ___ is not None and isinstance( ___, dict):
             context.update(___)
-        if isinstance(template_one_or_list_or_str, str) and template_one_or_list_or_str.endswith(".html") or template_one_or_list_or_str.endswith(".htm"):
-            return render_template_string(template_one_or_list_or_str, **context)
-        else: return render_template(template_one_or_list_or_str, **context)
+        if isinstance(template_one_or_list_or_str, str):
+            if not template_one_or_list_or_str.endswith(".html") and not template_one_or_list_or_str.endswith(".htm"):
+                return render_template_string(template_one_or_list_or_str, **context)
+            else: return render_template(template_one_or_list_or_str, **context)
 
 def path(url, views, name=None):
     if not url.startswith('/'): url += "/"

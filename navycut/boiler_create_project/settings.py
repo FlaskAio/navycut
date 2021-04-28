@@ -1,4 +1,4 @@
-from navycut.core import app, models
+from navykut.core import app, models
 from pathlib import Path
 from os.path import abspath
 
@@ -11,13 +11,16 @@ from os.path import abspath
 #defining the base directory
 __basedir__ = Path(abspath(__file__)).parent
 
+#app debug state:
+__appdebug__ = False
+
 #defining the base database configuration.
 __database__ = {
     "engine" : "sqlite3",
-    "database": __basedir__ / "navycut.sqlite3"
+    "database": __basedir__ / "navykut.sqlite3"
 }
 
-#defining the navycut app secret key
+#defining the navykut app secret key
 __secretkey__ = "__secretkey_____boiler_var" #should generate randomly at the time of creation.
 
 #default index view.

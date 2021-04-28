@@ -49,10 +49,11 @@ def _create_boiler_app(app_name, project_dir, *wargs):
     mkdir (app_dir)
     Console.log.Info(f"Empty app folder named {app_name} created.\nProject name: {app_name}\nLocation: {str(app_dir)}")
     boilerplate_dir = __baseDir__ / 'boiler_create_app'
-    Console.log.Info(r'Started writing the default boiler files for app')
+    Console.log.Info('Started writing the default boiler files for app')
     boilerplate_dir__files = listdir(boilerplate_dir)
     boilerplate_dir__files.remove("__pycache__") if "__pycache__" in boilerplate_dir__files else None
     for boiler_file in boilerplate_dir__files:
+        if path.isdir(boiler_file):pass
         with open(boilerplate_dir / boiler_file, 'r') as fb:
             with open(app_dir / boiler_file, 'w') as wb:
                 if boiler_file == '__init__.py':

@@ -1,4 +1,4 @@
-from navycut.core import models
+from navykut.core import models
 
 # create your models here: 
 

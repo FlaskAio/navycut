@@ -30,11 +30,11 @@ class Command:
                 print ("[+] models dropped successfully.") 
             else: print("[!] Service canceled")
         @self.manager.command
-        def runserver(port=None, host=None, debug=None):
+        def runserver(port=None, host=None):
             port = port or 8888
             host = host or '127.0.0.1'
-            debug = debug or False
-            self.settings.app.run(port=port, host=host, debug=debug)
+            # debug =  self.settings.app.debug or False
+            self.settings.app.run(port=port, host=host, debug=self.settings.app.debug)
         @self.manager.command
         def createsuperuser():
             name:str = input("enter admin name: ")

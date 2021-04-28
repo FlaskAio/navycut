@@ -1,4 +1,4 @@
-from navycut.core import app, models
+from navykut.core import app, models
 from pathlib import Path
 from os.path import abspath
 from . import first_app
@@ -8,7 +8,7 @@ __basedir__ = Path(abspath(__file__)).parent.parent
 
 __database__ = {
     "engine" : "sqlite3",
-    "database": __basedir__ / "navycut.sqlite3"
+    "database": __basedir__ / "navykut.sqlite3"
 }
 
 __secretkey__ = "most_secret_key"

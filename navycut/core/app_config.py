@@ -13,12 +13,12 @@ _appConfig__default:dict = {
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 }
 
-class Navycut(Flask):
+class Navykut(Flask):
     def __init__(self, importName,
             models=None):
         self.importName = importName.lower()
         self.models = models
-        super(Navycut, self).__init__(self.importName)
+        super(Navykut, self).__init__(self.importName)
         for key, value in _appConfig__default.items(): self.config[key] = value
         if self.models: models.init_app(self)
 
@@ -26,6 +26,9 @@ class Navycut(Flask):
         self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         self.config["BASE_DIR"] = settings.__basedir__
         self.config['SECRET_KEY'] = settings.__secretkey__
+        self.config['DEBUG'] = settings.__appdebug__
+        #configure the debug settings with the app instance:
+        self.debug = settings.__appdebug__
         #basic index page settings:
         self._configure_index_view(settings)
         #for database config: 
@@ -55,9 +58,8 @@ class Navycut(Flask):
         for app in _appList: 
             self.register_blueprint(app, url_prefix="/"+str(app))
 
-    def debugging(self,flag=False):
+    def debugging(self,flag=False) -> None:
         self.debug = flag
-        return True
 
     def __repr__(self):
         return self.importName

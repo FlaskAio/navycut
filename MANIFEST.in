@@ -1,5 +1,5 @@
-recursive-include navycut/templates *
-recursive-include navycut/boiler_create_project *
-recursive-include navycut/boiler_create_app *
+recursive-include navykut/templates *
+recursive-include navykut/boiler_create_project *
+recursive-include navykut/boiler_create_app *
 
-recursive-exclude navycut/examples *
+recursive-exclude navykut/examples *

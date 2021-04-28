@@ -1,6 +1,6 @@
 import settings
 
-from navycut.command import Command
+from navykut.command import Command
 
 settings.app.addConfig(settings)
 

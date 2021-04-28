@@ -1,4 +1,4 @@
-from navycut.core import SisterApp, app
+from navykut.core import SisterApp, app
 from .urls import url_patterns
 from .models import models
 
