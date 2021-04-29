@@ -57,7 +57,7 @@ def _create_boiler_project(*wargs):
                         wb.write(manage_data)
                     else: wb.write(fb.read())
                 Console.log.Info(f'Data from {boilerplate_dir / boiler_file} successfully transferred to {project_dir}/{boiler_file}')
-    Console.log.Success(f"{project_name} created successfully.")
+    Console.log.Success(f"project {project_name} created successfully.")
 
 def _create_boiler_app(app_name, project_dir, *wargs):
     app_dir = project_dir / app_name
@@ -88,4 +88,4 @@ def _create_boiler_app(app_name, project_dir, *wargs):
                         wb.write(settings_data)
                     else: wb.write(fb.read())
                 Console.log.Info(f'Data from {boilerplate_dir}/{boiler_file} successfully transferred to {app_dir}/{boiler_file}')
-    Console.log.Success(f"{app_name} created successfully.")
+    Console.log.Success(f"app {app_name} created successfully.")

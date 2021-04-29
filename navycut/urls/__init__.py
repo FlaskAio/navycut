@@ -2,6 +2,7 @@
 from flask.views import MethodView as _MethodView
 from flask import request, render_template, render_template_string
 from ..errors.misc import DataTypeMismatchError
+from flask import abort
 # from flask_restful import Api as _Api
 
 class MethodView(_MethodView):
@@ -9,6 +10,21 @@ class MethodView(_MethodView):
         super(MethodView, self).__init__(*wargs, **kwargs)
         self.request = request
     
+    def get(self, *args, **kwargs):
+        abort(405)
+
+    def put(self, *args, **kwargs):
+        abort(405)
+
+    def post(self, *args, **kwargs):
+        abort(405)
+
+    def delete(self, *args, **kwargs):
+        abort(405)
+
+    def head(self, *args, **kwargs):
+        abort(405)
+
     @property
     def query(self) -> dict:
         return self.request.args
@@ -23,14 +39,9 @@ class MethodView(_MethodView):
                 return render_template_string(template_one_or_list_or_str, **context)
             else: return render_template(template_one_or_list_or_str, **context)
 
-# def path(url, views, name=None):
-#     if not url.startswith('/'): url += "/"
-#     name = name or views.__name__
-#     return (url, views, name)
 
 class path:
     def __init__(self, url:str, views, name=None):
-        if not url.startswith('/'): url += "/"
-        self.url = "/"+"url" if not url.startswith('/') else url
+        self.url = "/"+url if not url.startswith('/') else url
         self.views = views
         self.name = name or self.views.__name__

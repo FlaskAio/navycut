@@ -19,6 +19,6 @@ _config__dict = {
     "url_prefix" : "/import_name___boiler_var",
 }
 
-import_name___boiler_var = SisterApp(_config__dict)
+app = SisterApp(_config__dict)
 
-import_name___boiler_var.add_url_pattern(url_patterns)
+app.add_url_pattern(url_patterns)

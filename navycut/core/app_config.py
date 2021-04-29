@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint
+from importlib import import_module
 from ..database.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
 from ..admin._routes import _BaseIndexView
 # from os.path import abspath
@@ -41,11 +42,14 @@ class Navycut(Flask):
 
     def _configure_index_view(self, settings):
         methods=['GET', 'PUT', 'DELETE', 'POST']
-        if settings.__indexview__ is None:
+        if settings.__defaultindex__ is not False and settings.__appdebug__ is not False:
             self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=methods)
-        else:
-            self.add_url_rule(rule="/", view_func=settings.__indexview__.as_view("index"), methods=methods)
-        pass
+        else: pass
+        # if settings.__indexview__ is None:
+        #     self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=methods)
+        # else:
+        #     self.add_url_rule(rule="/", view_func=settings.__indexview__.as_view("index"), methods=methods)
+        # pass
     
     def initIns(self, ins):
         ins.init_app(self)
@@ -54,8 +58,14 @@ class Navycut(Flask):
     def initmodels(self):
         self.init_app(self.models)
 
+    def _import_app(self, app:str):
+        try: app = import_module(app)
+        except AttributeError: raise AttributeError(f"{app} not found at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
+        return getattr(app, 'app')
+
     def _registerApp(self, _appList:list):
-        for app in _appList: 
+        for str_app in _appList: 
+            app = self._import_app(str_app)
             self.register_blueprint(app, url_prefix=app.url_prefix)
 
     def debugging(self,flag=False) -> None:
@@ -86,8 +96,8 @@ class SisterApp(Blueprint):
         return self._views
     
     def add_url_pattern(self, pattern_list:list):
-        for pattern in pattern_list:
-            self.add_url_rule(rule=pattern.url, view_func=pattern.views.as_view(pattern.name), methods=['GET', 'PUT', 'DELETE', 'POST'])
+        for url_path in pattern_list:
+            self.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=['GET','PUT', 'DELETE', 'POST', 'HEAD'])
 
     def __repr__(self):
         return self.import_name
