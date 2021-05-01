@@ -2,9 +2,10 @@ from os import path
 from pathlib import Path
 from flask_script import prompt_bool, Manager
 from flask_migrate import Migrate, MigrateCommand
-from ..admin.model import BaseUser
+from ..admin.site.models import User, Group
 from ..utils._exec_cli import _create_boiler_app
-from werkzeug.security import generate_password_hash
+from ..utils.security import create_password_hash
+from ..admin.site.models import _insert_intial_data
 
 class Command:
     def __init__(self, settings=None):
@@ -29,12 +30,19 @@ class Command:
                 with self.settings.app.app_context(): self.settings.models.drop_all()
                 print ("[+] models dropped successfully.") 
             else: print("[!] Service canceled")
+        
         @self.manager.command
         def runserver(port=None, host=None):
             port = port or 8888
             host = host or '127.0.0.1'
             # debug =  self.settings.app.debug or False
             self.settings.app.run(port=port, host=host, debug=self.settings.app.debug)
+        
+        @self.manager.command
+        def makemigrations():
+            _insert_intial_data()
+            pass
+        
         @self.manager.command
         def createsuperuser():
             name:str = input("enter admin name: ")
@@ -49,9 +57,11 @@ class Command:
                 else: break
             if prompt_bool( "Are you sure to create superuser using inserted data"):
                 with self.settings.app.app_context():
-                    newAdmin = BaseUser(name=name, email=email, username=username, 
-                                        password=generate_password_hash(password))
-                    self.settings.models.session.add(newAdmin)
+                    newSAdmin = User(first_name=name.rsplit(" ")[0], last_name=name.rsplit(" ")[1], email=email, 
+                            username=username, password=create_password_hash(password))
+                    group = Group.query.filter_by(name='super_admin').first()
+                    newSAdmin.groups.append(group)
+                    self.settings.models.session.add(newSAdmin)
                     self.settings.models.session.commit()
                     print("superuser created successfully")
             else: print("superuser creation canceled!")
@@ -65,5 +75,8 @@ class Command:
     
     def add_command(self, name, command):
         self.manager.add_command(name, command)
+
+
+
 
 _Command = Command()

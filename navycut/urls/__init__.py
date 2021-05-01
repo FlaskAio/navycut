@@ -1,28 +1,45 @@
 # from flask_restful import  Resource
 from flask.views import MethodView as _MethodView
-from flask import request, render_template, render_template_string
+from flask import request, render_template, render_template_string, session
 from ..errors.misc import DataTypeMismatchError
 from flask import abort
+from ..datastructures import NCObject
 # from flask_restful import Api as _Api
 
 class MethodView(_MethodView):
+    """
+    Navycut default view class to provide the interactive service and features.
+    Simply import this class and extend it eith your view class.example: 
+
+    from navycut.urls import MethodView
+    from navycut.http import JsonResponse
+
+    class IndexView(MethodView):
+        return JsonResponse(message="Salve Mundi!")
+    """
     def __init__(self, *wargs, **kwargs) -> None:
         super(MethodView, self).__init__(*wargs, **kwargs)
         self.request = request
+        # self.session = NCObject(dict(session))
     
     def get(self, *args, **kwargs):
+        """simply override this function for get request"""
         abort(405)
 
     def put(self, *args, **kwargs):
+        """simply override this function for put request"""
         abort(405)
 
     def post(self, *args, **kwargs):
+        """simply override this function for post request"""
         abort(405)
 
     def delete(self, *args, **kwargs):
+        """simply override this function for delete request"""
         abort(405)
 
     def head(self, *args, **kwargs):
+        """simply override this function for head request"""
         abort(405)
 
     @property

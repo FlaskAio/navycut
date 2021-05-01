@@ -5,6 +5,7 @@ from pathlib import Path
 from .urls import url_patterns
 from . import models
 from . import views
+from . import admin
 
 __basedir__ = Path(abspath(__file__)).parent
 
@@ -16,6 +17,7 @@ _config__dict = {
     "static_url_path" : "/import_name___boiler_var/static/",
     "models" : models,
     "views" : views,
+    "admin" : admin,
     "url_prefix" : "/import_name___boiler_var",
 }
 

@@ -1,11 +1,11 @@
 from flask import Flask, Blueprint
+from navycut.urls import MethodView
 from importlib import import_module
 from ..database.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
-from ..admin._routes import _BaseIndexView
-# from os.path import abspath
-# from pathlib import Path
+from os.path import abspath
+from pathlib import Path
 
-# _basedir = Path(abspath(__file__)).parent.parent
+_basedir = Path(abspath(__file__)).parent.parent
 
 
 _appConfig__default:dict = {
@@ -14,12 +14,16 @@ _appConfig__default:dict = {
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 }
 
+class _BaseIndexView(MethodView):
+    def get(self):
+        return self.render("_index.html")
+
 class Navycut(Flask):
     def __init__(self, importName,
             models=None):
         self.importName = importName.lower()
-        self.models = models
-        super(Navycut, self).__init__(self.importName)
+        self.models = models 
+        super(Navycut, self).__init__(self.importName, template_folder=_basedir / 'templates')
         for key, value in _appConfig__default.items(): self.config[key] = value
         if self.models: models.init_app(self)
 
