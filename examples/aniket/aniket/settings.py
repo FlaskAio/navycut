@@ -2,7 +2,11 @@ from navycut.core import app, models
 from pathlib import Path
 from os.path import abspath
 
+# import your custom app here
 
+# from first_app import first_app
+
+# ____end of custom app importing
 
 #defining the base directory
 __basedir__ = Path(abspath(__file__)).parent.parent
@@ -17,7 +21,7 @@ __database__ = {
 }
 
 #defining the navycut app secret key
-__secretkey__ = "__secretkey_____boiler_var" #should generate randomly at the time of creation.
+__secretkey__ = "DHXWXZ@iy}?p?Ls:v>dynWO2z1WLWetd41HZ0WB9E0p[^3]Acp]E^" #should generate randomly at the time of creation.
 
 #default index view.
 __indexview__ = None # None means seted to default. change it with your any app's view function.
@@ -27,9 +31,6 @@ __defaultindex__ = True # if True": it will show the default index page, to use 
 
 #available installed app add here to bloom.
 __installedapp__ = [
+    "blogs"
     #first_app, # should change to first_app to get the app.
-]
-
-__allowedhost__ = [ # 
-    '127.0.0.1', 
 ]
