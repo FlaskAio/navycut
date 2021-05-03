@@ -8,11 +8,12 @@ from flask import (request,
 from ..errors.misc import DataTypeMismatchError
 from flask import abort
 from ..datastructures import NCObject
+# from flask import current_app, Flask
 # from flask_restful import Api as _Api
 
 # class _Request(Request):
 #     def __init__(self):
-#         super(_Request, self).__init__("flask.Flask.request_class")
+#         super(_Request, self).__init__(current_app.config)
 
 class MethodView(_MethodView):
     """

@@ -3,7 +3,6 @@ from pathlib import Path
 from os.path import abspath
 
 
-
 #defining the base directory
 __basedir__ = Path(abspath(__file__)).parent.parent
 
