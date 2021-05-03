@@ -2,17 +2,16 @@ from os import path
 from pathlib import Path
 from flask_script import prompt_bool, Manager
 from flask_migrate import Migrate, MigrateCommand
-from ..admin.site.models import User, Group
+from ..admin.site.models import User, Group, _insert_intial_data
 from ..utils._exec_cli import _create_boiler_app
 from ..utils.security import create_password_hash
-from ..admin.site.models import _insert_intial_data
 
 class Command:
     def __init__(self, settings=None):
         self.settings = settings
         if self.settings is not None:
             self.manager = Manager(self.settings.app)
-            Migrate(self.settings.app, self.settings.models)
+            Migrate(self.settings.app, self.settings.db)
             self._playAll()
 
     def init(self, settings):

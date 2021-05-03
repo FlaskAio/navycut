@@ -8,9 +8,13 @@ from .models import Blog
 class IndexView(MethodView):
     # @login_required
     def get(self):
-        # blogs = Blog.query.all()
-        blogs = [blog.to_dict() for blog in Blog.all()]
-        return JsonResponse(blogs)
+        # # blogs = Blog.query.all()
+        # blogs = [blog.to_dict() for blog in Blog.all()]
+        # return JsonResponse(blogs)
+        blog = Blog.query.filter_by(name="this is the first blog").first()
+        # print ("Aniket")
+        # print (blog.is_exists)
+        return blog.to_dict()
 
     def post(self):
         blog = Blog(name=self.json.name, subject=self.json.subject, body=self.json.body)

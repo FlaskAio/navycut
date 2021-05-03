@@ -1,40 +1,40 @@
 from flask_login import UserMixin
 from datetime import datetime
-from navycut.models import models
+from navycut.orm import db
 from navycut.utils.security import create_password_hash
 from navycut.utils.logger import Console
 
-# class Permission(models.Model):
-#     id = models.Column(models.Integer, primary_key=True, unique=True, nullable=False)
-#     type = models.Column(models.String(50), nullable=False, unique=True)
+# class Permission(db.Model):
+#     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
+#     type = db.Column(db.String(50), nullable=False, unique=True)
 
 
-class Group(models.Model):
+class Group(db.Model):
     """default group model for users."""
-    id = models.Column(models.Integer, primary_key=True, unique=True, nullable=False)
-    name = models.Column(models.String(255), nullable=False, unique=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
+    name = db.Column(db.String(255), nullable=False, unique=True)
 
-group_user_con = models.Table("group_user_con", 
-                    models.Column('user_id', models.Integer, models.ForeignKey("user.id")),
-                    models.Column('zone_id', models.Integer, models.ForeignKey("group.id"))
+group_user_con = db.Table("group_user_con", 
+                    db.Column('user_id', db.Integer, db.ForeignKey("user.id")),
+                    db.Column('zone_id', db.Integer, db.ForeignKey("group.id"))
                     )
 
-class User(models.Model, UserMixin):
+class User(db.Model, UserMixin):
     """
     The default user model.
     """
-    id = models.Column(models.Integer, primary_key=True, unique=True, nullable=False)
-    first_name = models.Column(models.String(255), nullable=False)
-    last_name = models.Column(models.String(255), nullable=True)
-    email = models.Column(models.String(255), nullable=True)
-    username = models.Column(models.String(255), nullable=False, unique=True)
-    password = models.Column(models.String(100), nullable=False)
-    is_staff = models.Column(models.Boolean, default=False)
-    is_superuser = models.Column(models.Boolean, default=True)
-    last_login = models.Column(models.DateTime, default=None, nullable=True)
-    is_active = models.Column(models.Boolean, default=True)
-    groups = models.relationship("Group", secondary=group_user_con, backref=models.backref("users", lazy='dynamic'))
-    date_joined = models.Column(models.DateTime, default=datetime.now)
+    id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
+    first_name = db.Column(db.String(255), nullable=False)
+    last_name = db.Column(db.String(255), nullable=True)
+    email = db.Column(db.String(255), nullable=True)
+    username = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+    is_staff = db.Column(db.Boolean, default=False)
+    is_superuser = db.Column(db.Boolean, default=True)
+    last_login = db.Column(db.DateTime, default=None, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
+    groups = db.relationship("Group", secondary=group_user_con, backref=db.backref("users", lazy='dynamic'))
+    date_joined = db.Column(db.DateTime, default=datetime.now)
 
     def set_password(self, password:str):
         """
@@ -43,7 +43,7 @@ class User(models.Model, UserMixin):
         """
         password_hash:str = create_password_hash(password)
         self.password = password_hash
-        try: models.session.commit()
+        try: db.session.commit()
         except Exception: raise Exception
 
     def disable_user(self) -> bool:
@@ -72,6 +72,6 @@ def _insert_intial_data():
     available_groups = ['super_admin','admin', 'staff', 'customer']
     for group in available_groups:
         grp=Group(name=group)
-        models.session.add(grp)
-    models.session.commit()
+        db.session.add(grp)
+    db.session.commit()
     Console.log.Success("initial data for admin privilage added successfully.")

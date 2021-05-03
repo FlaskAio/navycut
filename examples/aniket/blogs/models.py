@@ -17,14 +17,14 @@ class Blog(models.Model):
     body = models.Column(models.String(), nullable=False)
     is_active = models.Column(models.Boolean, default=True)
 
-    def to_dict(self):
-        return {
-            "id":self.id,
-            "name":self.name,
-            "subject":self.subject,
-            "body":self.body,
-            "is_active":self.is_active,
-        }
+    # def to_dict(self):
+    #     return {
+    #         "id":self.id,
+    #         "name":self.name,
+    #         "subject":self.subject,
+    #         "body":self.body,
+    #         "is_active":self.is_active,
+    #     }
 
     def to_ncobject(self):
         return NCObject(
