@@ -55,6 +55,10 @@ def _create_boiler_project(*wargs):
                         #now replace the __secretkey__ with the real one at the new project directory.
                         manage_data=manage_data.replace("project_name___boiler_var", project_name)
                         wb.write(manage_data)
+                    elif boiler_file == 'name.py':
+                        name_data = fb.read()
+                        name_data = name_data.replace("project_name___boiler_var", project_name)
+                        wb.write(name_data)
                     else: wb.write(fb.read())
                 Console.log.Info(f'Data from {boilerplate_dir / boiler_file} successfully transferred to {project_dir}/{boiler_file}')
     Console.log.Success(f"project {project_name} created successfully.")

@@ -5,28 +5,27 @@ from flask_migrate import Migrate, MigrateCommand
 from ..admin.site.models import User, Group, _insert_intial_data
 from ..utils._exec_cli import _create_boiler_app
 from ..utils.security import create_password_hash
+from ..core import app
+from ..orm.db import db
 
 class Command:
-    def __init__(self, settings=None):
-        self.settings = settings
-        if self.settings is not None:
-            self.manager = Manager(self.settings.app)
-            Migrate(self.settings.app, self.settings.db)
-            self._playAll()
-
-    def init(self, settings):
-        self.settings = settings
-        self.manager = Manager(self.settings.app)
-        Migrate(self.settings.app, self.settings.models)
+    def __init__(self):
+        self.manager = Manager(app)
+        Migrate(app, db)
         self._playAll()
 
+    # def init(self, settings):
+    #     self.settings = settings
+    #     self.manager = Manager(app)
+    #     Migrate(app, db)
+    #     self._playAll()
+
     def _playAll(self):
-        self.manager.add_command('models', MigrateCommand)
         self.manager.add_command('db',MigrateCommand)
         @self.manager.command
-        def drop_models():
+        def drop_db():
             if prompt_bool( "Are you sure you want to lose all your data"):
-                with self.settings.app.app_context(): self.settings.models.drop_all()
+                with app.app_context(): db.drop_all()
                 print ("[+] models dropped successfully.") 
             else: print("[!] Service canceled")
         
@@ -34,8 +33,8 @@ class Command:
         def runserver(port=None, host=None):
             port = port or 8888
             host = host or '127.0.0.1'
-            # debug =  self.settings.app.debug or False
-            self.settings.app.run(port=port, host=host, debug=self.settings.app.debug)
+            # debug =  app.debug or False
+            app.run(port=port, host=host, debug=app.debug)
         
         @self.manager.command
         def makemigrations():
@@ -55,18 +54,17 @@ class Command:
                     continue
                 else: break
             if prompt_bool( "Are you sure to create superuser using inserted data"):
-                with self.settings.app.app_context():
-                    newSAdmin = User(first_name=name.rsplit(" ")[0], last_name=name.rsplit(" ")[1], email=email, 
+                with app.app_context():
+                    new_admin = User(first_name=name.rsplit(" ")[0], last_name=name.rsplit(" ")[1], email=email, 
                             username=username, password=create_password_hash(password))
                     group = Group.query.filter_by(name='super_admin').first()
-                    newSAdmin.groups.append(group)
-                    self.settings.models.session.add(newSAdmin)
-                    self.settings.models.session.commit()
+                    new_admin.groups.append(group)
+                    new_admin.save()
                     print("superuser created successfully")
             else: print("superuser creation canceled!")
         @self.manager.command
         def createapp(app_name):
-            project_dir = Path(path.abspath(self.settings.app.config.get('BASE_DIR')))
+            project_dir = Path(path.abspath(app.config.get('BASE_DIR')))
             _create_boiler_app(app_name, project_dir)
 
     def run(self):

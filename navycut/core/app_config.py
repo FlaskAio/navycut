@@ -1,9 +1,12 @@
 from flask import Flask, Blueprint
 from navycut.urls import MethodView
 from importlib import import_module
-from ..orm._fod.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
+from navycut.orm._fod.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
 from os.path import abspath
 from pathlib import Path
+from ..admin.site.auth import login_manager
+from ..orm.db import db
+from ..admin import admin
 
 _basedir = Path(abspath(__file__)).parent.parent
 
@@ -19,15 +22,16 @@ class _BaseIndexView(MethodView):
         return self.render("_index.html")
 
 class Navycut(Flask):
-    def __init__(self, importName,
-            models=None):
+    def __init__(self, importName):
         self.importName = importName.lower()
-        self.models = models 
+        self.admin = admin
+        self.db = db
         super(Navycut, self).__init__(self.importName, template_folder=_basedir / 'templates')
-        for key, value in _appConfig__default.items(): self.config[key] = value
-        if self.models: models.init_app(self)
+        # for key, value in _appConfig__default.items(): self.config[key] = value
+        self._add_config(self._import_settings_from_project_dir())
+        self.db.init_app(self)
 
-    def addConfig(self, settings) -> None:
+    def _add_config(self, settings) -> None:
         self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         self.config["BASE_DIR"] = settings.__basedir__
         self.config['SECRET_KEY'] = settings.__secretkey__
@@ -35,19 +39,21 @@ class Navycut(Flask):
         #configure the debug settings with the app instance:
         self.debug = settings.__appdebug__
         #basic index page settings:
-        self._configure_index_view(settings)
+        
         #for database config: 
         if settings.__database__.get('engine').lower() == "sqlite" or "sqlite3":
             self.config['SQLALCHEMY_DATABASE_URI'] = _SQLITE_ENGINE(settings.__database__.get('database'))
         elif settings.__database__.get('engine').lower() == "mysql":
             self.config['SQLALCHEMY_DATABASE_URI'] = _MYSQL_ENGINE(settings.__database__.get('database'))
         #for custom app config:
+        self._configure_default_login_system()
+        self._configure_index_view(settings)
+        self._configure_default_admin()
         self._registerApp(settings.__installedapp__)
 
     def _configure_index_view(self, settings):
-        methods=['GET', 'PUT', 'DELETE', 'POST']
         if settings.__defaultindex__ is not False and settings.__appdebug__ is not False:
-            self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=methods)
+            self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
         else: pass
         # if settings.__indexview__ is None:
         #     self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=methods)
@@ -55,22 +61,37 @@ class Navycut(Flask):
         #     self.add_url_rule(rule="/", view_func=settings.__indexview__.as_view("index"), methods=methods)
         # pass
     
+    def _configure_default_login_system(self) -> None:
+        login_manager.init_app(self)
+
+    def _configure_default_admin(self) ->None:
+        self.admin.init_app(self)
+
     def initIns(self, ins):
         ins.init_app(self)
         return True
 
-    def initmodels(self):
-        self.init_app(self.models)
+    # def initdb(self):
+    #     self.init_app(db)
 
     def _import_app(self, app:str):
         try: app = import_module(app)
-        except AttributeError: raise AttributeError(f"{app} not found at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
+        except AttributeError: raise AttributeError(f"{app} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
         return getattr(app, 'app')
 
     def _registerApp(self, _appList:list):
         for str_app in _appList: 
             app = self._import_app(str_app)
             self.register_blueprint(app, url_prefix=app.url_prefix)
+
+    def _get_project_dir(self) -> Path:
+        return Path(abspath(import_module('name').__file__)).parent
+
+    def _get_project_name(self) -> str: return str(self._get_project_dir()).rsplit("/", 1)[1]
+
+    def _import_settings_from_project_dir(self) -> object:
+        settings = import_module(f"{self._get_project_name()}.settings")
+        return settings
 
     def debugging(self,flag=False) -> None:
         self.debug = flag
@@ -86,22 +107,16 @@ class SisterApp(Blueprint):
                                         static_folder=str(arg_dict['static_folder']),
                                         static_url_path=str(arg_dict['static_url_path']),
                                         *wargs, **kwargs)
-        # self.models = None
-        if arg_dict: self._models = arg_dict['models']
-        if arg_dict: self._views = arg_dict['views']
         self.url_prefix = arg_dict['url_prefix']
-
-    @property
-    def models(self):
-        return self._models
-    
-    @property
-    def views(self):
-        return self._views
+        self._name = str(arg_dict['import_name'])
     
     def add_url_pattern(self, pattern_list:list):
         for url_path in pattern_list:
             self.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=['GET','PUT', 'DELETE', 'POST', 'HEAD'])
+
+    def import_app_features(self) -> None:
+        import_module(f"{self._name}.models", package=None)
+        import_module(f"{self._name}.admin", package=None)
 
     def __repr__(self):
         return self.import_name

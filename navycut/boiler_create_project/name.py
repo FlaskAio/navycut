@@ -1,0 +1,1 @@
+__projectname__ = "project_name___boiler_var"

@@ -1,5 +1,3 @@
-from navycut.core import app
-from navycut.orm import db
 from pathlib import Path
 from os.path import abspath
 

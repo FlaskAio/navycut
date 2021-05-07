@@ -1,6 +1,10 @@
-from . import settings
+"""
+need to be added some special features to make this work.
+"""
 
-settings.app.addConfig(settings)
-settings.app.debugging(False)
+# from . import settings
 
-application = settings.app
+# settings.app.add_config(settings)
+# settings.app.debugging(False)
+
+# application = settings.app

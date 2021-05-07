@@ -1,10 +1,4 @@
-from project_name___boiler_var import settings
-
-from navycut.command import Command
-
-settings.app.addConfig(settings)
-
-command = Command(settings)
-
 if __name__ == '__main__':
+    from navycut.command import Command
+    command = Command()
     command.run()

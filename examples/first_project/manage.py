@@ -3,7 +3,7 @@ from . import settings
 
 from navycut.command import command
 
-settings.app.addConfig(settings)
+settings.app.add_config(settings)
 
 command.init(settings.app, settings.models)
 

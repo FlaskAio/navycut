@@ -12,6 +12,7 @@ from ..datastructures import NCObject
 # from flask_restful import Api as _Api
 
 # class _Request(Request):
+# here I can use the current_app features.
 #     def __init__(self):
 #         super(_Request, self).__init__(current_app.config)
 

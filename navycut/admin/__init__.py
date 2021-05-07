@@ -1,12 +1,12 @@
-from flask import redirect
+from flask import redirect, current_app
 from flask_login import current_user
 from flask_admin import Admin
-# from flask_admin.contrib.sqla import ModelView
 from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from ..urls import MethodView
-from .site.auth import login_manager, login_user
+from .site.auth import login_user
 from .site.models import *
+from navycut.orm import db
 from ..utils.security import check_password_hash
 # from .views import NavAdminIndexView
 # from .model import BaseUser
@@ -32,18 +32,35 @@ class _AdminLoginView(MethodView):
 
 
 class NavycutAdmin(Admin):
-    def __init__(self, app):
+    # def __init__(self, app=None):
+    #     if app is not None: self.init_app(app)
+    #     else: super(NavycutAdmin, self).__init__(self.app, template_mode="bootstrap4", index_view=_NavAdminIndexView())
+
+    def init_app(self, app):
         self.app = app
-        login_manager.init_app(self.app)
         self._add_admin_login_view()
         super(NavycutAdmin, self).__init__(self.app, template_mode="bootstrap4", index_view=_NavAdminIndexView())
+    
+    # def _add_view(self, model):
+    #     current_app.admin.rm(model)
+
+    # def register_model(self, model):
+    #     with self.app.app_context():
+    #         self._add_view(model)
 
     def register_model(self,model):
         """
         register the app specific model with the admin
         :param model: specific model to register.
         """
-        self.add_view(ModelView(model, self.app.models.session))
+        # with self.app.app_context:
+        self.add_view(ModelView(model, db.session))
 
     def _add_admin_login_view(self):
         self.app.add_url_rule('/admin/login', view_func=_AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
+
+admin:NavycutAdmin = NavycutAdmin()
+
+from flask import current_app
+def rm(model):
+    pass
