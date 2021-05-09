@@ -1,10 +1,10 @@
-"""
-need to be added some special features to make this work.
-"""
+from navycut.utils.server import create_wsgi_app
 
-# from . import settings
 
-# settings.app.add_config(settings)
-# settings.app.debugging(False)
+# Web server gateway interface
+# use gunicorn wsgi server to run this app
 
-# application = settings.app
+#define your default settings file here:
+settings_file = "project_name___boiler_var.settings"
+
+application = create_wsgi_app(settings_file)

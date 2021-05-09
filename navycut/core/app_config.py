@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint
+from flask_migrate import Migrate
 from navycut.urls import MethodView
 from importlib import import_module
 from navycut.orm._fod.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
@@ -10,69 +11,51 @@ from ..admin import admin
 
 _basedir = Path(abspath(__file__)).parent.parent
 
-
-_appConfig__default:dict = {
-    'SECRET_KEY': "b40a0e070c1519495d6540676cda7e3f22c0488e64af8e89a4222f77b3b7224a",
-    'SQLALCHEMY_DATABASE_URI' : "",
-    'SQLALCHEMY_TRACK_MODIFICATIONS': False,
-}
-
 class _BaseIndexView(MethodView):
     def get(self):
         return self.render("_index.html")
 
 class Navycut(Flask):
-    def __init__(self, importName):
-        self.importName = importName.lower()
-        self.admin = admin
-        self.db = db
-        super(Navycut, self).__init__(self.importName, template_folder=_basedir / 'templates')
-        # for key, value in _appConfig__default.items(): self.config[key] = value
-        self._add_config(self._import_settings_from_project_dir())
-        self.db.init_app(self)
+    def __init__(self, settings:object=None):
+        super(Navycut, self).__init__(__name__, 
+                    template_folder=_basedir / 'templates',
+                    static_folder=str(_basedir / "static"),
+                    static_url_path="/static")
+        self.settings = settings
 
     def _add_config(self, settings) -> None:
+        self.settings = settings
+        self.import_name = settings.IMPORT_NAME
+        self.project_name = settings.PROJECT_NAME
         self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-        self.config["BASE_DIR"] = settings.__basedir__
-        self.config['SECRET_KEY'] = settings.__secretkey__
-        self.config['DEBUG'] = settings.__appdebug__
-        #configure the debug settings with the app instance:
-        self.debug = settings.__appdebug__
-        #basic index page settings:
-        
-        #for database config: 
-        if settings.__database__.get('engine').lower() == "sqlite" or "sqlite3":
-            self.config['SQLALCHEMY_DATABASE_URI'] = _SQLITE_ENGINE(settings.__database__.get('database'))
-        elif settings.__database__.get('engine').lower() == "mysql":
-            self.config['SQLALCHEMY_DATABASE_URI'] = _MYSQL_ENGINE(settings.__database__.get('database'))
-        #for custom app config:
-        self._configure_default_login_system()
-        self._configure_index_view(settings)
-        self._configure_default_admin()
-        self._registerApp(settings.__installedapp__)
+        self.config["BASE_DIR"] = settings.BASE_DIR
+        self.config['SECRET_KEY'] = settings.SECRET_KEY
+        self.config['DEBUG'] = settings.DEBUG
+        self.debug = settings.DEBUG        
+        if settings.DATABASE.get('engine').lower() == "sqlite" or "sqlite3":
+            self.config['SQLALCHEMY_DATABASE_URI'] = _SQLITE_ENGINE(settings.DATABASE.get('database'))
+        elif settings.DATABASE.get('engine').lower() == "mysql":
+            self.config['SQLALCHEMY_DATABASE_URI'] = _MYSQL_ENGINE(settings.DATABASE.get('database'))
+        self._configure_default_index()
+    
+    def _configure_core_features(self):
+        #add all the core features of navycut app here.
+        self.initIns(db)
+        self.initIns(login_manager)
+        self.initIns(admin)
+        Migrate(self, db)
 
-    def _configure_index_view(self, settings):
-        if settings.__defaultindex__ is not False and settings.__appdebug__ is not False:
+    def _perform_app_registration(self):
+        self._registerApp(self.settings.INSTALLED_APPS)
+
+    def _configure_default_index(self):
+        if self.settings.DEFAULT_INDEX is not False and self.settings.DEBUG is not False:
             self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
         else: pass
-        # if settings.__indexview__ is None:
-        #     self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=methods)
-        # else:
-        #     self.add_url_rule(rule="/", view_func=settings.__indexview__.as_view("index"), methods=methods)
-        # pass
     
-    def _configure_default_login_system(self) -> None:
-        login_manager.init_app(self)
-
-    def _configure_default_admin(self) ->None:
-        self.admin.init_app(self)
-
-    def initIns(self, ins):
+    def initIns(self, ins) -> bool:
         ins.init_app(self)
         return True
-
-    # def initdb(self):
-    #     self.init_app(db)
 
     def _import_app(self, app:str):
         try: app = import_module(app)
@@ -81,23 +64,29 @@ class Navycut(Flask):
 
     def _registerApp(self, _appList:list):
         for str_app in _appList: 
-            app = self._import_app(str_app)
+            try: app = self._import_app(f"{self.project_name}.{str_app}")
+            except: app = self._import_app(str_app)
             self.register_blueprint(app, url_prefix=app.url_prefix)
 
-    def _get_project_dir(self) -> Path:
-        return Path(abspath(import_module('name').__file__)).parent
-
-    def _get_project_name(self) -> str: return str(self._get_project_dir()).rsplit("/", 1)[1]
 
     def _import_settings_from_project_dir(self) -> object:
-        settings = import_module(f"{self._get_project_name()}.settings")
-        return settings
+        try: 
+            settings = import_module('settings')
+            return settings
+        except Exception: 
+            try:
+                name = import_module('name').__file__
+                proj_dir =  Path(abspath(name)).parent
+                settings = import_module(f'{str(proj_dir).rsplit("/", 1)[1]}.settings')
+                return settings
+            except ModuleNotFoundError: raise AttributeError("neither name.py nor settings.py found.")
+        
 
     def debugging(self,flag=False) -> None:
         self.debug = flag
 
     def __repr__(self):
-        return self.importName
+        return self.import_name
 
 class SisterApp(Blueprint):
     def __init__(self, arg_dict:dict, *wargs, **kwargs):

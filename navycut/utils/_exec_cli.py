@@ -1,7 +1,7 @@
 from os import mkdir, path, listdir
 from pathlib import Path
 from sys import argv
-from .logger import Console
+from .console import Console
 from .tools import generate_random_secret_key
 from ..errors.misc import InsufficientArgumentsError, DirectoryAlreadyExistsError
 
@@ -43,8 +43,12 @@ def _create_boiler_project(*wargs):
                         if bff == 'settings.py':
                             settings_data = bfffb.read()
                             #now replace the __secretkey__ with the real one at the new project directory.
-                            settings_data=settings_data.replace("__secretkey_____boiler_var", generate_random_secret_key(53))
+                            settings_data=settings_data.replace("__secretkey_____boiler_var", generate_random_secret_key(53)).replace("project_name___boiler_var", project_name)
                             bffwb.write(settings_data)
+                        elif bff == 'wsgi.py' or bff == "asgi.py":
+                            wsgi_data = bfffb.read()
+                            wsgi_data = wsgi_data.replace("project_name___boiler_var", project_name)
+                            bffwb.write(wsgi_data)
                         else: bffwb.write(bfffb.read())
                 Console.log.Info(f'data from {boilerplate_dir / boiler_file / bff} successfully transfered to {project_dir / project_name / bff}')
         else:

@@ -40,27 +40,28 @@ class NavycutAdmin(Admin):
         self.app = app
         self._add_admin_login_view()
         super(NavycutAdmin, self).__init__(self.app, template_mode="bootstrap4", index_view=_NavAdminIndexView())
-    
+        self._register_users_model()
     # def _add_view(self, model):
     #     current_app.admin.rm(model)
 
     # def register_model(self, model):
     #     with self.app.app_context():
     #         self._add_view(model)
+    def _register_users_model(self):
+        self.register_model(User, category="Users")
+        self.register_model(Group, category="Users")
 
-    def register_model(self,model):
+    def register_model(self,model, category=None):
         """
         register the app specific model with the admin
         :param model: specific model to register.
         """
         # with self.app.app_context:
-        self.add_view(ModelView(model, db.session))
+        self.add_view(ModelView(model, db.session, category=category))
 
     def _add_admin_login_view(self):
         self.app.add_url_rule('/admin/login', view_func=_AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
 
 admin:NavycutAdmin = NavycutAdmin()
-
-from flask import current_app
-def rm(model):
-    pass
+# admin.register_model(User, category="Users")
+# admin.register_model(Group, category="Users")

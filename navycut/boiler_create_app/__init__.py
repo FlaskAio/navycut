@@ -15,7 +15,7 @@ _config__dict = {
     "name" : __name__,
     "template_folder" : __basedir__ / "templates",
     "static_folder" : __basedir__ / "static",
-    "static_url_path" : "/import_name___boiler_var/static/",
+    "static_url_path" : "/static",
     "url_prefix" : "/import_name___boiler_var",
 }
 

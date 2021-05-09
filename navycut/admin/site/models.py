@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from datetime import datetime
 from navycut.orm import db
 from navycut.utils.security import create_password_hash
-from navycut.utils.logger import Console
+from navycut.utils.console import Console
 
 # class Permission(db.Model):
 #     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -13,6 +13,9 @@ class Group(db.Model):
     """default group model for users."""
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     name = db.Column(db.String(255), nullable=False, unique=True)
+
+    def __repr__(self) -> str:
+        return self.name
 
 group_user_con = db.Table("group_user_con", 
                     db.Column('user_id', db.Integer, db.ForeignKey("user.id")),
@@ -72,6 +75,5 @@ def _insert_intial_data():
     available_groups = ['super_admin','admin', 'staff', 'customer']
     for group in available_groups:
         grp=Group(name=group)
-        db.session.add(grp)
-    db.session.commit()
+        grp.save()
     Console.log.Success("initial data for admin privilage added successfully.")

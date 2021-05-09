@@ -1,6 +1,5 @@
 from ..errors.misc import InsufficientArgumentsError
-from . import input
-from .logger import Console
+from .console import Console
 from ._exec_cli import (_show_help, 
                 _create_boiler_project)
 

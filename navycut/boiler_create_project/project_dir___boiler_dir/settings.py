@@ -1,30 +1,36 @@
 from pathlib import Path
 from os.path import abspath
 
+# defining the default import name for flask:
+IMPORT_NAME = __name__
+
+#defining the actual project name:
+PROJECT_NAME = "project_name___boiler_var"
+
 
 #defining the base directory
-__basedir__ = Path(abspath(__file__)).parent.parent
+BASE_DIR = Path(abspath(__file__)).parent.parent
 
 #app debug state:
-__appdebug__ = True
+DEBUG = True
 
 #defining the base database configuration.
-__database__ = {
+DATABASE = {
     "engine" : "sqlite3",
-    "database": __basedir__ / "navycut.sqlite3"
+    "database": BASE_DIR / "navycut.sqlite3"
 }
 
 #defining the navycut app secret key
-__secretkey__ = "__secretkey_____boiler_var" #should generate randomly at the time of creation.
+SECRET_KEY = "__secretkey_____boiler_var" #should generate randomly at the time of creation.
 
 
-__defaultindex__ = True # if True": it will show the default index page, to use your own index please set it to False.
+DEFAULT_INDEX = True # if True": it will show the default index page, to use your own index please set it to False.
 
 #available installed app add here to bloom.
-__installedapp__ = [ # should change to first_app to get the app.
+INSTALLED_APPS = [ # should change to first_app to get the app.
     #"first_app", 
 ]
 
-__allowedhost__ = [ # 
+ALLOWED_HOST = [ # 
     '127.0.0.1', 
 ]
