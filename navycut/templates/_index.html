@@ -6,25 +6,6 @@
     </head>
     <body>
         <div id=main__body>
-            <div id=nav>
-                <header class="text-gray-600 body-font">
-                   <!-- <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-                      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-                        <img src="/static/admin/images/icons/navycut-logo.png" height="120px", width="120px">
-                        <span class="ml-3 text-xl">Navycut</span>
-                      </a>
-                      <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://thenavycut.com">Website</a>
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://docs.thenavycut.com">Documentation</a>
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://github.com/navycut/navycut">Github</a>
-                        <a class="mr-5 hover:text-gray-900" target="_blank" href="https://pypi.org/project/navycut">Pypi</a>
-                      </nav>
-                      <p class="inline-flex items-center  border-0 py-1 px-3  rounded text-base mt-4 md:mt-0">
-                        <img src="/static/admin/images/icons/icons8-eye.gif" height="50px", width="50px"> 
-                      </p>
-                    </div>
-                  </header> -->
-            </div>
             <div id=intro>
                 <p style="font-family: 'Freckle Face', cursive;" class="text-center text-blue-900 uppercase text-6xl subpixel-antialiased font-bold py-4">Welcome to Navycut</p>
                 <p id="intro__desc" class="text-center text-green-900 text-opacity-50 font-sans text-xl subpixel-antialiased font-semibold py-4"></p>
@@ -36,30 +17,20 @@
                 <section class="text-gray-600 body-font">
                     <div class="container px-5 py-4 mx-auto">
                       <div class="flex flex-col text-center w-full ">
-                        <!-- <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Statistics Report from Github</h1> -->
-                        <!-- <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag.</p> -->
                       </div>
                       <div class="flex flex-wrap -m-4 text-center">
                         <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
                           <div class="border-2 border-gray-200 px-4 py-6 rounded-lg">
-                            <!-- <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
-                              <path d="M8 17l4 4 4-4m-4-5v9"></path>
-                              <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29"></path> -->
                               <img src="/static/admin/images/icons/github.png"/>
                             </svg>
-                            <h2 class="title-font font-medium text-3xl text-gray-900">2.7K</h2>
+                            <h2 class="title-font font-medium text-3xl text-gray-900" id="github__watch">1</h2>
                             <p class="leading-relaxed">Github Watch</p>
                           </div>
                         </div>
                         <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
                           <div class="border-2 border-gray-200 px-4 py-6 rounded-lg">
-                            <!-- <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
-                              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
-                              <circle cx="9" cy="7" r="4"></circle>
-                              <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"></path>
-                            </svg> -->
                             <img src="/static/admin/images/icons/pull-request.png"/>
-                            <h2 class="title-font font-medium text-3xl text-gray-900">1.3K</h2>
+                            <h2 class="title-font font-medium text-3xl text-gray-900" id="github__contributors">1</h2>
                             <p class="leading-relaxed">Github Contributors</p>
                           </div>
                         </div>
@@ -67,14 +38,14 @@
                           <div class="border-2 border-gray-200 px-4 py-6 rounded-lg">
                             
                             <img src="/static/admin/images/icons/star--v1.png"/>
-                            <h2 id="github__star" class="title-font font-medium text-3xl text-gray-900"></h2>
+                            <h2 id="github__star" class="title-font font-medium text-3xl text-gray-900">1</h2>
                             <p class="leading-relaxed">Github Stars</p>
                           </div>
                         </div>
                         <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
                           <div class="border-2 border-gray-200 px-4 py-6 rounded-lg">
                             <img src="https://img.icons8.com/ios-filled/100/4a90e2/fork.png"/>
-                            <h2 id="github__forks" class="title-font font-medium text-3xl text-gray-900"></h2>
+                            <h2 id="github__forks" class="title-font font-medium text-3xl text-gray-900">1</h2>
                             <p class="leading-relaxed">Github Forkes</p>
                           </div>
                         </div>
@@ -84,13 +55,6 @@
             </div>
         </div> 
 
-        <script type="text/javascript">
-        fetch("https://api.github.com/repos/navycut/navycut").then(req=>req.json()).then(repo=>{
-            // const repo = body[0];
-            document.getElementById("intro__desc").innerHTML = repo.description;
-            document.getElementById("github__star").innerHTML = repo.watchers;
-            document.getElementById("github__forks").innerHTML = repo.forks_count;
-        })
-        </script>
+        <script type="text/javascript" src="/static/javascript/gh_api_fetch.js"></script>
     </body>
 </html>

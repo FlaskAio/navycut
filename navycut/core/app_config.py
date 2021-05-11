@@ -1,13 +1,16 @@
 from flask import Flask, Blueprint
-from flask_migrate import Migrate
-from navycut.urls import MethodView
 from importlib import import_module
-from navycut.orm._fod.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
 from os.path import abspath
 from pathlib import Path
 from ..admin.site.auth import login_manager
-from ..orm.db import db
 from ..admin import admin
+from ..urls import MethodView
+from ..conf import get_settings_module
+from ..orm.db import db
+from ..orm._fod.migrator import migrate
+from ..orm._fod.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
+from os import environ
+from dotenv import load_dotenv; load_dotenv()
 
 _basedir = Path(abspath(__file__)).parent.parent
 
@@ -23,6 +26,13 @@ class Navycut(Flask):
                     static_url_path="/static")
         self.settings = settings
 
+    def _attach_settings_modules(self, settings=None):
+        if settings is None: settings = get_settings_module()
+        self._add_config(settings)
+        self._configure_core_features()
+        self._perform_app_registration()
+
+
     def _add_config(self, settings) -> None:
         self.settings = settings
         self.import_name = settings.IMPORT_NAME
@@ -31,25 +41,25 @@ class Navycut(Flask):
         self.config["BASE_DIR"] = settings.BASE_DIR
         self.config['SECRET_KEY'] = settings.SECRET_KEY
         self.config['DEBUG'] = settings.DEBUG
-        self.debug = settings.DEBUG        
+        self.debug = settings.DEBUG   
+        environ["BASE_DIR"] = str(self.config["BASE_DIR"])
         if settings.DATABASE.get('engine').lower() == "sqlite" or "sqlite3":
             self.config['SQLALCHEMY_DATABASE_URI'] = _SQLITE_ENGINE(settings.DATABASE.get('database'))
         elif settings.DATABASE.get('engine').lower() == "mysql":
             self.config['SQLALCHEMY_DATABASE_URI'] = _MYSQL_ENGINE(settings.DATABASE.get('database'))
-        self._configure_default_index()
     
     def _configure_core_features(self):
         #add all the core features of navycut app here.
         self.initIns(db)
         self.initIns(login_manager)
         self.initIns(admin)
-        Migrate(self, db)
+        migrate.init_app(self, db)
 
     def _perform_app_registration(self):
         self._registerApp(self.settings.INSTALLED_APPS)
 
     def _configure_default_index(self):
-        if self.settings.DEFAULT_INDEX is not False and self.settings.DEBUG is not False:
+        if self.settings.DEFAULT_INDEX is not False and self.debug is not False:
             self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
         else: pass
     
@@ -68,22 +78,13 @@ class Navycut(Flask):
             except: app = self._import_app(str_app)
             self.register_blueprint(app, url_prefix=app.url_prefix)
 
-
-    def _import_settings_from_project_dir(self) -> object:
-        try: 
-            settings = import_module('settings')
-            return settings
-        except Exception: 
-            try:
-                name = import_module('name').__file__
-                proj_dir =  Path(abspath(name)).parent
-                settings = import_module(f'{str(proj_dir).rsplit("/", 1)[1]}.settings')
-                return settings
-            except ModuleNotFoundError: raise AttributeError("neither name.py nor settings.py found.")
-        
-
-    def debugging(self,flag=False) -> None:
+    def debugging(self,flag) -> None:
         self.debug = flag
+        self.config['DEBUG'] =flag
+
+    def run_wsgi(self, *wargs, **kwargs) -> None:
+        self._configure_default_index()
+        super(Navycut, self).run(*wargs, **kwargs)
 
     def __repr__(self):
         return self.import_name
@@ -100,8 +101,9 @@ class SisterApp(Blueprint):
         self._name = str(arg_dict['import_name'])
     
     def add_url_pattern(self, pattern_list:list):
+        methods=['GET','PUT', 'DELETE', 'POST', 'HEAD']
         for url_path in pattern_list:
-            self.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=['GET','PUT', 'DELETE', 'POST', 'HEAD'])
+            self.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
 
     def import_app_features(self) -> None:
         import_module(f"{self._name}.models", package=None)

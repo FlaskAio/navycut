@@ -68,7 +68,7 @@ class User(db.Model, UserMixin):
         return f"{self.first_name} {self.last_name}"
 
     def __repr__(self) -> str:
-        return f"<{self.first_name} {self.last_name}>"
+        return self.name
 
 def _insert_intial_data():
     #insert all the initial data to the equivalent table.

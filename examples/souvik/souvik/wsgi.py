@@ -6,6 +6,8 @@ from os import environ
 # use gunicorn wsgi server to run this app
 
 #define your default settings file here:
-environ.setdefault("NAVYCUT_SETTINGS_MODULE", "project_name___boiler_var.settings")
+# settings_file = "souvik.settings"
+
+environ.setdefault("NAVYCUT_SETTINGS_MODULE", "souvik.settings")
 
 application = create_wsgi_app()

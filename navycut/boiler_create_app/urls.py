@@ -1,6 +1,6 @@
 from navycut.urls import path
-from .views import *
+# from . import views
 
 url_patterns = [
-    # path("" , IndexView, "index"),
+    # path("" , views.IndexView, "index"),
 ]

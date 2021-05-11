@@ -12,12 +12,13 @@ from navycut.datastructures import NCObject
 #     def all(self):
 #         return self.models.query.all()
 
-# class _BaseQuery(BaseQuery):
-#     def exclude(self, **kwargs):
-#         objL:list = self.query.all()
-#         ans = []
-#         for obj in objL:
-#             pass
+class _BaseQuery(BaseQuery):
+    pass
+    # def exclude(self, **kwargs):
+    #     objL:list = self.query.all()
+    #     ans = []
+    #     for obj in objL:
+    #         pass
 
 class _Model(Model):
     def __init__(self, *args, **kwargs):
@@ -27,8 +28,6 @@ class _Model(Model):
         db.session.add(self)
         try: db.session.commit()
         except IntegrityError as e: raise ModelsIntegrityError(e)
-    def all(self):
-        return self.query.all()
 
     def to_dict(self) -> dict:
         """returns the dictionary output of the particular model."""
@@ -45,6 +44,7 @@ class NavycutORM(_SQLAlchemy):
     with some extra own's special.
     """
     def __init__(self):
-        super(NavycutORM, self).__init__(model_class=_Model)
+        super(NavycutORM, self).__init__(model_class=_Model,
+                                    query_class=_BaseQuery)
 
 db = NavycutORM()
