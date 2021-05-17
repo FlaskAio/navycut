@@ -7,8 +7,8 @@ Create Date: ${create_date}
 """
 from alembic import op
 import sqlalchemy as sa
-import navycut
 import sqlalchemy_jsonfield
+import navycut
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.

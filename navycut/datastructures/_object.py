@@ -12,7 +12,7 @@ class NCObject(object):
         nob = NCObject(data)
         print (nob.name, nob.planet)
     """
-    def __init__(self, ___=None, **kwargs):
+    def __init__(self, ___=None, **kwargs): 
         if ___ is None and kwargs is not None: self.dict = kwargs
         elif ___ is not None and isinstance(___, str): 
             try:self.dict = loads(___)

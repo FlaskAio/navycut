@@ -5,7 +5,7 @@ from os.path import abspath
 IMPORT_NAME = __name__
 
 #defining the actual project name:
-PROJECT_NAME = "project_name___boiler_var"
+PROJECT_NAME = "kalyanj"
 
 
 #defining the base directory
@@ -17,16 +17,11 @@ DEBUG = True
 #defining the base database configuration.
 DATABASE = {
     "engine" : "sqlite3",
-    "creds" : {
-        "host"     : None,
-        "username" : None,
-        "password" : None,
-        "database" : BASE_DIR / "navycut.sqlite3"
-    }
+    "database": BASE_DIR / "navycut.sqlite3"
 }
 
 #defining the navycut app secret key
-SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time of creation.
+SECRET_KEY = r"y>EYb:G1YAZkpq{IGfPg9:Z}ro*5d}R7BQA[IbC/FKw2pSx%>rO>m" #should generate randomly at the time of creation.
 
 
 #available installed app add here to bloom.

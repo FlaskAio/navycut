@@ -6,6 +6,6 @@ from os import environ
 # use uvicorn asgi server to run this app
 
 #define your default settings file here:
-environ.setdefault("NAVYCUT_SETTINGS_MODULE", "project_name___boiler_var.settings")
+environ.setdefault("NAVYCUT_SETTINGS_MODULE", "kalyanj.settings")
 
 application = create_asgi_app()

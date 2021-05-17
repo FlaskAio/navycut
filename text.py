@@ -1,36 +1,69 @@
-from flask import Flask, jsonify
-import logging
-from logging.config import dictConfig
-from a2wsgi import WSGIMiddleware
+from navycut.datastructures import NCObject
+from json import dumps
 
-# dictConfig({
-#     'version': 1,
-#     'formatters': {'default': {
-#         'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-#     }},
-#     'handlers': {'wsgi': {
-#         'class': 'logging.StreamHandler',
-#         'stream': 'ext://flask.logging.wsgi_errors_stream',
-#         'formatter': 'default'
-#     }},
-#     'root': {
-#         'level': 'INFO',
-#         'handlers': ['wsgi']
-#     }
-# })
+a={
+   "name": "Partha Das",
+   "age" : "26",
+   "address" : {
+       "city" : "kolkata",
+       "area" : {
+           "country" : {"IN" : "India"},
+       }
+   }
+}
 
-app = Flask(__name__)
+nc = NCObject(a)
 
-@app.route("/")
-def index():
-    return jsonify(message="Hello world!")
 
-# app.wsgi_app = WhiteNoise(app.wsgi_app, root='/static')
-app.debug=True
-application = WSGIMiddleware(app)
+
+# nc.update({"name":"Aniket Sarkar"})
+nc.address.area.country.update(UK="England")
+print (nc.address.area.country.UK)
+
+
+# nc.na me
+
+
+
+
+
+
+# from logging import debug
+# from flask import Flask, jsonify
+# from a2wsgi import WSGIMiddleware
+# from uvicorn import run
+# import uvicorn
+
+# # dictConfig({
+# #     'version': 1,
+# #     'formatters': {'default': {
+# #         'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+# #     }},
+# #     'handlers': {'wsgi': {
+# #         'class': 'logging.StreamHandler',
+# #         'stream': 'ext://flask.logging.wsgi_errors_stream',
+# #         'formatter': 'default'
+# #     }},
+# #     'root': {
+# #         'level': 'INFO',
+# #         'handlers': ['wsgi']
+# #     }
+# # })
+
+# app = Flask(__name__)
+
+# @app.route("/")
+# async def index():
+#     return jsonify(message="Hello world!")
+
+# # app.wsgi_app = WhiteNoise(app.wsgi_app, root='/static')
+# app.debug=True
+# application = WSGIMiddleware(app)
+
+
 
 
 # if __name__ == "__main__":
-    # app.run()
-    # serve(TransLogger(app, setup_console_handler=False), listen='*:8000')
-    # serve(app, listen='*:8000')
+#     uvicorn.run(application, port=9500, debug=True)
+#     # serve(TransLogger(app, setup_console_handler=False), listen='*:8000')
+#     # serve(app, listen='*:8000')

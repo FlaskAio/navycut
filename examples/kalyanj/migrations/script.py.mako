@@ -7,7 +7,6 @@ Create Date: ${create_date}
 """
 from alembic import op
 import sqlalchemy as sa
-import navycut
 import sqlalchemy_jsonfield
 ${imports if imports else ""}
 

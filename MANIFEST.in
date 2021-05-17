@@ -2,5 +2,6 @@ recursive-include navycut/templates *
 recursive-include navycut/boiler_create_project *
 recursive-include navycut/boiler_create_app *
 recursive-include navycut/static *
+recursive-include navycut/orm/sqla/migrator *
 
 recursive-exclude navycut/examples *

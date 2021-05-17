@@ -1,3 +1,4 @@
+from flask import current_app
 from flask_script import Manager
 from flask_migrate import MigrateCommand
 from webbrowser import open_new_tab
@@ -6,8 +7,14 @@ from ..utils._exec_cli import _create_boiler_app
 from ..utils.security import create_password_hash
 from ..utils.console import Console
 from ..core import app
-from ..orm.db import db
+from ..orm.sqla import sql
+from os import path
+from alembic import command
 from ..conf import get_settings_module
+from ..orm.sqla.migrator import (
+            Config as MigratorConfig, 
+            _perform_migration
+            )
 
 class Command:
     def __init__(self):
@@ -22,7 +29,7 @@ class Command:
             if Console.input.Boolean( "Are you sure, you want to lose all your data"):
                 with app.app_context(): 
                     try:
-                        db.drop_all()
+                        sql.drop_all()
                         Console.log.Success("models dropped successfully.") 
                     except Exception:
                         Console.log.Error("Unable to drop the database. \nSomething went Wrong with database conf.")
@@ -37,6 +44,21 @@ class Command:
             
             app.run_wsgi(port=port, host=host)
             # open_new_tab(f"http://{host}:{port}")
+
+        @self.manager.command
+        def migrate():
+            """Creates a new migration repository"""
+            directory = current_app.extensions['migrate'].directory
+            if not path.exists(directory):
+                config = MigratorConfig()
+                config.set_main_option('script_location', directory)
+                config.config_file_name = path.join(directory, 'alembic.ini')
+                config = current_app.extensions['migrate'].\
+                    migrate.call_configure_callbacks(config)
+                command.init(config, directory, 'flask')
+                _perform_migration()
+            else: _perform_migration()
+
         
         @self.manager.command
         def makemigrations():

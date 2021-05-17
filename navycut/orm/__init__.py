@@ -1,1 +1,1 @@
-from .db import db
+__SQL_ORM__ = "SQLAlchemy"

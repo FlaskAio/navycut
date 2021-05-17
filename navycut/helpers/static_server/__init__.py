@@ -8,7 +8,7 @@ config_dict = dict(
         name = __name__,
         static_folder =  settings.BASE_DIR / "uploads",
         static_url_path = "/",
-        url_prefix = "/static_server",
+        url_prefix = "/static_upload",
         template_folder = None,
 )
 

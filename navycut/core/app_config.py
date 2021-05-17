@@ -2,15 +2,17 @@ from flask import Flask, Blueprint
 from importlib import import_module
 from os.path import abspath
 from pathlib import Path
+from werkzeug.routing import RequestRedirect
+from werkzeug.exceptions import MethodNotAllowed, NotFound
+from dotenv import load_dotenv; load_dotenv()
 from ..admin.site.auth import login_manager
 from ..admin import admin
 from ..urls import MethodView
 from ..conf import get_settings_module
-from ..orm.db import db
-from ..orm._fod.migrator import migrate
-from ..orm._fod.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
-from os import environ
-from dotenv import load_dotenv; load_dotenv()
+from ..orm.sqla import sql
+from ..orm.sqla.migrator import migrate
+from ..orm.engine import _generate_engine_uri
+# from ..orm.sqla.migrator.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
 
 _basedir = Path(abspath(__file__)).parent.parent
 
@@ -41,25 +43,49 @@ class Navycut(Flask):
         self.config["BASE_DIR"] = settings.BASE_DIR
         self.config['SECRET_KEY'] = settings.SECRET_KEY
         self.config['DEBUG'] = settings.DEBUG
-        self.debug = settings.DEBUG   
-        environ["BASE_DIR"] = str(self.config["BASE_DIR"])
-        if settings.DATABASE.get('engine').lower() == "sqlite" or "sqlite3":
-            self.config['SQLALCHEMY_DATABASE_URI'] = _SQLITE_ENGINE(settings.DATABASE.get('database'))
-        elif settings.DATABASE.get('engine').lower() == "mysql":
-            self.config['SQLALCHEMY_DATABASE_URI'] = _MYSQL_ENGINE(settings.DATABASE.get('database'))
+        self.debug = settings.DEBUG  
+        self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
     
     def _configure_core_features(self):
         #add all the core features of navycut app here.
-        self.initIns(db)
+        self.initIns(sql)
         self.initIns(login_manager)
         self.initIns(admin)
-        migrate.init_app(self, db)
+        migrate.init_app(self, sql)
 
     def _perform_app_registration(self):
         self._registerApp(self.settings.INSTALLED_APPS)
 
+    # def _configure_default_index(self):
+    #     if self.settings.DEFAULT_INDEX is not False and self.debug is not False:
+    #         self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
+    #     else: pass
+
+    def _get_view_function(self, url, method="GET") -> tuple:
+        adapter = self.url_map.bind('0.0.0.0')
+        try:
+            match = adapter.match(url, method=method)
+        except RequestRedirect as e:
+            # recursively match redirects
+            return self._get_view_function(e.new_url, method)
+        except (MethodNotAllowed, NotFound):
+            # no match
+            return None
+
+        try:
+            # return the view function and arguments
+            return self.view_functions[match[0]], match[1]
+        except KeyError:
+            # no view is associated with the endpoint
+            return None
+    
+    def _has_view_function(self, url, method="GET") -> bool:
+        res = self._get_view_function(url, method)
+        if res: return True
+        else: return False
+
     def _configure_default_index(self):
-        if self.settings.DEFAULT_INDEX is not False and self.debug is not False:
+        if self.debug is not False and not self._has_view_function("/"):
             self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
         else: pass
     

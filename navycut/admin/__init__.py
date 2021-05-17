@@ -4,7 +4,7 @@ from ..urls import MethodView
 from .site.auth import login_user
 from .site.models import *
 from .site.views import *
-from navycut.orm import db
+from navycut.orm.sqla import sql
 from ..utils.security import check_password_hash
 
 class _AdminLoginView(MethodView):
@@ -49,9 +49,9 @@ class NavycutAdmin(Admin):
         # model_fields:list = list(column.name for column in model.__table__.columns)
         # _all_image_fields = list(filter(None, list(field if field.endswith("_image") or field.endswith("_picture") else None for field in model_fields)))
         # if len(_all_image_fields): 
-        #     self.add_view(NCSpecialModelView(model, db.session, category=category))
+        #     self.add_view(NCAdminModelView(model, db.session, category=category))
         #     return True
-        self.add_view(NCSpecialModelView(model, db.session, category=category))
+        self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
 
     def _add_admin_login_view(self):

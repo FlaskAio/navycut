@@ -1,11 +1,11 @@
-from navycut.orm import db
+from navycut.orm.sqla import sql
 
 # create your models here: 
 #demo models
 
-# class Blog(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, unique=True)
-#     name = db.Column(db.String(255), nullable=False, unique=True)
-#     subject = db.Column(db.String(255), nullable=False)
-#     body = db.Column(db.String(), nullable=False)
-#     is_active = db.Column(db.Boolean, default=True)
+# class Blog(sql.Model):
+#     id = sql.Column(sql.Integer, primary_key=True, unique=True)
+#     name = sql.Column(sql.String(255), nullable=False, unique=True)
+#     subject = sql.Column(sql.String(255), nullable=False)
+#     body = sql.Column(sql.String(), nullable=False)
+#     is_active = sql.Column(sql.Boolean, default=True)

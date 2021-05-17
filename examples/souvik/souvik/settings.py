@@ -15,8 +15,10 @@ DEBUG = True
 
 #defining the base database configuration.
 DATABASE = {
-    "engine" : "sqlite3",
-    "database": BASE_DIR / "navycut.sqlite3"
+    "engine" : "sqlite",
+    "creds": {
+        'database':BASE_DIR / "navycut.sqlite3"
+    }
 }
 
 #defining the navycut app secret key

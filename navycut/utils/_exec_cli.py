@@ -29,7 +29,7 @@ def _create_boiler_project(*wargs):
     project_dir = Path(path.realpath(project_name))
     boilerplate_dir = __baseDir__ / 'boiler_create_project'
     Console.log.Info(f"Empty project folder created.\nProject name: {project_name}\nLocation: {str(project_dir)}")
-    #start reading exiting boiler plate
+    #start reading the existing boiler plate
     Console.log.Info('Started writing the default boiler files for project')
     boilerplate_dir__files = listdir(boilerplate_dir)
     boilerplate_dir__files.remove("__pycache__") if "__pycache__" in boilerplate_dir__files else None
@@ -59,10 +59,10 @@ def _create_boiler_project(*wargs):
                         #now replace the __secretkey__ with the real one at the new project directory.
                         manage_data=manage_data.replace("project_name___boiler_var", project_name)
                         wb.write(manage_data)
-                    elif boiler_file == 'name.py':
-                        name_data = fb.read()
-                        name_data = name_data.replace("project_name___boiler_var", project_name)
-                        wb.write(name_data)
+                    # elif boiler_file == 'name.py':
+                    #     name_data = fb.read()
+                    #     name_data = name_data.replace("project_name___boiler_var", project_name)
+                    #     wb.write(name_data)
                     else: wb.write(fb.read())
                 Console.log.Info(f'Data from {boilerplate_dir / boiler_file} successfully transferred to {project_dir}/{boiler_file}')
     Console.log.Success(f"project {project_name} created successfully.")
