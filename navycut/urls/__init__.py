@@ -4,9 +4,9 @@ from flask import (request,
                 render_template, 
                 render_template_string, 
                 session, 
+                abort,
                 Request)
 from ..errors.misc import DataTypeMismatchError
-from flask import abort
 from ..datastructures import NCObject
 # from flask import current_app, Flask
 # from flask_restful import Api as _Api
