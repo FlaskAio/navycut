@@ -1,7 +1,9 @@
 from sqlalchemy.types import TypeDecorator, String
 
 class ImageType(TypeDecorator):
-    
+    """
+    Custom sqlalchemy type to store image.
+    """
     impl = String
     
     cache_ok = True

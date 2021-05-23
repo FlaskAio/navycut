@@ -7,6 +7,7 @@ from .models import *
 # admin.register_model(MotuPatlu)
 # # admin.register_model(Nobita)
 # admin.register_model(Suzuka)
-admin.register_model(Aniket)
 
-# admin.register_model(Kiteretsu)
+admin.register_model(Owner)
+
+admin.register_model(Cycle)

@@ -5,8 +5,8 @@ class NCObject(object):
     """
     The special object of Navycut fullstack web framework.
     It's basically gives you the feel like javascript while dealing with json or dictionary.
-    :param data: provide a dictionary or json data here. It supported only for json and dictionary like data object.
-    example:
+    :param ___: provide a dictionary or json data here. It supported only for json and dictionary like data object.
+    :example::
         from navycut.datastructure import NCObject
         data = {"name":"Jerry", "planet": "Pluto"}
         nob = NCObject(data)
@@ -36,13 +36,13 @@ class NCObject(object):
         update single/multiple attribute values.
         :param __:A simple dictionary object.
         :param **kwargs: the kwargs based values.
-        example:
-        a= NCObject({"name":"pluto"})
-        print (a.name)
-        a.update({"name":"mars"})
-        #or simply
-        a.update(name="mars")
-        print (a.name)
+        :example::
+            a= NCObject({"name":"pluto"})
+            print (a.name)
+            a.update({"name":"mars"})
+            #or simply
+            a.update(name="mars")
+            print (a.name)
         """
         if __ and not isinstance(__, dict): raise NCObjectDataTypeMisMatchError(__)
         if __: self.__dict__.update({k: self.__elt(v) for k, v in __.items()})

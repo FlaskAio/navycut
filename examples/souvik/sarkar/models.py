@@ -63,12 +63,52 @@ from navycut.orm.sqla import sql
 #     duration = sql.Column(sql.Interval())
 #     is_active = sql.Column(sql.Boolean, default=True)
 
-class Aniket(sql.Model):
+
+
+# class Bike(sql.Model):
+#     id = sql.Column(sql.Integer, primary_key=True, unique=True)
+#     name = sql.field.Char(max_length=255, choices=(('duke', 'DUKE'), ('rc', 'RC')), help_text="this is name field.")
+#     model = sql.field.Char(required=True, choices=(('200', '200'), ('390', '390')), help_text="this is subject field.")
+#     image = sql.field.Image(required=True)
+#     is_active = sql.Column(sql.Boolean, default=True)
+#     # aniket_id = sql.field.ForeignKey("aniket.id")
+#     aniket_id = sql.Column(sql.Integer, sql.ForeignKey("aniket.id"))
+
+#     def __repr__(self):
+#         return self.name
+
+# class Aniket(sql.Model):
+#     id = sql.Column(sql.Integer, primary_key=True, unique=True)
+#     name = sql.field.Char(max_length=255, choices=[('aniket', 'Aniket'), ('gobind', 'Gobind')], help_text="this is name field.")
+#     subject = sql.field.Char(required=True, choices=(('Plassey', 'PLASSEY'), ('Chakdah', 'CHAKDAH')), help_text="this is subject field.")
+#     body = sql.field.Json()
+#     profile_image = sql.field.Image(required=True)
+#     data = sql.field.Image(required=True)
+#     duration = sql.Column(sql.SmallInteger)
+#     is_active = sql.Column(sql.Boolean, default=True)
+#     # bike = sql.field.OneToMany("Bike", backref="anike")
+#     bike = sql.relationship("Bike", backref="anike")
+
+
+class Cycle(sql.Model):
+    id = sql.Column(sql.Integer, primary_key=True, unique=True)
+    name = sql.field.Char(max_length=255, choices=(('duke', 'DUKE'), ('rc', 'RC')), help_text="this is name field.")
+    model = sql.field.Char(required=True, choices=(('200', '200'), ('390', '390')), help_text="this is subject field.")
+    image = sql.field.Image(required=True)
+    is_active = sql.Column(sql.Boolean, default=True)
+    kunal_id = sql.field.ForeignKey("Owner")
+    # kunal_id = sql.Column(sql.Integer, sql.ForeignKey("kunal.id"))
+
+    def __repr__(self):
+        return self.name
+
+class Owner(sql.Model):
     id = sql.Column(sql.Integer, primary_key=True, unique=True)
     name = sql.field.Char(max_length=255, choices=[('aniket', 'Aniket'), ('gobind', 'Gobind')], help_text="this is name field.")
-    subject = sql.field.Char(required=True, choices=(('plassey', 'PLASSEY'), ('Chakdah', 'CHAKDAH')), help_text="this is subject field.")
+    subject = sql.field.Char(required=True, choices=(('Plassey', 'PLASSEY'), ('Chakdah', 'CHAKDAH')), help_text="this is subject field.")
     body = sql.field.Json()
-    profile_image = sql.field.Image(required=True)
-    data = sql.field.Image(required=True)
-    duration = sql.Column(sql.SmallInteger)
     is_active = sql.Column(sql.Boolean, default=True)
+    bike = sql.field.OneToMany("Cycle", backref="kunal")
+    # cycle = sql.relationship("Cycle", backref="aniket")
+    def __repr__(self):
+        return self.name

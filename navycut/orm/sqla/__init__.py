@@ -14,10 +14,12 @@ from navycut.datastructures import NCObject
 __all__ = ("sql", "meta", "Model")
 
 class Model(_Model):
-
+    
     def __init__(self, *args, **kwargs):
+        # id = sql.field.Integer( primary_key=True, unique=True)
         super(_Model, self).__init__(*args, **kwargs)
     def save(self):
+        
         sql.session.add(self)
         try: sql.session.commit()
         except IntegrityError as e: raise ModelsIntegrityError(e)
@@ -36,7 +38,7 @@ class Model(_Model):
 meta = MetaData()
 
 
-class SQLANCORM(SQLAlchemy):
+class SqlaNcOrm(SQLAlchemy):
     """
     The default database for Navycut Fullstack framework. Basically
     it's a subclass of SQLALchemy. It contains all the sqlalchemy features
@@ -46,8 +48,8 @@ class SQLANCORM(SQLAlchemy):
 
     def __init__(self):
 
-        super(SQLANCORM, self).__init__(model_class=Model,
+        super(SqlaNcOrm, self).__init__(model_class=Model,
                                     query_class=BaseQuery,
                                     metadata=meta)
 
-sql = SQLANCORM()
+sql = SqlaNcOrm()

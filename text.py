@@ -1,24 +1,57 @@
-from navycut.datastructures import NCObject
-from json import dumps
+from flask import Flask, jsonify
+import requests as r
 
-a={
-   "name": "Partha Das",
-   "age" : "26",
-   "address" : {
-       "city" : "kolkata",
-       "area" : {
-           "country" : {"IN" : "India"},
-       }
-   }
-}
+app = Flask(__name__)
 
-nc = NCObject(a)
+async def get(url):
+    return r.get(url)
+
+@app.route("/")
+async def index():
+    data = await get("https://api.github.com/repos/django/django")
+    data = data.json()
+    return jsonify(data)
 
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
-# nc.update({"name":"Aniket Sarkar"})
-nc.address.area.country.update(UK="England")
-print (nc.address.area.country.UK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from navycut.datastructures import NCObject
+# from json import dumps
+
+# a={
+#    "name": "Partha Das",
+#    "age" : "26",
+#    "address" : {
+#        "city" : "kolkata",
+#        "area" : {
+#            "country" : {"IN" : "India"},
+#        }
+#    }
+# }
+
+# nc = NCObject(a)
+
+
+
+# # nc.update({"name":"Aniket Sarkar"})
+# nc.address.area.country.update(UK="England")
+# print (nc.address.area.country.UK)
 
 
 # nc.na me
