@@ -1,6 +1,10 @@
 #VS Code files:
 .vscode/settings.json 
 
+# extra files
+
+text.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

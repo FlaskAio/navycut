@@ -35,6 +35,7 @@ class MethodView(_MethodView):
         super(MethodView, self).__init__(*wargs, **kwargs)
 
         self.request = request
+        self.context = dict()
         # self.session = NCObject(dict(session))
    
     # @Request.application
@@ -72,15 +73,22 @@ class MethodView(_MethodView):
     def session(self) -> None:
         return session
 
-    def render(self, template_one_or_list_or_str, ___:dict=None, **context):
+    def render(self, template_one_or_list_or_str, *wargs, **context):
+        
         context = context
-        if ___ is not None and not isinstance(___, dict): raise DataTypeMismatchError(___, "template rendering", "dict")
-        if ___ is not None and isinstance( ___, dict):
-            context.update(___)
+        
+        if len(wargs) and not isinstance(wargs[0], dict): 
+            raise DataTypeMismatchError(wargs[0], "template rendering", "dict")
+        
+        if len(wargs) and isinstance(wargs[0], dict):
+            context.update(wargs[0])
+        
         if isinstance(template_one_or_list_or_str, str):
             if not template_one_or_list_or_str.endswith(".html") and not template_one_or_list_or_str.endswith(".htm"):
                 return render_template_string(template_one_or_list_or_str, **context)
-            else: return render_template(template_one_or_list_or_str, **context)
+            
+            else: 
+                return render_template(template_one_or_list_or_str, **context)
 
 
 class path:
