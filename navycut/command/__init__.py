@@ -1,102 +1,135 @@
-from flask import current_app
-from flask_script import Manager
-from flask_migrate import MigrateCommand
-from webbrowser import open_new_tab
-from threading import Timer
-from ..utils._exec_cli import _create_boiler_app
+import click
+from os import path
+from alembic import command
+from ..cli._exec_cli import _create_boiler_app
 from ..utils.security import create_password_hash
 from ..utils.console import Console
 from ..core import app
-from ..orm.sqla import sql
-from os import path
-from alembic import command
 from ..conf import get_settings_module
 from ..orm.sqla.migrator import (
             Config as MigratorConfig, 
-            _perform_migration
+            _perform_migration,
+            _perform_makemigrations
             )
 
-class Command:
-    def __init__(self):
-        app._attach_settings_modules()
-        self.manager = Manager(app)
-        self._playAll()
 
-    def _playAll(self):
-        self.manager.add_command('db',MigrateCommand)
-        @self.manager.command
-        def drop_db():
-            if Console.input.Boolean( "Are you sure, you want to lose all your data"):
-                with app.app_context(): 
-                    try:
-                        sql.drop_all()
-                        Console.log.Success("models dropped successfully.") 
-                    except Exception:
-                        Console.log.Error("Unable to drop the database. \nSomething went Wrong with database conf.")
-            else: Console.log.Error("Service canceled")
-        
-        @self.manager.command
-        def runserver(port=None):
-            port = port or 8888
-            host =  '127.0.0.1'
-            # res = self._open_web_browser(f"http://{host}:{port}")
-            # Timer(1, open_new_tab(f"http://{host}:{port}") ).start()
-            
-            app.run_wsgi(port=port, host=host)
-            # open_new_tab(f"http://{host}:{port}")
+@click.group()
+def manage_command():
+    """manage the command executed using manage.py"""
+    app._attach_settings_modules()
 
-        @self.manager.command
-        def migrate():
-            """Creates a new migration repository"""
-            directory = current_app.extensions['migrate'].directory
-            if not path.exists(directory):
-                config = MigratorConfig()
-                config.set_main_option('script_location', directory)
-                config.config_file_name = path.join(directory, 'alembic.ini')
-                config = current_app.extensions['migrate'].\
-                    migrate.call_configure_callbacks(config)
-                command.init(config, directory, 'flask')
-                _perform_migration()
-            else: _perform_migration()
-
-        
-        @self.manager.command
-        def makemigrations():
-            from ..admin.site.models import _insert_intial_data
-            _insert_intial_data()
-            return None
-        
-        @self.manager.command
-        def createsuperuser():
-            from ..admin.site.models import User, Group
-            
-            name:str = Console.input.String("enter admin name: ")
-            email:str = Console.input.String("enter admin email: ")
-            username:str = Console.input.String("enter admin username: ") or email
-            while True:
-                password:str = Console.input.String("enter admin password: ")
-                confirm_password:str = Console.input.String("enter admin confirm password: ")
-                if not password == confirm_password:
-                    Console.log.Warning('confirm password not matched.\nPlease enter again.')
-                    continue
-                else: break
-            if Console.input.Boolean( "Are you sure, you want to create superuser using inserted data"):
-                with app.app_context():
-                    new_admin = User(first_name=name.rsplit(" ")[0], last_name=name.rsplit(" ")[1], email=email, 
-                            username=username, password=create_password_hash(password))
-                    group = Group.query.filter_by(name='super_admin').first()
-                    new_admin.groups.append(group)
-                    new_admin.save()
-                    Console.log.Success("superuser created successfully.")
-            else: Console.log.Error("superuser creation canceled!")
-        @self.manager.command
-        def createapp(app_name):
-            settings = get_settings_module()
-            project_dir = settings.BASE_DIR
-            _create_boiler_app(app_name, project_dir)
-
-    def run(self):
-        self.manager.run()
+@manage_command.command()
+@click.argument('addrport', default="127.0.0.1:8888")
+def runserver(addrport):
     
-    def add_command(self, name, command):
-        self.manager.add_command(name, command)
+    """Starts a lightweight and interactive Web server for development."""
+
+    if addrport is not None: 
+        port = int(addrport.split(":")[1])
+        host = str(addrport.split(":")[0])
+    
+    app.run_wsgi(port=port, host=host)
+
+@manage_command.command()
+@click.option('-d', '--directory', default=None,
+              help=('Migration script directory (default is "migrations")'))
+@click.option('-m', '--message', default=None, help='Revision message')
+@click.option('--sql', is_flag=True,
+              help=('Don\'t emit SQL to database - dump to standard output '
+                    'instead'))
+@click.option('--head', default='head',
+              help=('Specify head revision or <branchname>@head to base new '
+                    'revision on'))
+@click.option('--splice', is_flag=True,
+              help=('Allow a non-head revision as the "head" to splice onto'))
+@click.option('--branch-label', default=None,
+              help=('Specify a branch label to apply to the new revision'))
+@click.option('--version-path', default=None,
+              help=('Specify specific path from config for version file'))
+@click.option('--rev-id', default=None,
+              help=('Specify a hardcoded revision id instead of generating '
+                    'one'))
+@click.option('-x', '--x-arg', multiple=True,
+              help='Additional arguments consumed by custom env.py scripts')
+def migrate(directory, message, sql, head, splice, branch_label, version_path,
+            rev_id, x_arg):
+    
+    """Updates database schema. Manages both apps with migrations and those without."""
+    
+    directory = app.extensions['migrate'].directory
+    
+    if not path.exists(directory):
+        config = MigratorConfig()
+        config.set_main_option('script_location', directory)
+        config.config_file_name = path.join(directory, 'alembic.ini')
+        config = app.extensions['migrate']\
+            .migrate.call_configure_callbacks(config)
+        command.init(config, directory, 'flask')
+        with app.app_context():
+            _perform_migration(directory, message, sql, head, splice, branch_label, version_path,
+                            rev_id, x_arg)
+    
+    else: 
+        with app.app_context():
+            _perform_migration(directory, message, sql, head, splice, branch_label, version_path,
+                        rev_id, x_arg)
+
+@manage_command.command()
+@click.option('-d', '--directory', default=None,
+              help=('Migration script directory (default is "migrations")'))
+@click.option('--sql', is_flag=True,
+              help=('Don\'t emit SQL to database - dump to standard output '
+                    'instead'))
+@click.option('--tag', default=None,
+              help=('Arbitrary "tag" name - can be used by custom env.py '
+                    'scripts'))
+@click.option('-x', '--x-arg', multiple=True,
+              help='Additional arguments consumed by custom env.py scripts')
+@click.argument('revision', default='head')
+def makemigrations(directory, sql, tag, x_arg, revision):
+    """Creates new migration(s) for apps."""
+    from ..admin.site.models import _insert_intial_data
+    with app.app_context():
+        _perform_makemigrations(directory, sql, tag, x_arg, revision)
+        try: 
+            _insert_intial_data()
+        except:
+            pass
+    return None
+
+@manage_command.command()
+def createsuperuser():
+    
+    """Create the superuser account to access the admin panel."""
+    
+    from ..admin.site.models import User, Group
+            
+    name:str = Console.input.String("enter admin name: ")
+    email:str = Console.input.String("enter admin email: ")
+    username:str = Console.input.String("enter admin username: ") or email
+    while True:
+        password:str = Console.input.Password("enter admin password: ")
+        confirm_password:str = Console.input.Password("enter admin confirm password: ")
+        if not password == confirm_password:
+            Console.log.Warning('confirm password not matched.\nPlease enter again.')
+            continue
+        else: 
+            break
+    
+    if Console.input.Boolean( "Are you sure, you want to create superuser using inserted data"):
+        with app.app_context():
+            new_admin = User(first_name=name.rsplit(" ")[0], last_name=name.rsplit(" ")[1], email=email, 
+                    username=username, password=create_password_hash(password))
+            group = Group.query.filter_by(name='super_admin').first()
+            new_admin.groups.append(group)
+            new_admin.save()
+            Console.log.Success("superuser created successfully.")
+    else: 
+        Console.log.Error("superuser creation canceled!")
+
+@manage_command.command()
+def createapp(app_name):
+    """Creates a Navycut app directory structure for the given app name in the current directory."""
+    settings = get_settings_module()
+    project_dir = settings.BASE_DIR
+    _create_boiler_app(app_name, project_dir)

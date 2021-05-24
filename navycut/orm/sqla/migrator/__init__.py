@@ -16,7 +16,6 @@ class Migrate(_Migrate):
         super(Migrate, self).__init__(*wargs, **kwargs)
 
     def get_config(self, directory=None, x_arg=None, opts=None):
-        print ("info:", "this block is working")
         if directory is None:
             directory = str(self.directory)
         config = Config(path.join(directory, 'alembic.ini'))
@@ -37,6 +36,7 @@ class Migrate(_Migrate):
                 setattr(config.cmd_opts, 'x', None)
         return self.call_configure_callbacks(config)
 
+
 def _perform_migration(directory=None, message=None, sql=False, head='head', splice=False,
             branch_label=None, version_path=None, rev_id=None, x_arg=None):
     """Alias for 'revision --autogenerate'"""
@@ -45,6 +45,12 @@ def _perform_migration(directory=None, message=None, sql=False, head='head', spl
     command.revision(config, message, autogenerate=True, sql=sql,
                      head=head, splice=splice, branch_label=branch_label,
                      version_path=version_path, rev_id=rev_id)
+
+def _perform_makemigrations(directory=None, revision='head', sql=False, tag=None, x_arg=None):
+    
+    config = current_app.extensions['migrate'].migrate.get_config(directory,
+                                                                  x_arg=x_arg)
+    command.upgrade(config, revision, sql=sql, tag=tag)
 
 
 migrate:Migrate=Migrate()

@@ -1,4 +1,5 @@
 from .colours import _Colours
+from getpass import getpass
 
 class Console:
     class log:
@@ -18,40 +19,39 @@ class Console:
 
     class input:
         def String(input_message:str=None) -> str:
-            # if not input_message: input_message:str = Tool.default_path
+            
             message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
-            while True:
-                input_msg = input(message)
-                if not input_msg: continue
-                else: 
-                    try: return str(input_msg)
-                    except:
-                        Console.log.Error("Failed to convert the entered data into string.")
-                        continue 
+            input_msg = input(message)
+            try: 
+                return str(input_msg)
+            except: Console.log.Error("Failed to convert into string.")
+                
+        def Password(input_message:str=None) -> str:
+            
+            message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
+            input_msg = getpass(prompt=message)
+            return input_msg
+                    
+
         def Integer(input_message:str=None) -> int:
-            # if not input_message: input_message:str = Tool.default_path
+            
             message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
-            while True:
-                input_msg = input(message)
-                if not input_msg: continue
-                else: 
-                    try: return int(input_msg)
-                    except:
-                        Console.log.Error("Failed to convert the entered data into integer.")
-                        continue 
+            input_msg = input(message)
+            try: 
+                return int(input_msg)
+            except:
+                Console.log.Error("Failed to convert the entered data into integer.")
+
         def Float(input_message:str=None) -> float:
-            # if not input_message: input_message:str = Tool.default_path
+
             message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
-            while True:
-                input_msg = input(message)
-                if not input_msg: continue
-                else: 
-                    try: return float(input_msg)
-                    except:
-                        Console.log.Error("Failed to convert the entered data into float.")
-                        continue 
+            input_msg = input(message)
+            try: 
+                return float(input_msg)
+            except:
+                Console.log.Error("Failed to convert the entered data into float.")
+
         def Boolean(input_message:str=None) -> bool:
-            # if not input_message: input_message:str = Tool.default_path
             message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+"(Y/n): "+_Colours.reset
             while True:
                 input_msg = input(message)

@@ -1,9 +1,9 @@
 from os import mkdir, path, listdir
 from pathlib import Path
 from sys import argv
-from .console import Console
-from .tools import generate_random_secret_key
-from ..errors.misc import InsufficientArgumentsError, DirectoryAlreadyExistsError
+from ..utils.console import Console
+from ..utils.tools import generate_random_secret_key
+from ..errors.misc import  DirectoryAlreadyExistsError
 
 __baseDir__ = Path(path.abspath(__file__)).parent.parent
 
@@ -17,11 +17,8 @@ def _show_help(_cli_dict, *wargs) -> None:
 def _write_file():
     pass
 
-def _create_boiler_project(*wargs):
-    if len(argv) < 2: 
-        Console.log.Error("A valid project is required.")
-        raise InsufficientArgumentsError("Provide a valid project name")
-    project_name = argv[2].lower()
+def _create_boiler_project(name):
+    project_name = name
     if path.exists(project_name): 
         Console.log.Error(f"A project already exists with the same name: {project_name}. Try some another name.")
         raise DirectoryAlreadyExistsError(project_name)
@@ -59,10 +56,6 @@ def _create_boiler_project(*wargs):
                         #now replace the __secretkey__ with the real one at the new project directory.
                         manage_data=manage_data.replace("project_name___boiler_var", project_name)
                         wb.write(manage_data)
-                    # elif boiler_file == 'name.py':
-                    #     name_data = fb.read()
-                    #     name_data = name_data.replace("project_name___boiler_var", project_name)
-                    #     wb.write(name_data)
                     else: wb.write(fb.read())
                 Console.log.Info(f'Data from {boilerplate_dir / boiler_file} successfully transferred to {project_dir}/{boiler_file}')
     Console.log.Success(f"project {project_name} created successfully.")
