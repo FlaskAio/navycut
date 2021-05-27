@@ -11,8 +11,8 @@ from .urls import url_patterns
 __basedir__ = Path(abspath(__file__)).parent
 
 _config__dict = {
-    "import_name" : "import_name___boiler_var",
-    "name" : __name__,
+    "import_name" : __name__,
+    "name" : "import_name___boiler_var",
     "template_folder" : __basedir__ / "templates",
     "static_folder" : __basedir__ / "static",
     "static_url_path" : "/static",

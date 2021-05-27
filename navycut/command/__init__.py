@@ -27,7 +27,6 @@ def runserver(addrport):
     if addrport is not None: 
         port = int(addrport.split(":")[1])
         host = str(addrport.split(":")[0])
-    
     app.run_wsgi(port=port, host=host)
 
 @manage_command.command()
@@ -90,7 +89,7 @@ def makemigrations(directory, sql, tag, x_arg, revision):
     """Creates new migration(s) for apps."""
     from ..admin.site.models import _insert_intial_data
     with app.app_context():
-        _perform_makemigrations(directory, sql, tag, x_arg, revision)
+        _perform_makemigrations(directory, revision, sql, tag, x_arg)
         try: 
             _insert_intial_data()
         except:

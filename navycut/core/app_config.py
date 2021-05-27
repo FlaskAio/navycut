@@ -4,7 +4,9 @@ from os.path import abspath
 from pathlib import Path
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
-from dotenv import load_dotenv; load_dotenv()
+from dotenv import load_dotenv
+
+from navycut.orm.sqla import migrator; load_dotenv()
 from ..admin.site.auth import login_manager
 from ..admin import admin
 from ..urls import MethodView
@@ -47,7 +49,8 @@ class Navycut(Flask):
         self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
     
     def _configure_core_features(self):
-        #add all the core features of navycut app here.
+        # add all the core features of navycut app here.
+
         self.initIns(sql)
         self.initIns(login_manager)
         self.initIns(admin)
@@ -56,10 +59,6 @@ class Navycut(Flask):
     def _perform_app_registration(self):
         self._registerApp(self.settings.INSTALLED_APPS)
 
-    # def _configure_default_index(self):
-    #     if self.settings.DEFAULT_INDEX is not False and self.debug is not False:
-    #         self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
-    #     else: pass
 
     def _get_view_function(self, url, method="GET") -> tuple:
         adapter = self.url_map.bind('0.0.0.0')
@@ -81,27 +80,42 @@ class Navycut(Flask):
     
     def _has_view_function(self, url, method="GET") -> bool:
         res = self._get_view_function(url, method)
-        if res: return True
-        else: return False
+        
+        if res: 
+            return True
+        
+        else: 
+            return False
 
     def _configure_default_index(self):
+        
         if self.debug is not False and not self._has_view_function("/"):
             self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
-        else: pass
+        
+        else: 
+            pass
     
     def initIns(self, ins) -> bool:
         ins.init_app(self)
         return True
 
     def _import_app(self, app:str):
-        try: app = import_module(app)
-        except AttributeError: raise AttributeError(f"{app} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
+        
+        try: 
+            app = import_module(app)
+        
+        except AttributeError: 
+            raise AttributeError(f"{app} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
         return getattr(app, 'app')
 
     def _registerApp(self, _appList:list):
         for str_app in _appList: 
-            try: app = self._import_app(f"{self.project_name}.{str_app}")
-            except: app = self._import_app(str_app)
+            
+            try: 
+                app = self._import_app(f"{self.project_name}.{str_app}")
+            
+            except: 
+                app = self._import_app(str_app)
             self.register_blueprint(app, url_prefix=app.url_prefix)
 
     def debugging(self,flag) -> None:
