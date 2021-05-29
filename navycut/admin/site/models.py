@@ -65,7 +65,7 @@ class User(sql.Model, UserMixin):
 
     def __str__(self) -> str:
         """return the string representation of the user model object."""
-        return f"{self.first_name} {self.last_name}"
+        return self.name
 
     def __repr__(self) -> str:
         return self.name

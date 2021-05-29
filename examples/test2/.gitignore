@@ -1,11 +1,5 @@
-#VS Code files:
-.vscode/settings.json 
-
-# extra files
-
-text.py
-test.py
-
+#Aniket Sarkar aka Mark Tennyson - 28-04-2021 
+ 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

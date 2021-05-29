@@ -1,6 +1,5 @@
-from os import mkdir, path, listdir
+from os import makedirs, path, listdir
 from pathlib import Path
-from sys import argv
 from ..utils.console import Console
 from ..utils.tools import generate_random_secret_key
 from ..errors.misc import  DirectoryAlreadyExistsError
@@ -8,21 +7,12 @@ from ..errors.misc import  DirectoryAlreadyExistsError
 __baseDir__ = Path(path.abspath(__file__)).parent.parent
 
 
-def _show_help(_cli_dict, *wargs) -> None:
-    Console.log.Info("--------------------------------------------------")
-    for key, value in _cli_dict.items():
-        Console.log.Info(f"{key} ----- {value[1]}")
-    Console.log.Info("--------------------------------------------------")
-
-def _write_file():
-    pass
-
 def _create_boiler_project(name):
     project_name = name
     if path.exists(project_name): 
         Console.log.Error(f"A project already exists with the same name: {project_name}. Try some another name.")
         raise DirectoryAlreadyExistsError(project_name)
-    mkdir(project_name)
+    makedirs(project_name)
     project_dir = Path(path.realpath(project_name))
     boilerplate_dir = __baseDir__ / 'boiler_create_project'
     Console.log.Info(f"Empty project folder created.\nProject name: {project_name}\nLocation: {str(project_dir)}")
@@ -32,7 +22,7 @@ def _create_boiler_project(name):
     boilerplate_dir__files.remove("__pycache__") if "__pycache__" in boilerplate_dir__files else None
     for boiler_file in boilerplate_dir__files:
         if path.isdir(boilerplate_dir / boiler_file) and boiler_file == "project_dir___boiler_dir":
-            mkdir(project_dir / project_name)
+            makedirs(project_dir / project_name)
             for bff in listdir(boilerplate_dir / boiler_file):
                 if bff == '__pycache__': continue
                 with open(boilerplate_dir / boiler_file / bff, 'r') as bfffb:
@@ -65,7 +55,7 @@ def _create_boiler_app(app_name, project_dir, *wargs):
     if path.exists(app_dir): 
         Console.log.Error(f"A app already exists with the same name: {app_name} at {project_dir}. Try some another name.")
         raise DirectoryAlreadyExistsError(app_dir)
-    mkdir (app_dir)
+    makedirs (app_dir)
     Console.log.Info(f"Empty app folder named {app_name} created.\nProject name: {app_name}\nLocation: {str(app_dir)}")
     boilerplate_dir = __baseDir__ / 'boiler_create_app'
     Console.log.Info('Started writing the default boiler files for app')
@@ -74,7 +64,7 @@ def _create_boiler_app(app_name, project_dir, *wargs):
     for boiler_file in boilerplate_dir__files:
         if path.isdir(boilerplate_dir / boiler_file):
             with open(boilerplate_dir / boiler_file / "README.md", 'r') as tmr:
-                mkdir(app_dir / boiler_file)
+                makedirs(app_dir / boiler_file)
                 Console.log.Info(f"Empty directory created at: {app_dir/boiler_file}")
                 with open(app_dir / boiler_file / "README.md", 'w') as tmw:
                     tmw.write(tmr.read())

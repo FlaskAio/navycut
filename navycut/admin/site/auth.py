@@ -1,9 +1,11 @@
-from flask_login import LoginManager 
-from flask_login import LoginManager, login_required as _login_required
-from flask_login import LoginManager, login_user as _login_user
+from flask_login import (LoginManager, 
+                    login_required as _login_required)
+
+from flask_login import (LoginManager, 
+                    login_user as _login_user)
+
 from flask_login import current_user as _current_user
-# from flask import current_app as _current_app
-# from flask import current_app
+
 from .models import User
 
 # app = current_app

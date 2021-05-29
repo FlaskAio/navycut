@@ -6,9 +6,8 @@ def _execute_from_command_line():
     """execute navycut commands from command line."""
     pass
 
-@click.command()
+@_execute_from_command_line.command()
 @click.argument('name')
 def createproject(name):
+    """Create the navycut project at the specified directory."""
     _create_boiler_project(name)
-
-_execute_from_command_line.add_command(createproject)
