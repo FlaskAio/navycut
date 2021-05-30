@@ -4,7 +4,7 @@ from ..urls import MethodView
 from .site.auth import login_user
 from .site.models import *
 from .site.views import *
-from navycut.orm.sqla import sql
+from navycut.orm import sql
 from ..utils.security import check_password_hash
 
 class _AdminLoginView(MethodView):
@@ -21,21 +21,16 @@ class _AdminLoginView(MethodView):
 
 
 class NavycutAdmin(Admin):
-    # def __init__(self, app=None):
-    #     if app is not None: self.init_app(app)
-    #     else: super(NavycutAdmin, self).__init__(self.app, template_mode="bootstrap4", index_view=_NavAdminIndexView())
+    def __init__(self,app=None):
+        if app is not None:
+            self.init_app(app)
 
     def init_app(self, app):
         self.app = app
         self._add_admin_login_view()
         super(NavycutAdmin, self).__init__(self.app, template_mode="bootstrap4", index_view=NavAdminIndexView())
         self._register_administrator_model()
-    # def _add_view(self, model):
-    #     current_app.admin.rm(model)
 
-    # def register_model(self, model):
-    #     with self.app.app_context():
-    #         self._add_view(model)
     def _register_administrator_model(self):
         self.register_model(User, category="Users")
         self.register_model(Group, category="Users")
@@ -45,12 +40,12 @@ class NavycutAdmin(Admin):
         register the app specific model with the admin
         :param model: 
             specific model to register.
+        
+        :for example ::
+            from .models import Blog
+            admin.register_model(Blog)
         """
-        # model_fields:list = list(column.name for column in model.__table__.columns)
-        # _all_image_fields = list(filter(None, list(field if field.endswith("_image") or field.endswith("_picture") else None for field in model_fields)))
-        # if len(_all_image_fields): 
-        #     self.add_view(NCAdminModelView(model, db.session, category=category))
-        #     return True
+
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
 
@@ -58,5 +53,3 @@ class NavycutAdmin(Admin):
         self.app.add_url_rule('/admin/login', view_func=_AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
 
 admin:NavycutAdmin = NavycutAdmin()
-# admin.register_model(User, category="Users")
-# admin.register_model(Group, category="Users")

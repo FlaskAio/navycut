@@ -31,8 +31,9 @@ SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
-    "navycut.helpers.static_server",
-    #"first_app", 
+    "navycut.admin.sister",
+    "navycut.helpers.static_server.sister",
+    #"first_app.sister", 
 ]
 
 ALLOWED_HOST = [ # 

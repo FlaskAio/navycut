@@ -2,8 +2,8 @@ import typing
 from json import dumps
 from warnings import warn
 from flask_admin import AdminIndexView
-from .auth import current_user
-from flask import redirect, render_template_string as rts
+from navycut.auth import current_user
+from flask import redirect, render_template_string as rts, url_for
 from flask_admin._compat import string_types, urljoin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.upload import ImageUploadField, ImageUploadInput
@@ -141,6 +141,10 @@ class _ImageUploadField(ImageUploadField):
 
 
 class NavAdminIndexView(AdminIndexView):
+
+    def __init__(self, *args, **kwargs):
+        super(NavAdminIndexView, self).__init__(*args, **kwargs)
+        self.endpoint = "admin.admin.index"
     
     def is_accessible(self):
         return current_user.is_authenticated

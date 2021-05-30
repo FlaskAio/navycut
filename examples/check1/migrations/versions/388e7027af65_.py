@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1691fb8409f3
+Revision ID: 388e7027af65
 Revises: 
-Create Date: 2021-05-27 17:41:54.704552
+Create Date: 2021-05-30 15:56:19.915224
 
 """
 from alembic import op
@@ -12,7 +12,7 @@ import navycut
 
 
 # revision identifiers, used by Alembic.
-revision = '1691fb8409f3'
+revision = '388e7027af65'
 down_revision = None
 branch_labels = None
 depends_on = None

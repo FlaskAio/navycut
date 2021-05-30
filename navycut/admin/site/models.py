@@ -1,8 +1,9 @@
 from flask_login import UserMixin
 from datetime import datetime
-from navycut.orm.sqla import sql
+from navycut.orm import sql
 from navycut.utils.security import create_password_hash
 from navycut.utils.console import Console
+from navycut.auth import login_manager
 
 # class Permission(sql.Model):
 #     id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
@@ -11,8 +12,10 @@ from navycut.utils.console import Console
 
 class Group(sql.Model):
     """default group model for users."""
-    id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
-    name = sql.Column(sql.String(255), nullable=False, unique=True)
+    # id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
+    # name = sql.Column(sql.String(255), nullable=False, unique=True)
+    id = sql.field.Integer(pk=True, unique=True, required=True)
+    name = sql.field.Char(required=True, unique=True)
 
     def __repr__(self) -> str:
         return self.name
@@ -39,6 +42,12 @@ class User(sql.Model, UserMixin):
     groups = sql.relationship("Group", secondary=group_user_con, backref=sql.backref("users", lazy='dynamic'))
     date_joined = sql.Column(sql.DateTime, default=datetime.now)
 
+    def __init__(self, *args, **kwargs):
+        print ('working')
+        super(User, self).__init__(*args, **kwargs)
+        self.password = create_password_hash(kwargs.pop('password'))
+        self.save()
+
     def set_password(self, password:str):
         """
         change the password for the user.
@@ -54,6 +63,7 @@ class User(sql.Model, UserMixin):
         to disable a particular user.
         """
         self.is_active = False
+        self.save()
         return True
 
     @property
@@ -70,10 +80,14 @@ class User(sql.Model, UserMixin):
     def __repr__(self) -> str:
         return self.name
 
-def _insert_intial_data():
+def _insert_intial_data() -> None:
     #insert all the initial data to the equivalent table.
     available_groups = ['super_admin','admin', 'staff', 'customer']
     for group in available_groups:
         grp=Group(name=group)
         grp.save()
     Console.log.Success("initial data for admin privilage added successfully.")
+
+@login_manager.user_loader
+def load_user(user_id) -> User:
+    return User.query.get(int(user_id))

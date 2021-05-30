@@ -6,22 +6,10 @@ from flask_login import (LoginManager,
 
 from flask_login import current_user as _current_user
 
-from .models import User
 
-# app = current_app
-# current_app = _current_app
 current_user = _current_user
 login_required = _login_required
 login_user = _login_user
 
-# class AuthManager:
-#     def __init__(self, App):pass
-#         # global app
-#         # app = App
-    
-# # if app is not None:
-login_manager = LoginManager()
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+login_manager = LoginManager()

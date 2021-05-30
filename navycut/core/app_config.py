@@ -4,11 +4,9 @@ from os.path import abspath
 from pathlib import Path
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
-from dotenv import load_dotenv
-
-from navycut.orm.sqla import migrator; load_dotenv()
-from ..admin.site.auth import login_manager
-from ..admin import admin
+from dotenv import load_dotenv; load_dotenv()
+from ..auth import login_manager
+# from ..admin import admin
 from ..urls import MethodView
 from ..conf import get_settings_module
 from ..orm.sqla import sql
@@ -53,7 +51,7 @@ class Navycut(Flask):
 
         self.initIns(sql)
         self.initIns(login_manager)
-        self.initIns(admin)
+        # self.initIns(admin)
         migrate.init_app(self, sql)
 
     def _perform_app_registration(self):
@@ -138,7 +136,7 @@ class SisterApp(Blueprint):
                                         static_url_path=str(arg_dict['static_url_path']),
                                         *wargs, **kwargs)
         self.url_prefix = arg_dict['url_prefix']
-        self._name = str(arg_dict['import_name'])
+        self._name = str(arg_dict['name'])
     
     def add_url_pattern(self, pattern_list:list):
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD']
@@ -149,5 +147,11 @@ class SisterApp(Blueprint):
         import_module(f"{self._name}.models", package=None)
         import_module(f"{self._name}.admin", package=None)
 
+    def register_blueprint(self, *wargs, **kwargs):
+        app.register_blueprint(*wargs, **kwargs)
+
     def __repr__(self):
         return self.import_name
+
+
+app = Navycut()

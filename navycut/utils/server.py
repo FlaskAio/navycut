@@ -7,5 +7,5 @@ def create_wsgi_app():
     return app
     
 
-def create_asgi_app(settings_file:str):
-    return WSGIMiddleware(create_wsgi_app(settings_file))
+def create_asgi_app():
+    return WSGIMiddleware(create_wsgi_app())

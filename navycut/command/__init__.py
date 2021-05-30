@@ -118,7 +118,7 @@ def createsuperuser():
     if Console.input.Boolean( "Are you sure, you want to create superuser using inserted data"):
         with app.app_context():
             new_admin = User(first_name=name.rsplit(" ")[0], last_name=name.rsplit(" ")[1], email=email, 
-                    username=username, password=create_password_hash(password))
+                    username=username, password=password)
             group = Group.query.filter_by(name='super_admin').first()
             new_admin.groups.append(group)
             new_admin.save()
@@ -127,8 +127,9 @@ def createsuperuser():
         Console.log.Error("superuser creation canceled!")
 
 @manage_command.command()
-def createapp(app_name):
+@click.argument("name")
+def createapp(name):
     """Creates a Navycut app directory structure for the given app name in the current directory."""
     settings = get_settings_module()
     project_dir = settings.BASE_DIR
-    _create_boiler_app(app_name, project_dir)
+    _create_boiler_app(name, project_dir)
