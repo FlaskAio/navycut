@@ -2,3 +2,7 @@
 
 from .app_config import Navycut, app
 from .app_config import SisterApp
+
+
+
+"""Written by: Aniket Sarkar(https://github.com/marktennyson)"""

@@ -6,14 +6,11 @@ from . import admin
 
 _basedir = Path(path.abspath(__file__)).parent.parent
 
-config__dict:dict = dict(
-        import_name = __name__,
-        name = "admin",
-        static_folder =  _basedir / "static",
-        static_url_path = "/",
-        url_prefix = "/",
-        template_folder = _basedir / "templates",
-)
+app = SisterApp(name="adminapp",
+                import_name= __name__,
+                template_folder=_basedir / "templates",
+                static_folder=_basedir / "static",
+                static_url_path="/",
+                url_prefix="/",)
 
-app = SisterApp(config__dict)
 admin.init_app(app)

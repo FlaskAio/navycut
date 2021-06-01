@@ -6,13 +6,11 @@ from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from dotenv import load_dotenv; load_dotenv()
 from ..auth import login_manager
-# from ..admin import admin
 from ..urls import MethodView
 from ..conf import get_settings_module
 from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
-# from ..orm.sqla.migrator.engine import _SQLITE_ENGINE, _MYSQL_ENGINE
 
 _basedir = Path(abspath(__file__)).parent.parent
 
@@ -114,7 +112,7 @@ class Navycut(Flask):
             
             except: 
                 app = self._import_app(str_app)
-            self.register_blueprint(app, url_prefix=app.url_prefix)
+            self.register_blueprint(app._create_app(), url_prefix=app.url_prefix)
 
     def debugging(self,flag) -> None:
         self.debug = flag
@@ -128,15 +126,48 @@ class Navycut(Flask):
         return self.import_name
 
 class SisterApp(Blueprint):
-    def __init__(self, arg_dict:dict, *wargs, **kwargs):
-        super(SisterApp, self).__init__(name=str(arg_dict['name']),
-                                        import_name=str(arg_dict['import_name']),
-                                        template_folder=str(arg_dict['template_folder']),
-                                        static_folder=str(arg_dict['static_folder']),
-                                        static_url_path=str(arg_dict['static_url_path']),
-                                        *wargs, **kwargs)
-        self.url_prefix = arg_dict['url_prefix']
-        self._name = str(arg_dict['name'])
+    def __init__(self, name=None,
+                import_name=None,
+                template_folder=None,
+                static_folder=None,
+                static_url_path=None,
+                url_prefix=None,
+                 *wargs, **kwargs):
+
+        kwargs_pl = dict()
+
+        if template_folder is not None:
+            kwargs_pl.update(dict(template_folder=template_folder,))
+
+        if static_folder is not None:
+            kwargs_pl.update(dict(static_folder=static_folder,))
+
+        if static_url_path is not None:
+            kwargs_pl.update(dict(static_url_path=static_url_path,))
+
+        if url_prefix is not None:
+            kwargs_pl.update(dict(url_prefix=url_prefix,))
+
+        if import_name is None:
+            import_name = __name__
+        
+        if name is None:
+            name = "_".join(import_name.split('.'))
+
+        if kwargs is not None:
+            kwargs_pl.update(kwargs)
+
+        self._name = name
+        self._import_name = import_name
+        self._kwargs_pl = kwargs_pl
+
+        super(SisterApp, self).__init__(self._name, 
+                                        self._import_name,
+                                        **self._kwargs_pl)
+
+    def _create_app(self):
+        return self
+        
     
     def add_url_pattern(self, pattern_list:list):
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD']
@@ -144,8 +175,8 @@ class SisterApp(Blueprint):
             self.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
 
     def import_app_features(self) -> None:
-        import_module(f"{self._name}.models", package=None)
-        import_module(f"{self._name}.admin", package=None)
+        import_module(f"{self.name}.models", package=None)
+        import_module(f"{self.name}.admin", package=None)
 
     def register_blueprint(self, *wargs, **kwargs):
         app.register_blueprint(*wargs, **kwargs)

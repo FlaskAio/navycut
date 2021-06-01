@@ -144,7 +144,7 @@ class NavAdminIndexView(AdminIndexView):
 
     def __init__(self, *args, **kwargs):
         super(NavAdminIndexView, self).__init__(*args, **kwargs)
-        self.endpoint = "admin.admin.index"
+        self.endpoint = "admin_index"
     
     def is_accessible(self):
         return current_user.is_authenticated
