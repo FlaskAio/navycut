@@ -13,3 +13,8 @@ class DirectoryAlreadyExistsError(Exception):
     def __init__(self,project_dir):
         message = f"{project_dir} already exists at the location."
         super(DirectoryAlreadyExistsError, self).__init__(message)
+
+class ImportNameNotFoundError(Exception):
+    def __init__(self, location) -> None:
+        message = f"import_name notm provided for the sister app at {location}"
+        super(ImportNameNotFoundError, self).__init__(message)

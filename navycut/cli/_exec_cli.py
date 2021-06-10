@@ -72,11 +72,12 @@ def _create_boiler_app(app_name, project_dir, *wargs):
         else:
             with open(boilerplate_dir / boiler_file, 'r') as fb:
                 with open(app_dir / boiler_file, 'w') as wb:
-                    if boiler_file == '__init__.py':
-                        settings_data = fb.read()
+                    if boiler_file == 'sister.py':
+                        sister_data = fb.read()
                         #now replace the import_name with the real one at the new project directory.
-                        settings_data=settings_data.replace("import_name___boiler_var", app_name)
-                        wb.write(settings_data)
+                        sister_data=sister_data.replace("import_name___boiler_var", app_name)
+                        sister_data=sister_data.replace("classname___boiler_var", f"{app_name.capitalize()}Sister")
+                        wb.write(sister_data)
                     else: wb.write(fb.read())
                 Console.log.Info(f'Data from {boilerplate_dir}/{boiler_file} successfully transferred to {app_dir}/{boiler_file}')
     Console.log.Success(f"app {app_name} created successfully.")

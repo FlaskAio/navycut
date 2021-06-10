@@ -3,7 +3,7 @@ Do not change anything if you dont have enough knowledge
 about how to handle it, otherwise it may mess with the server.
 """
 
-from navycut.core import SisterApp
+from navycut.core import AppSister
 from os.path import abspath
 from pathlib import Path
 from .urls import url_patterns
@@ -19,7 +19,7 @@ _config__dict = {
     "url_prefix" : "/blog",
 }
 
-app = SisterApp(_config__dict)
+app = AppSister(_config__dict)
 
 app.add_url_pattern(url_patterns)
 app.import_app_features()

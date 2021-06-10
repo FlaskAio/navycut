@@ -18,3 +18,5 @@ def get_settings_module():
     settings_file = environ.get("NAVYCUT_SETTINGS_MODULE")
     try: return import_module(settings_file)
     except ModuleNotFoundError: raise SettingsFileNotFoundError(settings_file, None)
+
+# settings = get_settings_module()

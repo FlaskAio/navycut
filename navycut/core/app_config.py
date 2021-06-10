@@ -5,6 +5,7 @@ from pathlib import Path
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from dotenv import load_dotenv; load_dotenv()
+from ..errors.misc import ImportNameNotFoundError
 from ..auth import login_manager
 from ..urls import MethodView
 from ..conf import get_settings_module
@@ -95,24 +96,35 @@ class Navycut(Flask):
         ins.init_app(self)
         return True
 
-    def _import_app(self, app:str):
+    def _import_app(self, app_name:str):
         
         try: 
-            app = import_module(app)
+            app_location, app_str_class = tuple(app_name.rsplit(".", 1))
+            app_file = import_module(app_location)
+            real_app_class = getattr(app_file, app_str_class)
+            print ("app_name:", app_file.__name__)
+            app = real_app_class()
+            if getattr(app, "import_name") is None:
+                app.import_name = app_file.__name__
+            try: 
+                app.init()
+            except:
+                pass
         
         except AttributeError: 
-            raise AttributeError(f"{app} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
-        return getattr(app, 'app')
+            raise AttributeError(f"{app_name} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
+        return app.get_app()
 
     def _registerApp(self, _appList:list):
         for str_app in _appList: 
             
             try: 
-                app = self._import_app(f"{self.project_name}.{str_app}")
+                app = self._import_app(str_app)    
             
             except: 
-                app = self._import_app(str_app)
-            self.register_blueprint(app._create_app(), url_prefix=app.url_prefix)
+                app = self._import_app(f"{self.project_name}.{str_app}")
+
+            self.register_blueprint(app, url_prefix=app.url_prefix)
 
     def debugging(self,flag) -> None:
         self.debug = flag
@@ -125,56 +137,103 @@ class Navycut(Flask):
     def __repr__(self):
         return self.import_name
 
-class SisterApp(Blueprint):
-    def __init__(self, name=None,
-                import_name=None,
-                template_folder=None,
-                static_folder=None,
-                static_url_path=None,
-                url_prefix=None,
-                 *wargs, **kwargs):
+class AppSister:
 
-        kwargs_pl = dict()
+    import_app_feature:bool = False
 
-        if template_folder is not None:
-            kwargs_pl.update(dict(template_folder=template_folder,))
+    extra_url_pattern:tuple = None
 
-        if static_folder is not None:
-            kwargs_pl.update(dict(static_folder=static_folder,))
+    import_name:str = None
 
-        if static_url_path is not None:
-            kwargs_pl.update(dict(static_url_path=static_url_path,))
+    name:str = None
 
-        if url_prefix is not None:
-            kwargs_pl.update(dict(url_prefix=url_prefix,))
+    template_folder = None
 
-        if import_name is None:
-            import_name = __name__
-        
-        if name is None:
-            name = "_".join(import_name.split('.'))
+    static_folder = None
 
-        if kwargs is not None:
-            kwargs_pl.update(kwargs)
+    static_url_path = None
 
-        self._name = name
-        self._import_name = import_name
-        self._kwargs_pl = kwargs_pl
-
-        super(SisterApp, self).__init__(self._name, 
-                                        self._import_name,
-                                        **self._kwargs_pl)
-
-    def _create_app(self):
-        return self
-        
+    url_prefix = None
     
+    extra_ins:tuple = None
+    
+    def init(self, **kwargs) -> None:
+
+        if self.import_name is None:
+            raise ImportNameNotFoundError("app_register")
+
+        if self.name is None:
+            self.name = "_".join(self.import_name.split("."))
+
+        if isinstance(self.import_name, tuple):
+            self.import_name = self.import_name[0]
+
+        if isinstance(self.template_folder, tuple):
+            self.template_folder = self.template_folder[0]
+
+        if isinstance(self.static_folder, tuple):
+            self.static_folder = self.static_folder[0]
+
+        if isinstance(self.static_url_path, tuple):
+            self.static_url_path = self.static_url_path[0]
+
+        if isinstance(self.url_prefix, tuple):
+            self.url_prefix = self.url_prefix[0]
+
+        if isinstance(self.import_app_feature, tuple):
+            self.import_app_feature = self.import_app_feature[0]
+
+        # if isinstance(self.extra_url_pattern, tuple):
+        #     self.extra_url_pattern = self.extra_url_pattern[0]
+
+
+        if self.template_folder is not None:
+            kwargs.update(dict(template_folder=self.template_folder,))
+
+        if self.static_folder is not None:
+            kwargs.update(dict(static_folder=self.static_folder,))
+
+        if self.static_url_path is not None:
+            kwargs.update(dict(static_url_path=self.static_url_path,))
+
+        if self.url_prefix is not None:
+            kwargs.update(dict(url_prefix=self.url_prefix,))
+                
+
+        # The default blueprint object for each sister app
+        self.power = Blueprint(self.name, self.import_name, **kwargs)
+
+        if self.extra_ins is not None:
+            for ins in self.extra_ins:
+                ins.init_app(app)
+
+        if self.extra_url_pattern is not None:
+            for url_pattern in self.extra_url_pattern:
+                self.add_url_pattern(url_pattern)
+
+        if self.import_app_feature is True:
+            self.import_app_features()
+
+
+    def get_app(self):
+        return self.power
+        
+    def init_while_registration(self, import_name, **kwargs):
+        self.import_name = import_name
+        self.name = kwargs.pop('name', None)
+        self.init(**kwargs)
+
     def add_url_pattern(self, pattern_list:list):
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD']
         for url_path in pattern_list:
-            self.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
+            self.power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
 
     def import_app_features(self) -> None:
+        """
+        To use this feature you must need to set the 
+        value of name variable same as the app name, 
+        otherwise it may not work properly.
+        """
         import_module(f"{self.name}.models", package=None)
         import_module(f"{self.name}.admin", package=None)
 

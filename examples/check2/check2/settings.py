@@ -5,7 +5,7 @@ from os.path import abspath
 IMPORT_NAME = __name__
 
 #defining the actual project name:
-PROJECT_NAME = "project_name___boiler_var"
+PROJECT_NAME = "check2"
 
 
 #defining the base directory
@@ -26,14 +26,14 @@ DATABASE = {
 }
 
 #defining the navycut app secret key
-SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time of creation.
+SECRET_KEY = r"nKXOtseZUJ;m;<iHvbXR:$jxLS%/C]bvSJ:sGM{0oZImNbrVPVL*x" #should generate randomly at the time of creation.
 
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
-    "navycut.admin.sister",
-    "navycut.helpers.upload_server.sister",
-    #"first_app.sister", 
+    "navycut.admin.sister.AdminSister",
+    "navycut.helpers.upload_server.sister.UploadserverSister",
+    "app1.sister.App1Sister", 
 ]
 
 ALLOWED_HOST = [ # 

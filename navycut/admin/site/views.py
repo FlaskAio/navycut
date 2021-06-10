@@ -183,7 +183,6 @@ class _AdminModelConverter(AdminModelConverter):
                 return CKTextAreaField
 
             if isinstance(column.type, JSONType) and not name != column.name:
-                print ('this block working')
                 return JSONField
 
     def convert(self, model, mapper, name, prop, field_args, hidden_pk):

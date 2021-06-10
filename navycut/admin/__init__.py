@@ -1,15 +1,17 @@
 from flask import redirect
 from flask_admin import Admin
 from ..urls import MethodView
-from .site.auth import login_user
+from ..auth import login_user
 from .site.models import *
 from .site.views import *
 from navycut.orm import sql
 from ..utils.security import check_password_hash
 
-class _AdminLoginView(MethodView):
+class AdminLoginView(MethodView):
+
     def get(self):
         return self.render("admin/_adm_login.html")
+
     def post(self):
         username = self.request.form.get('username')
         password = self.request.form.get('password')
@@ -50,6 +52,6 @@ class NavycutAdmin(Admin):
         return True
 
     def _add_admin_login_view(self):
-        self.app.add_url_rule('/admin/login', view_func=_AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
+        self.app.add_url_rule('/admin/login', view_func=AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
 
 admin:NavycutAdmin = NavycutAdmin()

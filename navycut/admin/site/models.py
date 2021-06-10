@@ -43,7 +43,6 @@ class User(sql.Model, UserMixin):
     date_joined = sql.Column(sql.DateTime, default=datetime.now)
 
     def __init__(self, *args, **kwargs):
-        print ('working')
         super(User, self).__init__(*args, **kwargs)
         self.password = create_password_hash(kwargs.pop('password'))
         self.save()
@@ -55,8 +54,7 @@ class User(sql.Model, UserMixin):
         """
         password_hash:str = create_password_hash(password)
         self.password = password_hash
-        try: sql.session.commit()
-        except Exception: raise Exception
+        self.save()
 
     def disable_user(self) -> bool:
         """

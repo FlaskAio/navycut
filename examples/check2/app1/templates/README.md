@@ -1,0 +1,1 @@
+# If you don't want to rend the html file, simply delete this folder.

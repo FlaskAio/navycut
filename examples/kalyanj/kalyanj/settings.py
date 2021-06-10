@@ -26,7 +26,7 @@ SECRET_KEY = r"y>EYb:G1YAZkpq{IGfPg9:Z}ro*5d}R7BQA[IbC/FKw2pSx%>rO>m" #should ge
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
-    "navycut.helpers.static_server",
+    "navycut.helpers.upload_server",
     #"first_app", 
 ]
 

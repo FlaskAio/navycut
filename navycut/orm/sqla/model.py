@@ -17,8 +17,10 @@ class Model(_Model):
         To store the sqlalchemy object.
         """
         current_app.extensions['sqlalchemy'].db.session.add(self)
-        try: current_app.extensions['sqlalchemy'].db.session.commit()
-        except IntegrityError as e: raise ModelsIntegrityError(e)
+        try: 
+            current_app.extensions['sqlalchemy'].db.session.commit()
+        except IntegrityError as e: 
+            raise ModelsIntegrityError(e)
 
     def to_dict(self) -> dict:
         """returns the dictionary output of the particular model."""

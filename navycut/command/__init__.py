@@ -97,15 +97,24 @@ def makemigrations(directory, sql, tag, x_arg, revision):
     return None
 
 @manage_command.command()
-def createsuperuser():
+@click.option('-n', '--name', default=None,
+              help=('Provide the name of superuser (default is None)'))
+
+@click.option('-u', '--username', default=None,
+              help=('Provide the username of superuser (default is None)'))
+
+@click.option('-e', '--email', default=None,
+              help=('Provide the email of superuser (default is None)'))
+
+def createsuperuser(name, username, email):
     
     """Create the superuser account to access the admin panel."""
     
     from ..admin.site.models import User, Group
             
-    name:str = Console.input.String("enter admin name: ")
-    email:str = Console.input.String("enter admin email: ")
-    username:str = Console.input.String("enter admin username: ") or email
+    name:str = name or Console.input.String("enter admin name: ")
+    email:str = email or Console.input.String("enter admin email: ")
+    username:str = username or Console.input.String("enter admin username: ") or email
     while True:
         password:str = Console.input.Password("enter admin password: ")
         confirm_password:str = Console.input.Password("enter admin confirm password: ")
