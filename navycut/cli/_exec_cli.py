@@ -1,10 +1,10 @@
-from os import makedirs, path, listdir
-from pathlib import Path
+from os import makedirs, listdir
+from ..utils import path
 from ..utils.console import Console
 from ..utils.tools import generate_random_secret_key
 from ..errors.misc import  DirectoryAlreadyExistsError
 
-__baseDir__ = Path(path.abspath(__file__)).parent.parent
+__baseDir__ = path.abspath(__file__).parent.parent
 
 
 def _create_boiler_project(name):

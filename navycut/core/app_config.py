@@ -1,7 +1,5 @@
 from flask import Flask, Blueprint
 from importlib import import_module
-from os.path import abspath
-from pathlib import Path
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from dotenv import load_dotenv; load_dotenv()
@@ -12,8 +10,9 @@ from ..conf import get_settings_module
 from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
+from ..utils import path
 
-_basedir = Path(abspath(__file__)).parent.parent
+_basedir = path.abspath(__file__).parent.parent
 
 class _BaseIndexView(MethodView):
     def get(self):
@@ -102,7 +101,6 @@ class Navycut(Flask):
             app_location, app_str_class = tuple(app_name.rsplit(".", 1))
             app_file = import_module(app_location)
             real_app_class = getattr(app_file, app_str_class)
-            print ("app_name:", app_file.__name__)
             app = real_app_class()
             if getattr(app, "import_name") is None:
                 app.import_name = app_file.__name__
@@ -205,7 +203,7 @@ class AppSister:
 
         if self.extra_ins is not None:
             for ins in self.extra_ins:
-                ins.init_app(app)
+                app.initIns(ins)
 
         if self.extra_url_pattern is not None:
             for url_pattern in self.extra_url_pattern:
@@ -218,10 +216,6 @@ class AppSister:
     def get_app(self):
         return self.power
         
-    def init_while_registration(self, import_name, **kwargs):
-        self.import_name = import_name
-        self.name = kwargs.pop('name', None)
-        self.init(**kwargs)
 
     def add_url_pattern(self, pattern_list:list):
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD']

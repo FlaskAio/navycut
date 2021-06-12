@@ -26,6 +26,8 @@ class NCObject(object):
                 self.dict = loads(wargs[0])
             except decoder.JSONDecodeError:
                 raise NCObjectDataTypeMisMatchError(wargs[0])
+            except Exception as e:
+                raise Exception("something went wrong.\nError: "+e)
         
         elif len(wargs) is not None and isinstance(wargs[0], dict): 
             self.dict = wargs[0]
@@ -55,9 +57,14 @@ class NCObject(object):
             a.update(name="mars")
             print (a.name)
         """
-        if len(wargs) and not isinstance(wargs[0], dict): raise NCObjectDataTypeMisMatchError(__)
-        if len(wargs): self.__dict__.update({k: self.__elt(v) for k, v in wargs[0].items()})
-        else: self.__dict__.update({k: self.__elt(v) for k, v in kwargs.items()})
+        if len(wargs) and not isinstance(wargs[0], dict): 
+            raise NCObjectDataTypeMisMatchError(wargs[0])
+
+        if len(wargs): 
+            self.__dict__.update({k: self.__elt(v) for k, v in wargs[0].items()})
+            
+        else: 
+            self.__dict__.update({k: self.__elt(v) for k, v in kwargs.items()})
 
     def _convert_to_dict(self, obj):
             _dict = obj.__dict__

@@ -4,11 +4,10 @@ how to handle it, otherwise it may mess the server.
 """
 
 from navycut.core import AppSister
-from os.path import abspath
-from pathlib import Path
+from navycut.utils import path
 from .urls import url_patterns
 
-__basedir__ = Path(abspath(__file__)).parent
+__basedir__ = path.abspath(__file__).parent
 
 class App1Sister(AppSister):
     name = "app1"
