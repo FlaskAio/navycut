@@ -13,6 +13,7 @@ from sqlalchemy import (Column as ColumnType,
                     DateTime as DateTimeType)
 from sqlalchemy.orm import relationship
 from sqlalchemy_jsonfield import JSONField as JSONType
+from wtforms import widgets
 from .types import ImageType
 from datetime import datetime
 
@@ -26,6 +27,9 @@ class Column(ColumnType):
         if "help_text" in kwargs:
             self.help_text = kwargs.pop("help_text")
 
+        if "widget" in kwargs:
+            self.widget = kwargs.pop("widget", None)
+
         return super(Column, self).__init__(*wargs, **kwargs)
 
 class Fields:
@@ -34,7 +38,8 @@ class Fields:
     """
     def Text(self, required:bool=False,
             unique:bool=False,
-            help_text:str=None) -> Column:
+            help_text:str=None,
+            widget:str="ckeditor") -> Column:
 
         """
         The Text fields for sqlalchemy,
@@ -61,6 +66,7 @@ class Fields:
             TextType,
             nullable=True if not required else False,
             unique=unique,
+            widget=widget
         )
 
 

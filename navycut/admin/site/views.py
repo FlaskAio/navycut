@@ -21,8 +21,8 @@ from flask_admin.model.form import  FieldPlaceholder
 from flask_admin.contrib.sqla.validators import Unique
 from flask_admin.contrib.sqla.tools import (has_multiple_pks, 
                                     filter_foreign_columns,
-                                    is_association_proxy)
-
+                                    is_association_proxy
+                                    )
 from flask_admin.form.fields import JSONField as _JsonField
 from sqlalchemy_jsonfield import JSONField as JSONType
 
@@ -35,16 +35,28 @@ class JSONField(_JsonField):
         else:
             return ''
 
-class CKTextAreaWidget(TextArea):
+class CKEditorTextAreaWidget(TextArea):
     def __call__(self, field, **kwargs):
         if kwargs.get('class'):
             kwargs['class'] += ' ckeditor'
         else:
             kwargs.setdefault('class', 'ckeditor')
-        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
+        return super(CKEditorTextAreaWidget, self).__call__(field, **kwargs)
 
-class CKTextAreaField(TextAreaField):
-    widget = CKTextAreaWidget()
+class TinyMCETextAreaWidget(TextArea):
+    def __call__(self, field, **kwargs):
+        if kwargs.get('class'):
+            kwargs['class'] += ' tinymce'
+        else:
+            kwargs.setdefault('class', 'tinymce')
+        return super(TinyMCETextAreaWidget, self).__call__(field, **kwargs)
+
+class CKEditorTextAreaField(TextAreaField):
+    widget = CKEditorTextAreaWidget()
+
+class TinyMCETextAreaField(TextAreaField):
+    widget = TinyMCETextAreaWidget()
+
 
 class _ImageUploadInput(ImageUploadInput):
     
@@ -144,7 +156,6 @@ class NavAdminIndexView(AdminIndexView):
 
     def __init__(self, *args, **kwargs):
         super(NavAdminIndexView, self).__init__(*args, **kwargs)
-        self.endpoint = "admin_index"
     
     def is_accessible(self):
         return current_user.is_authenticated
@@ -180,7 +191,13 @@ class _AdminModelConverter(AdminModelConverter):
                 return _ImageUploadField
             
             if isinstance(column.type, TextType) and not name != column.name:
-                return CKTextAreaField
+                if hasattr(column, "widget") and getattr(column, 'widget', None) is not None:
+                    if column.widget == "tinymce":
+                        return TinyMCETextAreaField
+                    else:
+                        return CKEditorTextAreaField
+                else:
+                    return CKEditorTextAreaField
 
             if isinstance(column.type, JSONType) and not name != column.name:
                 return JSONField
@@ -319,6 +336,20 @@ class _AdminModelConverter(AdminModelConverter):
                         **kwargs
                     )
 
+            # excluded_fields = getattr(self.view, 'excluded_fields', None)
+            # print ("excluded_fields:", excluded_fields)
+
+            # if excluded_fields is not None:
+            #     if self.view.column_exclude_list is not None:
+            #         self.view.column_exclude_list.extend(excluded_fields)
+            #     else:
+            #         self.view.column_exclude_list = excluded_fields
+
+            #     if self.view.form_excluded_columns is not None:
+            #         self.view.form_excluded_columns.extend(excluded_fields)
+            #     else:
+            #         self.view.form_excluded_columns = excluded_fields
+
             # Run converter
             converter = self.get_converter(column)
 
@@ -333,9 +364,24 @@ class NCAdminModelView(ModelView):
     
     model_form_converter = _AdminModelConverter
 
+    excluded_fields:list = None
+
     can_export = True
 
-    extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
+    extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js',
+                "https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js",
+                "/static/javascript/tinyMCE.js"
+                ]    
 
     def __init__(self, *wargs, **kwargs):
+        if self.column_exclude_list is not None:
+            self.column_exclude_list.extend(self.excluded_fields)
+        else:
+            self.column_exclude_list = self.excluded_fields
+
+        if self.form_excluded_columns is not None:
+            self.form_excluded_columns.extend(self.excluded_fields)
+        else:
+            self.form_excluded_columns = self.excluded_fields
+
         super(NCAdminModelView, self).__init__(*wargs, **kwargs)

@@ -16,8 +16,11 @@ class AdminLoginView(MethodView):
         username = self.request.form.get('username')
         password = self.request.form.get('password')
         user = User.query.filter_by(username=username).first()
-        if not user: return "Invalid username"
-        if not check_password_hash(user.password, password): return "Invalid password"
+        if not user: 
+            return "Invalid username"
+            
+        if not check_password_hash(user.password, password): 
+            return "Invalid password"
         login_user(user)
         return redirect('/admin')
 
@@ -37,7 +40,7 @@ class NavycutAdmin(Admin):
         self.register_model(User, category="Users")
         self.register_model(Group, category="Users")
 
-    def register_model(self, model, category=None) -> bool:
+    def register_model(self, model, *wargs, category=None) -> bool:
         """
         register the app specific model with the admin
         :param model: 
@@ -47,7 +50,8 @@ class NavycutAdmin(Admin):
             from .models import Blog
             admin.register_model(Blog)
         """
-
+        if len(wargs):
+            self.add_view(wargs[0](model, sql.session, category=category))
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
 

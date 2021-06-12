@@ -139,7 +139,7 @@ class AppSister:
 
     import_app_feature:bool = False
 
-    extra_url_pattern:tuple = None
+    url_pattern:tuple = None
 
     import_name:str = None
 
@@ -181,8 +181,8 @@ class AppSister:
         if isinstance(self.import_app_feature, tuple):
             self.import_app_feature = self.import_app_feature[0]
 
-        # if isinstance(self.extra_url_pattern, tuple):
-        #     self.extra_url_pattern = self.extra_url_pattern[0]
+        # if isinstance(self.url_pattern, tuple):
+        #     self.url_pattern = self.url_pattern[0]
 
 
         if self.template_folder is not None:
@@ -205,8 +205,8 @@ class AppSister:
             for ins in self.extra_ins:
                 app.initIns(ins)
 
-        if self.extra_url_pattern is not None:
-            for url_pattern in self.extra_url_pattern:
+        if self.url_pattern is not None:
+            for url_pattern in self.url_pattern:
                 self.add_url_pattern(url_pattern)
 
         if self.import_app_feature is True:

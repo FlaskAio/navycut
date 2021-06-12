@@ -15,5 +15,5 @@ class App1Sister(AppSister):
     static_folder = __basedir__ / "static"
     static_url_path = "/static"
     url_prefix = "/app1"
-    extra_url_pattern = (url_patterns, )
+    url_pattern = (url_patterns, )
     import_app_feature = True

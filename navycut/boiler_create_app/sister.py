@@ -18,5 +18,5 @@ class classname___boiler_var(AppSister):
     static_folder = __basedir__ / "static"
     static_url_path = "/static"
     url_prefix = "/import_name___boiler_var"
-    extra_url_pattern = (url_patterns, )
+    url_pattern = (url_patterns, )
     import_app_feature = True
