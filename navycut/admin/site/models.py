@@ -14,8 +14,8 @@ class Group(sql.Model):
     """default group model for users."""
     # id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
     # name = sql.Column(sql.String(255), nullable=False, unique=True)
-    id = sql.field.Integer(pk=True, unique=True, required=True)
-    name = sql.field.Char(required=True, unique=True)
+    id = sql.fields.Integer(pk=True, unique=True, required=True)
+    name = sql.fields.Char(required=True, unique=True)
 
     def __repr__(self) -> str:
         return self.name

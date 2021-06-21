@@ -40,18 +40,20 @@ class NavycutAdmin(Admin):
         self.register_model(User, category="Users")
         self.register_model(Group, category="Users")
 
-    def register_model(self, model, *wargs, category=None) -> bool:
+    def register_model(self, model, custom_view=None, category=None) -> bool:
         """
         register the app specific model with the admin
         :param model: 
             specific model to register.
+        :param custom_view:
+            The custom Model View class.
         
         :for example ::
             from .models import Blog
             admin.register_model(Blog)
         """
-        if len(wargs):
-            self.add_view(wargs[0](model, sql.session, category=category))
+        if custom_view is not None:
+            self.add_view(custom_view(model, sql.session, category=category))
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
 

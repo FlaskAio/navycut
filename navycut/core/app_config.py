@@ -1,8 +1,9 @@
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, request
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from dotenv import load_dotenv; load_dotenv()
+from inspect import signature
 from ..errors.misc import ImportNameNotFoundError
 from ..auth import login_manager
 from ..urls import MethodView
@@ -218,10 +219,36 @@ class AppSister:
         
 
     def add_url_pattern(self, pattern_list:list):
-        methods=['GET','PUT', 'DELETE', 'POST', 'HEAD']
-        for url_path in pattern_list:
-            self.power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
+        def get_request_view(f):
+            """
+            adding the default request object with view function
+            """
 
+            request_param = signature(f).parameters.get('request', None)
+            is_request = True if request_param is not None else False
+
+            def decorator(*args, **kwargs):
+                if is_request is True:
+                    args:list = list(args)
+                    args.insert(0, request)
+                    args:tuple = tuple(args)
+                return f(*args, **kwargs)
+            return decorator
+
+        methods=['GET','PUT', 'DELETE', 'POST', 'HEAD', 'OPTIONS']
+
+        for url_path in pattern_list:
+            if repr(url_path).startswith("path"):
+                self.power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
+            
+            elif repr(url_path).startswith("url"):
+                view_func = get_request_view(url_path.views)
+                self.power.add_url_rule(rule=url_path.url, view_func=view_func, methods=methods)
+            
+            else:
+                pass
+
+    
     def import_app_features(self) -> None:
         """
         To use this feature you must need to set the 

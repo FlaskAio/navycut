@@ -92,7 +92,19 @@ class MethodView(_MethodView):
 
 
 class path:
-    def __init__(self, url:str, views, name=None):
+    def __init__(self, url:str, views, name=None) -> None:
+        self.url:str = "/"+url if not url.startswith('/') else url
+        self.views = views
+        self.name:str = name or self.views.__name__
+    
+    def __repr__(self) -> str:
+        return f"path <{self.url}>"
+
+class url:
+    def __init__(self, url:str, views, name=None) -> None:
         self.url = "/"+url if not url.startswith('/') else url
         self.views = views
         self.name = name or self.views.__name__
+
+    def __repr__(self) -> str:
+        return f"url <{self.url}>"

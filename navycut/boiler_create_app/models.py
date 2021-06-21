@@ -4,8 +4,8 @@ from navycut.orm import sql
 #demo models
 
 # class Blog(sql.Model):
-#     id = sql.field.Integer(pk=True, unique=True)
-#     name = sql.field.Char(required=True, unique=True)
-#     picture = sql.field.Image(required=True)
-#     body = sql.field.Text(required=False)
-#     is_active = sql.field.Boolean(default=True)
+#     id = sql.fields.Integer(pk=True, unique=True)
+#     name = sql.fields.Char(required=True, unique=True)
+#     picture = sql.fields.Image(required=True)
+#     body = sql.fields.Text(required=False)
+#     is_active = sql.fields.Boolean(default=True)

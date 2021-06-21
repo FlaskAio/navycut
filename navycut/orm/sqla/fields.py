@@ -10,10 +10,10 @@ from sqlalchemy import (Column as ColumnType,
                     Date as DateType,
                     Time as TimeType,
                     ForeignKey as ForeignKeyType,
-                    DateTime as DateTimeType)
+                    DateTime as DateTimeType
+                    )
 from sqlalchemy.orm import relationship
 from sqlalchemy_jsonfield import JSONField as JSONType
-from wtforms import widgets
 from .types import ImageType
 from datetime import datetime
 
@@ -56,16 +56,22 @@ class Fields:
             Extra “help” text to be displayed with the form widget. 
             It’s useful for documentation even if your field isn’t used on a form.
 
+        :param wdiget:
+            Declare the text widget are box for admin section.
+            Default is "ckeditor".
+            available options - "ckeditor", "tinymce"
+
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Text(required=True)
+            name = sql.fields.Text(required=True, widget="ckeditor")
         """
 
         return Column(
             TextType,
             nullable=True if not required else False,
             unique=unique,
+            help_text=help_text,
             widget=widget
         )
 
@@ -83,7 +89,7 @@ class Fields:
         
         :param max_length:
             the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
+            Default value is 255.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
@@ -155,28 +161,28 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.Float(required=True)
         """
 
         return Column(
             FloatType,
             primary_key=pk,
             nullable=True if not required else False,
-            unique = unique
+            unique = unique,
+            choices=choices,
+            help_text=help_text 
         )
 
     def Integer(self, required:bool=False,
                 pk:bool=True,
                 unique:bool=False,
+                choices:tuple=None,
                 help_text:str=None) -> Column:
         
         """
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
@@ -201,28 +207,28 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.Integer(required=True)
         """
 
         return Column(
             IntegerType,
             primary_key=pk,
             nullable=True if not required else False,
-            unique=unique
+            unique=unique,
+            choices=choices,
+            help_text=help_text
         )
 
     def BigInteger(self, required:bool=False,
                 pk:bool=False,
                 unique:bool=False,
+                choices:tuple=None,
                 help_text:str=None) -> Column:
 
         """
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
@@ -247,28 +253,28 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.BigInteger(required=True)
         """
 
         return Column(
             BigIntegerType,
             nullable= True if not required else False,
             unique = unique,
-            primary_key=pk
+            primary_key=pk,
+            choices=choices,
+            help_text=help_text
         )
 
     def SmallInteger(self, required:bool=False,
                 pk:bool=False,
                 unique:bool=False,
+                choices:tuple=None,
                 help_text:str=None) -> Column:
 
         """
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
@@ -293,14 +299,16 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.SmallInteger(required=True)
         """
 
         return Column(
             SmallIntegerType,
             nullable= True if not required else False,
             unique = unique,
-            primary_key=pk
+            primary_key=pk,
+            choices=choices,
+            help_text=help_text
         )
 
     def Boolean(required:bool=False,
@@ -312,25 +320,15 @@ class Fields:
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
+        :param default:
+            Provide the default value for this column field.
 
         :param unique:
             If True, this field must be unique throughout the table.
-
-        :param choices:
-            A sequence consisting itself of iterables of exactly two items 
-            (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
-            the default form widget will be a select box with these choices 
-            instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
@@ -339,13 +337,14 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.Boolean(required=True)
         """
 
         return Column(
             BooleanType,
             nullable=True if not required else False,
             unique=unique,
+            help_text=help_text,
             default=default
         )
     
@@ -357,25 +356,13 @@ class Fields:
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
+        :param default:
+            Provide the default value for this column field.
 
-        :param unique:
-            If True, this field must be unique throughout the table.
-
-        :param choices:
-            A sequence consisting itself of iterables of exactly two items 
-            (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
-            the default form widget will be a select box with these choices 
-            instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
@@ -384,13 +371,14 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.Json(default={"name":"navycut", "planet":"Pluto"})
         """
 
         return Column(
             JSONType(enforce_string=True, enforce_unicode=False), 
             nullable= True if not required else False,
-            default=default
+            default=default,
+            help_text=help_text
             )
 
     def Image(self, required:bool=True,
@@ -401,25 +389,10 @@ class Fields:
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
-
-        :param unique:
-            If True, this field must be unique throughout the table.
-
-        :param choices:
-            A sequence consisting itself of iterables of exactly two items 
-            (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
-            the default form widget will be a select box with these choices 
-            instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
@@ -428,43 +401,30 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.Image(required=True, help_text="insert the image here")
         """
 
         return Column(
                 ImageType(255),
-                nullable= True if not required else False
+                nullable= True if not required else False,
+                help_text=help_text
         )
 
     def Binary(self, required:bool=False,
             default:bytes=None,
-            help_text:str=None,
-            unique=False) -> Column:
+            help_text:str=None) -> Column:
 
         """
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
+        :param default:
+            Provide the default value for this column field.
 
-        :param unique:
-            If True, this field must be unique throughout the table.
-
-        :param choices:
-            A sequence consisting itself of iterables of exactly two items 
-            (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
-            the default form widget will be a select box with these choices 
-            instead of the standard text field.
-        
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
             It’s useful for documentation even if your field isn’t used on a form.
@@ -472,44 +432,30 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.Binary(required=True)
         """
 
         return Column(
             LargeBinaryType,
             nullable=True if not required else False,
-            unique=unique,
-            default=default
+            default=default,
+            help_text=help_text
         )
 
     def LargeBinary(self, required:bool=False,
             default:bytes=None,
-            help_text:str=None,
-            unique=False) -> Column:
+            help_text:str=None) -> Column:
 
         """
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
-
-        :param unique:
-            If True, this field must be unique throughout the table.
-
-        :param choices:
-            A sequence consisting itself of iterables of exactly two items 
-            (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
-            the default form widget will be a select box with these choices 
-            instead of the standard text field.
+        :param default:
+            Provide the default value for this column field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
@@ -518,19 +464,20 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            name = sql.fields.LargerBinary(requireed=True)
         """
 
         return Column(
             LargeBinaryType,
             nullable=True if not required else False,
-            unique=unique,
-            default=default
+            default=default,
+            help_text=help_text
         )
 
     def Time(self, required:bool=False,
             default:datetime.time=None,
             help_text:str=None,
+            choices:tuple=None
             ) -> Column:
 
 
@@ -538,18 +485,12 @@ class Fields:
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
-
-        :param unique:
-            If True, this field must be unique throughout the table.
+        :param default:
+            Provide the default value for this column field.
 
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
@@ -565,7 +506,8 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            from datetime import datetime 
+            name = sql.fields.Time(default=datetime.time)
         """
 
         return Column(
@@ -573,29 +515,25 @@ class Fields:
             nullable=True if not required else False,
             help_text=help_text,
             default=default,
+            choices=choices
         )
 
     def Date(self, required:bool=False,
             default:datetime.date=None,
             help_text:str=None,
+            choices:tuple=None
             ) -> Column:
 
         """
         The Charecter fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
-
-        :param unique:
-            If True, this field must be unique throughout the table.
+        :param default:
+            Provide the default value for this column field.
 
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
@@ -611,7 +549,8 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            from datetime import datetime
+            name = sql.fields.Date(default=datetime.date)
         """
 
         return Column(
@@ -619,29 +558,25 @@ class Fields:
             nullable=True if not required else False,
             help_text=help_text,
             default=default,
+            choices=choices
         )
 
     def DateTime(self, required:bool=False,
             default:datetime.now=None,
             help_text:str=None,
+            choices:tuple=None
             ) -> Column:
 
         """
-        The Charecter fields for sqlalchemy,
+        The Datetime fields for sqlalchemy,
         if No maximum_length, it will seted to max_val.
         
-        :param max_length:
-            the maximum length of the field. only applicable for Cahr field.
-            If None, then the default value will be the max value.
         
         :param required:
             If False, the field is allowed to be blank. Default is False.
 
-        :param pk:
-            If True, this field is the primary key for the model.
-
-        :param unique:
-            If True, this field must be unique throughout the table.
+        :param default:
+            Provide the default value for this column field.
 
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
@@ -657,7 +592,8 @@ class Fields:
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Char(max_length=255, unique=True)
+            from datetime import datetime
+            name = sql.fields.DateTime(default=datetime.now)
         """
 
         return Column(
@@ -665,6 +601,7 @@ class Fields:
             nullable=True if not required else False,
             help_text=help_text,
             default=default,
+            choices=choices
         )
 
     #relationship field
@@ -673,6 +610,37 @@ class Fields:
                     unique:bool=False,
                     required:bool=False,
                     help_text:str=None) -> Column:
+
+        """
+        The ForiegnKey field for sqlalchemy,
+
+        :param model: 
+            Mention the name of the Model class here in str format only.
+        
+        :param required:
+            If False, the field is allowed to be blank. Default is False.
+
+        :param unique:
+            If True, this field must be unique throughout the table.
+        
+        :param help_text:
+            Extra “help” text to be displayed with the form widget. 
+            It’s useful for documentation even if your field isn’t used on a form.
+
+        :for example::
+
+            from navycut.orm.sqla import sql
+
+            class Blog(sql.Model):
+                id = sql.fields.Integer(pk=True, unique=True)
+                heading = sql.fields.Char(required=True, unique=True)
+                author = sql.fields.OneToMany("Author")
+            
+            class Author(sql.Model):
+                id = sql.fields.Integer(pk=True, unique=True)
+                name = sql.fields.Char(required=True, unique=True)
+                blog_id = sql.fields.ForiegnKey("Blog")
+        """
         
         return Column(
             IntegerType,
@@ -682,7 +650,72 @@ class Fields:
             help_text=help_text,
         )
 
-    def OneToMany(self, model:str, 
-                backref:str) -> Column:
+    def OneToOne(self, model:str, 
+                uselist:bool = False,
+                backref:str=None) -> Column:
+
+        """
+        The Datetime fields for sqlalchemy,
+        if No maximum_length, it will seted to max_val.
         
-        return relationship(model, backref=backref)
+        :param model: 
+            Mention the name of the Model class here in str format only.
+
+        :param backref: 
+            Define the back reference for the relation.
+            If no value, then it will default to provided model's name
+
+        :for example::
+
+            from navycut.orm.sqla import sql
+
+            class Blog(sql.Model):
+                id = sql.fields.Integer(pk=True, unique=True)
+                heading = sql.fields.Char(required=True, unique=True)
+                author = sql.fields.OneToOne("Author")
+            
+            class Author(sql.Model):
+                id = sql.fields.Integer(pk=True, unique=True)
+                name = sql.fields.Char(required=True, unique=True)
+                blog_id = sql.fields.ForiegnKey("Blog", unique=True)
+        """
+        
+        if backref is None:
+            backref = model.lower()
+
+        return relationship(model, uselist=uselist, backref=backref)
+
+    def OneToMany(self, model:str, 
+                uselist:bool = True,
+                backref:str=None) -> Column:
+
+        """
+        The Datetime fields for sqlalchemy,
+        if No maximum_length, it will seted to max_val.
+        
+        :param model: 
+            Mention the name of the Model class here in str format only.
+
+        :param backref: 
+            Define the back reference for the relation.
+            If no value, then it will default to provided model's name
+
+        :for example::
+
+            from navycut.orm.sqla import sql
+
+            class Blog(sql.Model):
+                id = sql.fields.Integer(pk=True, unique=True)
+                heading = sql.fields.Char(required=True, unique=True)
+                author = sql.fields.OneToMany("Author")
+            
+            class Author(sql.Model):
+                id = sql.fields.Integer(pk=True, unique=True)
+                name = sql.fields.Char(required=True, unique=True)
+                blog_id = sql.fields.ForiegnKey("Blog")
+        """
+        
+        if backref is None:
+            backref = model.lower()
+
+        return relationship(model, uselist=uselist, backref=backref)
