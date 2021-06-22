@@ -39,3 +39,15 @@ INSTALLED_APPS = [ # should change to first_app to get the app.
 ALLOWED_HOST = [ # 
     '127.0.0.1', 
 ]
+
+MAIL_USING_SMTP = True
+
+SMTP_CONFIGURATION = {
+    "host" : "smtp.gmail.com",
+    "post" : 587,
+    "username" : "aniketsarkar1998@gmail.com",
+    "password" : "none",
+    "is_using_ssl" : False,
+    "is_using_tls" : True,
+    "options" : {}
+} 

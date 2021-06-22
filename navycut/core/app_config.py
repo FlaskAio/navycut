@@ -4,10 +4,13 @@ from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from dotenv import load_dotenv; load_dotenv()
 from inspect import signature
-from ..errors.misc import ImportNameNotFoundError
+from ..errors.misc import (ImportNameNotFoundError, 
+                    ConfigurationError
+                    )
 from ..auth import login_manager
 from ..urls import MethodView
 from ..conf import get_settings_module
+from ..contrib.mail import mail
 from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
@@ -27,31 +30,59 @@ class Navycut(Flask):
                     static_url_path="/static")
         self.settings = settings
 
-    def _attach_settings_modules(self, settings=None):
+    def _attach_settings_modules(self, settings:object=None):
         if settings is None: settings = get_settings_module()
-        self._add_config(settings)
+        self.settings = settings
+        self._add_config()
         self._configure_core_features()
         self._perform_app_registration()
 
 
-    def _add_config(self, settings) -> None:
-        self.settings = settings
-        self.import_name = settings.IMPORT_NAME
-        self.project_name = settings.PROJECT_NAME
+    def _add_config(self) -> None:
+        self.import_name = self.settings.IMPORT_NAME
+        self.project_name = self.settings.PROJECT_NAME
         self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-        self.config["BASE_DIR"] = settings.BASE_DIR
-        self.config['SECRET_KEY'] = settings.SECRET_KEY
-        self.config['DEBUG'] = settings.DEBUG
-        self.debug = settings.DEBUG  
-        self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
+        self.config["BASE_DIR"] = self.settings.BASE_DIR
+        self.config['SECRET_KEY'] = self.settings.SECRET_KEY
+        self.config['DEBUG'] = self.settings.DEBUG
+        self.debug = self.settings.DEBUG  
+        self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(self.settings.DATABASE)
+        
+        if self.settings.MAIL_USING_SMTP:
+            self._configure_smtp_mail()
+
+    def _configure_smtp_mail(self):
+        """
+        The default config function to take smtp creds 
+        from settings file and attach with the navycut app.
+        """
+            
+        if self.settings.SMTP_CONFIGURATION.get("is_using_tls") == self.settings.SMTP_CONFIGURATION.get("is_using_ssl"):
+            raise ConfigurationError("the value of 'is_using_ssl' and 'is_using_tls' can't be same at a time for SMTP.")
+        
+        for key, value in self.settings.SMTP_CONFIGURATION.items():
+            
+            if value is None:
+                raise ConfigurationError(f"The value for {key} in SMTP CONFIGURATION can't be None, \
+                    \nwhile the MAIL_USING_SMTP settings is true.")
+
+        self.config['MAIL_SERVER'] = self.settings.SMTP_CONFIGURATION.get("host")
+        self.config['MAIL_PORT'] = self.settings.SMTP_CONFIGURATION.get("port")
+        self.config['MAIL_USE_TLS'] = self.settings.SMTP_CONFIGURATION.get("is_using_tls")
+        self.config['MAIL_USE_SSL'] = self.settings.SMTP_CONFIGURATION.get("is_using_ssl")
+        self.config['MAIL_USERNAME'] = self.settings.SMTP_CONFIGURATION.get("username")
+        self.config['MAIL_PASSWORD'] = self.settings.SMTP_CONFIGURATION.get("password")
     
+
     def _configure_core_features(self):
         # add all the core features of navycut app here.
 
         self.initIns(sql)
         self.initIns(login_manager)
-        # self.initIns(admin)
+        self.initIns(mail)
+
         migrate.init_app(self, sql)
+
 
     def _perform_app_registration(self):
         self._registerApp(self.settings.INSTALLED_APPS)
@@ -224,7 +255,7 @@ class AppSister:
             adding the default request object with view function
             """
 
-            request_param = signature(f).parameters.get('request', None)
+            request_param = signature(f).parameters.get('request', None) or signature(f).parameters.get('req', None)
             is_request = True if request_param is not None else False
 
             def decorator(*args, **kwargs):
@@ -243,7 +274,7 @@ class AppSister:
             
             elif repr(url_path).startswith("url"):
                 view_func = get_request_view(url_path.views)
-                self.power.add_url_rule(rule=url_path.url, view_func=view_func, methods=methods)
+                self.power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             else:
                 pass

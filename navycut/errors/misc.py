@@ -18,3 +18,7 @@ class ImportNameNotFoundError(Exception):
     def __init__(self, location) -> None:
         message = f"import_name notm provided for the sister app at {location}"
         super(ImportNameNotFoundError, self).__init__(message)
+
+class ConfigurationError(Exception):
+    def __init__(self, message) -> None:
+        super(ConfigurationError, self).__init__(message)

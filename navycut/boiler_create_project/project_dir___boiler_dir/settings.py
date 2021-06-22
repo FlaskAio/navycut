@@ -31,11 +31,24 @@ SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
-    "navycut.admin.sister",
-    "navycut.helpers.upload_server.sister",
-    #"first_app.sister", 
+    "navycut.admin.sister.AdminSister",
+    "navycut.helpers.upload_server.sister.UploadserverSister",
+    #"first_app.sister.FirstappSister", 
 ]
 
 ALLOWED_HOST = [ # 
     '127.0.0.1', 
 ]
+
+# Email SMTP Configuration
+MAIL_USING_SMTP = False
+
+SMTP_CONFIGURATION = {
+    "host" : None,
+    "post" : None,
+    "username" : None,
+    "password" : None,
+    "is_using_ssl" : None,
+    "is_using_tls" : None,
+    "options" : {}
+} 

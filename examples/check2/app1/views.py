@@ -1,5 +1,7 @@
 from navycut.urls import MethodView
 from navycut.http import JsonResponse
+from navycut.contrib.mail import send_html_mail
+from navycut.datastructures import NCObject
 from .form import RegistrationForm
 
 # write your views here.
@@ -20,3 +22,13 @@ class AuthView(MethodView):
     
 def home(request):
     return JsonResponse(dict(request.headers))
+
+def send_email(req):
+    if req.method == "POST":
+        data = NCObject(req.get_json())
+        send_html_mail(data.subject, 
+                data.message, 
+                data.recipients,
+                data.sender)
+        return JsonResponse(message="email sent successfull")
+    return JsonResponse(message="failed to sent email")
