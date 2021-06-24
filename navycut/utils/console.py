@@ -1,26 +1,26 @@
-from .colours import _Colours
+from .colours import colours
 from getpass import getpass
 
 class Console:
     class log:
         def Success(message:str=None) -> str:
-            print (_Colours.white+'[ '+_Colours.green+_Colours.bright+'SUCCESS'+_Colours.reset+_Colours.white+' ] '+_Colours.yellow+message+_Colours.reset)
+            print (colours.white+'[ '+colours.green+colours.bright+'SUCCESS'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset)
         def Error(message:str=None) -> str:
-            print (_Colours.white+'[ '+_Colours.red+_Colours.bright+'ERROR'+_Colours.reset+_Colours.white+' ] '+_Colours.yellow+message+_Colours.reset)
+            print (colours.white+'[ '+colours.red+colours.bright+'ERROR'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset)
         def Info(message:str=None) -> str:
             def _print(message_) -> None:
-                print (_Colours.white+'[ '+_Colours.blue+_Colours.bright+'INFO'+_Colours.reset+_Colours.white+' ] '+_Colours.yellow+message_+_Colours.reset)
+                print (colours.white+'[ '+colours.blue+colours.bright+'INFO'+colours.reset+colours.white+' ] '+colours.yellow+message_+colours.reset)
             if "\n" in message:
                 message_line_list:list = message.split("\n")
                 for _message in message_line_list: _print(_message)
             else: _print(message)
         def Warning(message:str=None) -> str:
-            print (_Colours.white+'[ '+_Colours.magenta+_Colours.bright+'WARNING'+_Colours.reset+_Colours.white+' ] '+_Colours.yellow+message+_Colours.reset) 
+            print (colours.white+'[ '+colours.magenta+colours.bright+'WARNING'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset) 
 
     class input:
         def String(input_message:str=None) -> str:
             
-            message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
+            message = colours.white+"[ "+colours.cyan+"INPUT"+colours.white+" ] "+colours.yellow+input_message+colours.reset
             input_msg = input(message)
             try: 
                 return str(input_msg)
@@ -28,14 +28,14 @@ class Console:
                 
         def Password(input_message:str=None) -> str:
             
-            message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
+            message = colours.white+"[ "+colours.cyan+"INPUT"+colours.white+" ] "+colours.yellow+input_message+colours.reset
             input_msg = getpass(prompt=message)
             return input_msg
                     
 
         def Integer(input_message:str=None) -> int:
             
-            message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
+            message = colours.white+"[ "+colours.cyan+"INPUT"+colours.white+" ] "+colours.yellow+input_message+colours.reset
             input_msg = input(message)
             try: 
                 return int(input_msg)
@@ -44,7 +44,7 @@ class Console:
 
         def Float(input_message:str=None) -> float:
 
-            message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+_Colours.reset
+            message = colours.white+"[ "+colours.cyan+"INPUT"+colours.white+" ] "+colours.yellow+input_message+colours.reset
             input_msg = input(message)
             try: 
                 return float(input_msg)
@@ -52,7 +52,7 @@ class Console:
                 Console.log.Error("Failed to convert the entered data into float.")
 
         def Boolean(input_message:str=None) -> bool:
-            message = _Colours.white+"[ "+_Colours.cyan+"INPUT"+_Colours.white+" ] "+_Colours.yellow+input_message+"(Y/n): "+_Colours.reset
+            message = colours.white+"[ "+colours.cyan+"INPUT"+colours.white+" ] "+colours.yellow+input_message+"(Y/n): "+colours.reset
             while True:
                 input_msg = input(message)
                 if not input_msg: continue

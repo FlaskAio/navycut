@@ -1,9 +1,8 @@
-from flask import Flask, Blueprint, request
+from flask import Flask, Blueprint
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from dotenv import load_dotenv; load_dotenv()
-from inspect import signature
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError
                     )
@@ -11,6 +10,7 @@ from ..auth import login_manager
 from ..urls import MethodView
 from ..conf import get_settings_module
 from ..contrib.mail import mail
+from ..contrib.decorators import _get_req_res_view
 from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
@@ -213,10 +213,6 @@ class AppSister:
         if isinstance(self.import_app_feature, tuple):
             self.import_app_feature = self.import_app_feature[0]
 
-        # if isinstance(self.url_pattern, tuple):
-        #     self.url_pattern = self.url_pattern[0]
-
-
         if self.template_folder is not None:
             kwargs.update(dict(template_folder=self.template_folder,))
 
@@ -246,25 +242,9 @@ class AppSister:
 
 
     def get_app(self):
-        return self.power
-        
+        return self.power     
 
     def add_url_pattern(self, pattern_list:list):
-        def get_request_view(f):
-            """
-            adding the default request object with view function
-            """
-
-            request_param = signature(f).parameters.get('request', None) or signature(f).parameters.get('req', None)
-            is_request = True if request_param is not None else False
-
-            def decorator(*args, **kwargs):
-                if is_request is True:
-                    args:list = list(args)
-                    args.insert(0, request)
-                    args:tuple = tuple(args)
-                return f(*args, **kwargs)
-            return decorator
 
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD', 'OPTIONS']
 
@@ -273,7 +253,7 @@ class AppSister:
                 self.power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
             
             elif repr(url_path).startswith("url"):
-                view_func = get_request_view(url_path.views)
+                view_func = _get_req_res_view(url_path.views)
                 self.power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             else:

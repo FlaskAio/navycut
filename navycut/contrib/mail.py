@@ -76,7 +76,7 @@ def send_mail(subject:str,
 
     current_app.extensions.get("mail").send(msg) 
 
-def send_plain_mail(subject:str, message:str, sender:str, recipients:t.Union[list, str], **options) -> None:
+def send_plain_mail(subject:str, message:str, sender:str, recipients:t.Union[list, str], **options:t.Any) -> None:
     """
     Similar to navycut.contrib.mail.send_email(),
     to send any plain text email please use this function.
@@ -102,7 +102,7 @@ def send_plain_mail(subject:str, message:str, sender:str, recipients:t.Union[lis
     """
     return send_mail(subject, message, sender, recipients, mimetype="plain", **options)
 
-def send_html_mail(subject:str, message:str, recipients:t.Union[list, str], sender:str=None, **options) -> None:
+def send_html_mail(subject:str, message:str, recipients:t.Union[list, str], sender:str=None, **options:t.Any) -> None:
     """
     In most cases, you can send email using navycut.contrib.mail.send_mail()
 
@@ -129,7 +129,7 @@ def send_html_mail(subject:str, message:str, recipients:t.Union[list, str], send
     return send_mail(subject, message, sender, recipients, mimetype="html", **options)
 
 
-def send_mass_mail(datas:t.Union[list, tuple], mimetype:str=None):
+def send_mass_mail(datas:t.Union[list, tuple], mimetype:str="plain"):
     """
     navycut.contrib.mail.send_mass_mail() is intended to handle mass emailing.
     

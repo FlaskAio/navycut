@@ -10,4 +10,4 @@ class Colours:
         self.bright = "\x1b[1m"
         self.reset = "\x1b[0m"
 
-_Colours=Colours()
+colours=Colours()

@@ -5,7 +5,9 @@ from ..datastructures import NCObject
 def JsonResponse(*wargs, **kwargs) -> Response: 
     """
     Returns the Jsonified object.
+
     :for example::
+    
         from navycut.http import JsonResponse
         class CustomView(MethodView):
             def get(self):

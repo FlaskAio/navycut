@@ -8,13 +8,7 @@ from flask import (request,
                 Request)
 from ..errors.misc import DataTypeMismatchError
 from ..datastructures import NCObject
-# from flask import current_app, Flask
-# from flask_restful import Api as _Api
-
-# class _Request(Request):
-# here I can use the current_app features.
-#     def __init__(self):
-#         super(_Request, self).__init__(current_app.config)
+import typing as t
 
 class MethodView(_MethodView):
     """
@@ -73,7 +67,7 @@ class MethodView(_MethodView):
     def session(self) -> None:
         return session
 
-    def render(self, template_one_or_list_or_str, *wargs, **context):
+    def render(self, template_name_or_raw:str, *wargs:tuple, **context:t.Any):
         
         context = context
         
@@ -83,12 +77,12 @@ class MethodView(_MethodView):
         if len(wargs) and isinstance(wargs[0], dict):
             context.update(wargs[0])
         
-        if isinstance(template_one_or_list_or_str, str):
-            if not template_one_or_list_or_str.endswith(".html") and not template_one_or_list_or_str.endswith(".htm"):
-                return render_template_string(template_one_or_list_or_str, **context)
+        if isinstance(template_name_or_raw, str):
+            if not template_name_or_raw.endswith(".html") and not template_name_or_raw.endswith(".htm"):
+                return render_template_string(template_name_or_raw, **context)
             
             else: 
-                return render_template(template_one_or_list_or_str, **context)
+                return render_template(template_name_or_raw, **context)
 
 
 class path:
