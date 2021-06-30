@@ -12,7 +12,7 @@ It's actually a Fullstack web framework using flask as backend wsgi server and t
 The official documentation is hosted on <a href="navycut.github.io">navycut.github.io</a>.
 
 ### Basic installation
-    Use the package manager [pip](https://pypi.org/project/navycut/) to install foobar.
+    Use the package manager [pip](https://pypi.org/project/navycut/) to install navycut.
 
 ```bash
 python3 -m pip install navycut
