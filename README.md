@@ -1,6 +1,6 @@
 # Navycut
 
-<img src="https://i.ibb.co/q9MKYZP/navycut-logo.png">
+<img src="https://raw.githubusercontent.com/navycut/navycut/main/logos/navycut_logo.png">
 <br>
 
 #### contributor wanted : feel free to contact me at aniketsarkar@yahoo.com
