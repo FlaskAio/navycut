@@ -121,6 +121,28 @@ blog
 |   └── README.md
 ├── manage.py
 ```
+now you need to register the newly created app with the project.
+To do this you must perform the following steps.
+<br>
+
+* open the directory containing the same name with project.
+* open settings.py file.
+* Now findout the block called `INSTALLED_APPS`.
+* Under this `INSTALLED_APPS` list add your app.
+* Suppose your app name is `blogapp` then add the following line under `INSTALLED_APPS`:
+"blogapp.sister.BlogappSister".
+<br>
+
+Your settings.py file should look like this:
+
+```python
+INSTALLED_APPS = [
+    "navycut.admin.sister.AdminSister",
+    "navycut.helpers.upload_server.sister.UploadserverSister",
+    "blogapp.sister.BlogappSister",
+]
+```
+
 ### Introduction to the model layer
 
 ```python
