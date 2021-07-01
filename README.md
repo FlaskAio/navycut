@@ -322,7 +322,9 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 <br/>
 
 ##### If you are from India, You can donate directly Using VPA(UPI):
-<a href="">
+
+    my vpa id: aniketsarkar@ybl
+<a href="https://raw.githubusercontent.com/navycut/navycut/main/logos/phonepe.jpeg">
 <img src="https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png" height="120px" width="180px">
 </a>
 
