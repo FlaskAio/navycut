@@ -80,7 +80,8 @@ blog
 
 ```bash
 python manage.py runserver
-or python manage.py runserver 0.0.0.0:8000 # to start a server on different port
+or 
+python manage.py runserver 0.0.0.0:8000 # to start a server on different port
 ```
 This command will start the development server on localhost:8888 or the provided address.
 Now you should create an app to start writing the urls and appropriate views function.
@@ -317,6 +318,12 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 
 <a href="https://liberapay.com/aniketsarkar" target="_blank">
 <img src="https://www.worldfuturecouncil.org/wp-content/uploads/2018/09/Donate-Button-HEART.png" height="50px" width="100px"/>
+</a>
+<br/>
+
+##### If you are from India, You can donate directly Using VPA(UPI):
+<a href="">
+<img src="https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png" height="120px" width="180px">
 </a>
 
 ### Contributors
