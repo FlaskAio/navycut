@@ -16,6 +16,7 @@ from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
 from ..utils import path
+from ..utils.tools import snake_to_camel
 
 _basedir = path.abspath(__file__).parent.parent
 
@@ -133,6 +134,16 @@ class Navycut(Flask):
     def _import_app(self, app_name:str):
         
         try: 
+            if not app_name.endswith("Sister"):
+                _pure_app_name = app_name.rsplit(".", 1)
+
+                if len(_pure_app_name) == 1:
+                    _pure_app_name = _pure_app_name[0]
+                else:
+                    _pure_app_name = _pure_app_name[1]
+
+                app_name = f"{app_name}.sister.{snake_to_camel(_pure_app_name)}Sister"
+
             app_location, app_str_class = tuple(app_name.rsplit(".", 1))
             app_file = import_module(app_location)
             real_app_class = getattr(app_file, app_str_class)

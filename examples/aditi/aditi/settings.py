@@ -34,7 +34,7 @@ SECRET_KEY = r"f7>Rn2eJli}>kVr7Hj@6^$&2P35Bx^>C^}FsOKG94SER!lwgtx[Wa" #should ge
 INSTALLED_APPS = [ # should change to first_app to get the app.
     "navycut.admin.sister.AdminSister",
     "navycut.helpers.upload_server.sister.UploadserverSister",
-    "aniket.sister.AniketSister"
+    "aniket"
     #"first_app.sister.FirstappSister", 
 ]
 
