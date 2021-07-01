@@ -2,7 +2,6 @@ import click
 from os import path
 from alembic import command
 from ..cli._exec_cli import _create_boiler_app
-from ..utils.security import create_password_hash
 from ..utils.console import Console
 from ..core import app
 from ..conf import get_settings_module

@@ -1,5 +1,8 @@
+from colorama import init
+
 class Colours:
     def __init__(self):
+        init()
         self.red = "\x1b[31m"
         self.green = "\x1b[32m"
         self.blue = "\x1b[34m"

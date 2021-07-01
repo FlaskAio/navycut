@@ -1,3 +1,7 @@
+class NCBaseError(Exception):
+    def __init__(self, message) -> None:
+        super(NCBaseError, self).__init__(message)
+
 
 class DataTypeMismatchError(Exception):
     def __init__(self, provided_data, place:str=None, required_data_type:str=None) -> None:
@@ -8,6 +12,10 @@ class InsufficientArgumentsError(Exception):
     def __init__(self, message):
         message = f"Insufficient arguments.\n{message}"
         super(InsufficientArgumentsError, self).__init__(message)
+
+class InvalidArgumentsError(Exception):
+    def __init__(self, message:str) -> None:
+        super(InvalidArgumentsError, self).__init__(message)
 
 class DirectoryAlreadyExistsError(Exception):
     def __init__(self,project_dir):

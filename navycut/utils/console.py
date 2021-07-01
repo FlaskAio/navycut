@@ -1,12 +1,16 @@
+import logging
 from .colours import colours
 from getpass import getpass
+import logging
 
 class Console:
     class log:
         def Success(message:str=None) -> str:
             print (colours.white+'[ '+colours.green+colours.bright+'SUCCESS'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset)
+        
         def Error(message:str=None) -> str:
             print (colours.white+'[ '+colours.red+colours.bright+'ERROR'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset)
+        
         def Info(message:str=None) -> str:
             def _print(message_) -> None:
                 print (colours.white+'[ '+colours.blue+colours.bright+'INFO'+colours.reset+colours.white+' ] '+colours.yellow+message_+colours.reset)
@@ -14,6 +18,7 @@ class Console:
                 message_line_list:list = message.split("\n")
                 for _message in message_line_list: _print(_message)
             else: _print(message)
+        
         def Warning(message:str=None) -> str:
             print (colours.white+'[ '+colours.magenta+colours.bright+'WARNING'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset) 
 

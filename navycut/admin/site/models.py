@@ -11,9 +11,9 @@ from navycut.auth import login_manager
 
 
 class Group(sql.Model):
-    """default group model for users."""
-    # id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
-    # name = sql.Column(sql.String(255), nullable=False, unique=True)
+    """
+    default group model for users.
+    """
     id = sql.fields.Integer(pk=True, unique=True, required=True)
     name = sql.fields.Char(required=True, unique=True)
 

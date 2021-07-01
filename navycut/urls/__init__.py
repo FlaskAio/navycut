@@ -4,35 +4,36 @@ from flask import (request,
                 render_template, 
                 render_template_string, 
                 session, 
-                abort,
-                Request)
+                abort
+                )
 from ..errors.misc import DataTypeMismatchError
 from ..datastructures import NCObject
+from importlib import import_module
 import typing as t
+
 
 class MethodView(_MethodView):
     """
     Navycut default view class to provide the interactive service and features.
     Simply import this class and extend it with your view class.
-    example: 
+    for example:: 
 
-    from navycut.urls import MethodView
-    from navycut.http import JsonResponse
+        from navycut.urls import MethodView
+        from navycut.http import JsonResponse
 
-    class IndexView(MethodView):
-        return JsonResponse(message="Salve Mundi!")
-    #or
-    class IndexView(MethodView):
-        return self.render("index.html") # html templates must be present at app's specified template folder.
+        class IndexView(MethodView):
+            return JsonResponse(message="Salve Mundi!")
+        #or
+        class IndexView(MethodView):
+            return self.render("index.html") # html templates must be present at app's specified template folder.
     """
     def __init__(self, *wargs, **kwargs) -> None:
         super(MethodView, self).__init__(*wargs, **kwargs)
 
         self.request = request
         self.context = dict()
-        # self.session = NCObject(dict(session))
-   
-    # @Request.application
+
+
     def get(self, *args, **kwargs):
         """simply override this function for get request"""
         abort(405)
@@ -51,6 +52,10 @@ class MethodView(_MethodView):
 
     def head(self, *args, **kwargs):
         """simply override this function for head request"""
+        abort(405)
+
+    def option(self, *args, **kwargs):
+        """simply override this function for option request"""
         abort(405)
 
     @property
@@ -88,6 +93,7 @@ class MethodView(_MethodView):
 class path:
     def __init__(self, url:str, views, name=None) -> None:
         self.url:str = "/"+url if not url.startswith('/') else url
+        self.url = self.url+"/" if not self.url.endswith("/") else self.url
         self.views = views
         self.name:str = name or self.views.__name__
     
@@ -97,8 +103,28 @@ class path:
 class url:
     def __init__(self, url:str, views, name=None) -> None:
         self.url = "/"+url if not url.startswith('/') else url
+        self.url = self.url+"/" if not self.url.endswith("/") else self.url
         self.views = views
         self.name = name or self.views.__name__
 
     def __repr__(self) -> str:
         return f"url <{self.url}>"
+
+class include:
+    def __init__(self, 
+                url_rule:str,
+                url_module_name:str) -> None:
+
+        self.url = "/"+url_rule if not url_rule.startswith('/') else url_rule
+        self.url = self.url[:-1] if self.url.endswith("/") else self.url
+        self.url_module = import_module(url_module_name)
+        self.url_patterns = self.url_module.url_patterns
+
+        for url_pattern in self.url_patterns:
+
+            url_pattern.url = url_rule+url_pattern.url
+            url_pattern.name = url_rule+url_pattern.name
+
+
+    def __repr__(self) -> str:
+        return f"include <{self.url}>"

@@ -1,6 +1,6 @@
-from flask.globals import request
 from inspect import signature
 from ..http.response import Response
+from flask.globals import request
 
 def _get_req_res_view(f):
         """
@@ -18,7 +18,6 @@ def _get_req_res_view(f):
         is_response = True if response_param is not None else False
 
         def decorator(*args, **kwargs):
-
             if is_request is True:
 
                 args:list = list(args)
@@ -32,6 +31,5 @@ def _get_req_res_view(f):
                     args.insert(0, Response)
            
             args:tuple = tuple(args)
-
             return f(*args, **kwargs)
         return decorator

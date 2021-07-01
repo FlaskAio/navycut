@@ -7,9 +7,9 @@
 
 Navycut is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. Thanks for checking it out.
 
-It's actually a Fullstack web framework using flask as backend wsgi server and trying to deliver the service like Django does.
+It's actually a Fullstack web framework using <a href="https://flask.palletsprojects.com">Flask(werkzeug)</a> as backend wsgi server and trying to deliver the service like Django does.
 
-The official documentation is hosted on <a href="navycut.github.io">navycut.github.io</a>.
+The official documentation is online at <a href="navycut.github.io">navycut.github.io</a>.
 
 ### Basic installation
     Use the package manager [pip](https://pypi.org/project/navycut/) to install navycut.
@@ -143,6 +143,37 @@ INSTALLED_APPS = [
 ]
 ```
 
+### All available command you must know to work with Navycut
+* to know more about the available commands:
+```bash
+navycut --help
+```
+* to create a project directory at the present location:
+```bash
+navycut createproject project_name
+```
+* to create a app inside the project directory:
+```bash
+cd project_name
+python manage.py createapp app_name
+```
+* to migrate the database:
+```bash
+python manage.py migrate
+```
+* to apply the migration to the database:
+```bash
+python manage.py makemigrations
+```
+* to create the superuser to access the admin:
+```bash
+python manage.py createsuperuser
+```
+* to start the interactive development server
+```bash
+python manage.py runserver
+```
+
 ### Introduction to the model layer
 
 ```python
@@ -172,16 +203,16 @@ from navycut.urls import path, url, include
 from . import views
 
 """
-The default url_prefix is the app name i.e "/band" for this case.
+The default url_prefix is the app name i.e "/blog" for this case.
 If you want to change it and use your own customized name then
 plese update the url_prefix for a particular app on the sister.py file
 under the AppSister class.
 """
 
 urlpatterns = [
-    path('/', views.BlogView, name='band-list'),
-    url('/<int:id>', views.blog_detail, name='band-detail'),
-    url('/search/?id=1', views.blog_search, name='band-search'),
+    path('/', views.BlogView, name='blog-index'),
+    url('/<int:id>', views.blog_detail, name='blog-detail'),
+    url('/search/?id=1', views.blog_search, name='blog-search'),
 	include('/polls', 'polls.urls') # include urlpatterns from another app
 ]
 ```
@@ -189,10 +220,10 @@ urlpatterns = [
 # views.py
 
 from navycut.urls import MethodView
-from .models import Band
+from .models import Blog
 
 """
-Here you can use views mnethod like expressJs.
+Here you can use views method like expressJs.
 Just simply pass the request and response object as
 arguments of the view function.
 """
@@ -260,7 +291,7 @@ class AuthView(MethodView):
         return JsonResponse(logged_in_username=current_user.username)
 
 @login_required
-@group_required('super_admin)
+@group_required('super_admin')
 def get_data(req, res):
     return res.json(username=req.user.username) # current_user == req.user
 ```
@@ -293,8 +324,6 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 <a href="https://github.com/navycut/navycut/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=navycut/navycut" />
 </a>
-
-Made with [contributors-img](https://contrib.rocks).
 
 ### How to contribute
 

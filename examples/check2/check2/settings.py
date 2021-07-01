@@ -1,5 +1,4 @@
-from pathlib import Path
-from os.path import abspath
+from navycut.utils import path
 
 # defining the default import name for flask:
 IMPORT_NAME = __name__
@@ -9,7 +8,7 @@ PROJECT_NAME = "check2"
 
 
 #defining the base directory
-BASE_DIR = Path(abspath(__file__)).parent.parent
+BASE_DIR = path.abspath(__file__).parent.parent
 
 #app debug state:
 DEBUG = True
@@ -33,7 +32,8 @@ SECRET_KEY = r"nKXOtseZUJ;m;<iHvbXR:$jxLS%/C]bvSJ:sGM{0oZImNbrVPVL*x" #should ge
 INSTALLED_APPS = [ # should change to first_app to get the app.
     "navycut.admin.sister.AdminSister",
     "navycut.helpers.upload_server.sister.UploadserverSister",
-    "app1.sister.App1Sister", 
+    "app1.sister.App1Sister",
+    "nord.sister.NordSister" 
 ]
 
 ALLOWED_HOST = [ # 

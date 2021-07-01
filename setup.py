@@ -23,9 +23,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     platforms="any",
-    install_requires=[ 
+    # install_requires=[ 
         
-    ],
+    # ],
     extras_require={},
     python_requires=">=3.6,<4",
     entry_points={
@@ -36,7 +36,7 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
-        "Framework :: flask",
+        "Framework :: Flask",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",

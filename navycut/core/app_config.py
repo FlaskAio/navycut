@@ -2,14 +2,15 @@ from flask import Flask, Blueprint
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
-from dotenv import load_dotenv; load_dotenv()
+from ._serving import run_simple_wsgi
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError
                     )
 from ..auth import login_manager
 from ..urls import MethodView
-from ..conf import get_settings_module
+from ..conf import settings
 from ..contrib.mail import mail
+from ..http.request import Request
 from ..contrib.decorators import _get_req_res_view
 from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
@@ -23,32 +24,34 @@ class _BaseIndexView(MethodView):
         return self.render("_index.html")
 
 class Navycut(Flask):
-    def __init__(self, settings:object=None):
-        super(Navycut, self).__init__(__name__, 
+
+    request_class = Request
+
+    def __init__(self):
+
+        self.settings = settings
+
+        super(Navycut, self).__init__(settings.IMPORT_NAME, 
                     template_folder=_basedir / 'templates',
                     static_folder=str(_basedir / "static"),
                     static_url_path="/static")
-        self.settings = settings
 
-    def _attach_settings_modules(self, settings:object=None):
-        if settings is None: settings = get_settings_module()
-        self.settings = settings
+    def _attach_settings_modules(self):
         self._add_config()
         self._configure_core_features()
         self._perform_app_registration()
 
 
     def _add_config(self) -> None:
-        self.import_name = self.settings.IMPORT_NAME
-        self.project_name = self.settings.PROJECT_NAME
+        self.import_name = settings.IMPORT_NAME
+        self.project_name = settings.PROJECT_NAME
         self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-        self.config["BASE_DIR"] = self.settings.BASE_DIR
-        self.config['SECRET_KEY'] = self.settings.SECRET_KEY
-        self.config['DEBUG'] = self.settings.DEBUG
-        self.debug = self.settings.DEBUG  
-        self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(self.settings.DATABASE)
+        self.config["BASE_DIR"] = settings.BASE_DIR
+        self.config['SECRET_KEY'] = settings.SECRET_KEY
+        self.debugging(settings.DEBUG)
+        self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
         
-        if self.settings.MAIL_USING_SMTP:
+        if settings.MAIL_USING_SMTP:
             self._configure_smtp_mail()
 
     def _configure_smtp_mail(self):
@@ -57,21 +60,21 @@ class Navycut(Flask):
         from settings file and attach with the navycut app.
         """
             
-        if self.settings.SMTP_CONFIGURATION.get("is_using_tls") == self.settings.SMTP_CONFIGURATION.get("is_using_ssl"):
+        if settings.SMTP_CONFIGURATION.get("is_using_tls") == settings.SMTP_CONFIGURATION.get("is_using_ssl"):
             raise ConfigurationError("the value of 'is_using_ssl' and 'is_using_tls' can't be same at a time for SMTP.")
         
-        for key, value in self.settings.SMTP_CONFIGURATION.items():
+        for key, value in settings.SMTP_CONFIGURATION.items():
             
             if value is None:
                 raise ConfigurationError(f"The value for {key} in SMTP CONFIGURATION can't be None, \
                     \nwhile the MAIL_USING_SMTP settings is true.")
 
-        self.config['MAIL_SERVER'] = self.settings.SMTP_CONFIGURATION.get("host")
-        self.config['MAIL_PORT'] = self.settings.SMTP_CONFIGURATION.get("port")
-        self.config['MAIL_USE_TLS'] = self.settings.SMTP_CONFIGURATION.get("is_using_tls")
-        self.config['MAIL_USE_SSL'] = self.settings.SMTP_CONFIGURATION.get("is_using_ssl")
-        self.config['MAIL_USERNAME'] = self.settings.SMTP_CONFIGURATION.get("username")
-        self.config['MAIL_PASSWORD'] = self.settings.SMTP_CONFIGURATION.get("password")
+        self.config['MAIL_SERVER'] = settings.SMTP_CONFIGURATION.get("host", None)
+        self.config['MAIL_PORT'] = settings.SMTP_CONFIGURATION.get("port", None)
+        self.config['MAIL_USE_TLS'] = settings.SMTP_CONFIGURATION.get("is_using_tls", None)
+        self.config['MAIL_USE_SSL'] = settings.SMTP_CONFIGURATION.get("is_using_ssl", None)
+        self.config['MAIL_USERNAME'] = settings.SMTP_CONFIGURATION.get("username", None)
+        self.config['MAIL_PASSWORD'] = settings.SMTP_CONFIGURATION.get("password", None)
     
 
     def _configure_core_features(self):
@@ -85,7 +88,7 @@ class Navycut(Flask):
 
 
     def _perform_app_registration(self):
-        self._registerApp(self.settings.INSTALLED_APPS)
+        self._registerApp(settings.INSTALLED_APPS)
 
 
     def _get_view_function(self, url, method="GET") -> tuple:
@@ -156,15 +159,32 @@ class Navycut(Flask):
 
             self.register_blueprint(app, url_prefix=app.url_prefix)
 
-    def debugging(self,flag) -> None:
+    def debugging(self, flag:bool) -> None:
         self.debug = flag
         self.config['DEBUG'] =flag
+        if flag is True:
+            self.config['ENV'] = 'development'
 
-    def run_wsgi(self, *wargs, **kwargs) -> None:
+        else:
+            self.config['ENV'] = 'production'
+
+    def run_wsgi(self, host, port, **options) -> None:
         self._configure_default_index()
-        super(Navycut, self).run(*wargs, **kwargs)
 
-    def __repr__(self):
+        _run_with_debug = self.config['DEBUG']
+        _run_with_reloader = self.config['DEBUG']
+
+        options.setdefault("threaded", True)
+
+        run_simple_wsgi(host, 
+                        port, 
+                        self, 
+                        _run_with_reloader, 
+                        _run_with_debug, 
+                        **options
+                        )
+
+    def __repr__(self) -> str:
         return self.import_name
 
 class AppSister:
@@ -215,6 +235,8 @@ class AppSister:
 
         if self.template_folder is not None:
             kwargs.update(dict(template_folder=self.template_folder,))
+        else:
+            kwargs.update(dict(template_folder=settings.TEMPLATE_DIR))
 
         if self.static_folder is not None:
             kwargs.update(dict(static_folder=self.static_folder,))
@@ -241,10 +263,10 @@ class AppSister:
             self.import_app_features()
 
 
-    def get_app(self):
+    def get_app(self) -> Blueprint:
         return self.power     
 
-    def add_url_pattern(self, pattern_list:list):
+    def add_url_pattern(self, pattern_list:list) -> None:
 
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD', 'OPTIONS']
 
@@ -255,6 +277,9 @@ class AppSister:
             elif repr(url_path).startswith("url"):
                 view_func = _get_req_res_view(url_path.views)
                 self.power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
+            
+            elif repr(url_path).startswith("include"):
+                self.add_url_pattern(url_path.url_patterns)
             
             else:
                 pass
@@ -269,11 +294,11 @@ class AppSister:
         import_module(f"{self.name}.models", package=None)
         import_module(f"{self.name}.admin", package=None)
 
-    def register_blueprint(self, *wargs, **kwargs):
+    def register_blueprint(self, *wargs, **kwargs) -> None:
         app.register_blueprint(*wargs, **kwargs)
 
     def __repr__(self):
         return self.import_name
 
 
-app = Navycut()
+app:Navycut = Navycut()

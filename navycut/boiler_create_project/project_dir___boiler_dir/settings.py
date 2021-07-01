@@ -1,5 +1,4 @@
-from pathlib import Path
-from os.path import abspath
+from navycut.utils import path
 
 # defining the default import name for flask:
 IMPORT_NAME = __name__
@@ -9,7 +8,9 @@ PROJECT_NAME = "project_name___boiler_var"
 
 
 #defining the base directory
-BASE_DIR = Path(abspath(__file__)).parent.parent
+BASE_DIR = path.abspath(__file__).parent.parent
+
+TEMPLATE_DIR = BASE_DIR / "templates"
 
 #app debug state:
 DEBUG = True
