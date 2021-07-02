@@ -1,6 +1,7 @@
 from flask_login import (LoginManager, 
                     login_required as _login_required,
                     login_user as _login_user,
+                    logout_user as _logout_user,
                     current_user as _current_user
                     )
 from flask import (abort, 
@@ -15,6 +16,9 @@ def login_required(*wargs, **kwargs):
 
 def login_user(*wargs, **kwargs):
     return _login_user(*wargs, **kwargs)
+
+def logout_user(*wargs, **kwargs):
+    return _logout_user(*wargs, **kwargs)
 
 
 login_manager = LoginManager()

@@ -1,0 +1,10 @@
+
+{% macro print_message() %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {{messages[0]}}
+    {% endif %}
+{% endwith %}
+
+{% endmacro %}

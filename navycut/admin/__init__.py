@@ -1,28 +1,37 @@
-from flask import redirect
+from flask import redirect, flash
+from flask.globals import request
+from flask.templating import render_template
 from flask_admin import Admin
-from ..urls import MethodView
-from ..auth import login_user
+from ..auth import login_user, logout_user
 from .site.models import *
 from .site.views import *
+from .site.forms import *
 from navycut.orm import sql
 from ..utils.security import check_password_hash
 
-class AdminLoginView(MethodView):
 
-    def get(self):
-        return self.render("admin/_adm_login.html")
-
-    def post(self):
-        username = self.request.form.get('username')
-        password = self.request.form.get('password')
-        user = User.query.filter_by(username=username).first()
+def admin_login():
+    form = AdminLoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
         if not user: 
-            return "Invalid username"
+            flash("Invalid username")
+            return redirect("/admin/login")
             
-        if not check_password_hash(user.password, password): 
-            return "Invalid password"
+        if not check_password_hash(user.password, form.password.data): 
+            flash ("Invalid password")
+            return redirect("/admin/login")
+
         login_user(user)
         return redirect('/admin')
+    return render_template("admin/_adm_login.html", form=form)
+
+
+def admin_logout():
+    if request.user.is_authenticated:
+        logout_user()
+    flash("User logged out successfully")
+    return redirect("/admin/login")
 
 
 class NavycutAdmin(Admin):
@@ -58,6 +67,7 @@ class NavycutAdmin(Admin):
         return True
 
     def _add_admin_login_view(self):
-        self.app.add_url_rule('/admin/login', view_func=AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
+        self.app.add_url_rule('/admin/login/', view_func=admin_login, methods=['POST', 'GET'])
+        self.app.add_url_rule('/admin/logout/', view_func=admin_logout, methods=['POST', 'GET'])
 
 admin:NavycutAdmin = NavycutAdmin()

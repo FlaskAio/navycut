@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint
+from flask_bootstrap import Bootstrap
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
@@ -84,8 +85,8 @@ class Navycut(Flask):
         self.initIns(sql)
         self.initIns(login_manager)
         self.initIns(mail)
-
         migrate.init_app(self, sql)
+        Bootstrap(self)
 
 
     def _perform_app_registration(self):
