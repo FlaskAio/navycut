@@ -8,8 +8,8 @@ from flask import (abort,
                 current_app)
 from functools import wraps
 import typing as t
-# from ..admin.site.models import User
-from ..utils.security import check_password_hash
+from ..admin.site.models import User
+from navycut.utils.security import check_password_hash
 
 
 current_user = _current_user
@@ -48,23 +48,28 @@ def group_required(*groups_name):
     
     return decorated_function
 
-# def authenticate(username:str, password:str) -> t.Optional["User"]:
-#     """
-#     The default authentication method to authenticate a user in Navycut.
+@login_manager.user_loader
+def load_user(user_id) -> t.Type["User"]:
+    return User.query.get(int(user_id))
 
-#     :param username:
-#         The username for authentication.
-#     :param password:
-#         the original password for the given user.
+def authenticate(username:str, password:str) -> t.Optional["User"]:
+    """
+    The default authentication method to authenticate a user in Navycut.
 
-#     example::
+    :param username:
+        The username for authentication.
+    :param password:
+        the original password for the given user.
 
-#         from navycut.auth import authenticate
-#         user = authenticate(username="jhon", password="password")
+    example::
 
-#     """
-#     user = User.query.filter_by(username=username).first()
-#     if not user is None:
-#         if not check_password_hash(user.password, password):
-#             return None
-#     return user
+        from navycut.auth import authenticate
+        user = authenticate(username="jhon", password="password")
+
+    """
+
+    user = User.query.filter_by(username=username).first()
+    if not user is None:
+        if not check_password_hash(user.password, password):
+            return None
+    return user

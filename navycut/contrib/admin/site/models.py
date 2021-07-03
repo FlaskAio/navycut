@@ -3,7 +3,7 @@ from datetime import datetime
 from navycut.orm import sql
 from navycut.utils.security import create_password_hash
 from navycut.utils.console import Console
-from navycut.auth import login_manager
+# from navycut.contrib.auth import login_manager
 
 # class Permission(sql.Model):
 #     id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
@@ -85,7 +85,3 @@ def _insert_intial_data() -> None:
         grp=Group(name=group)
         grp.save()
     Console.log.Success("initial data for admin privilage added successfully.")
-
-@login_manager.user_loader
-def load_user(user_id) -> User:
-    return User.query.get(int(user_id))

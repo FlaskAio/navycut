@@ -36,8 +36,4 @@ class NavycutAdmin(Admin):
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
 
-    # def _add_admin_login_view(self):
-    #     self.app.add_url_rule('/admin/login/', view_func=admin_login, methods=['POST', 'GET'])
-    #     self.app.add_url_rule('/admin/logout/', view_func=admin_logout, methods=['POST', 'GET'])
-
 admin:NavycutAdmin = NavycutAdmin()

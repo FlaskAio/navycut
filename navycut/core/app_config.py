@@ -8,7 +8,7 @@ from ..errors.misc import (ImportNameNotFoundError,
                     ConfigurationError,
                     NCBaseError
                     )
-from ..auth import login_manager
+from ..contrib.auth import login_manager
 from ..urls import MethodView
 from ..conf import settings
 from ..contrib.mail import mail

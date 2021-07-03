@@ -1,6 +1,5 @@
 # from flask.wrappers import Request
-from navycut.auth import login_required, group_required
-from navycut.admin.site.models import User
+from navycut.contrib.auth import login_required, group_required
 
 def homepage(req, res):
     return res.json(dict(req.headers))

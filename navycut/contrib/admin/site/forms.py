@@ -1,4 +1,3 @@
-from wtforms import form
 from navycut.contrib import forms 
 
 class AdminLoginForm(forms.Form):
