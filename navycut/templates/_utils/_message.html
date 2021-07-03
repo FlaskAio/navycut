@@ -1,9 +1,9 @@
 
-{% macro print_message() %}
+{% macro print_message(class=None) %}
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
-    {{messages[0]}}
+        <span class="{{class}}">{{messages[0]}}</span>
     {% endif %}
 {% endwith %}
 

@@ -22,3 +22,15 @@
     width: 165px;
     margin-top: 14px;
 }
+
+.danger {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+.warning {
+    color: blue;
+}

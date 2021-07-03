@@ -8,7 +8,7 @@ Admin login page
 
 {% block styles %}
 {{ super() }}
-<link rel="stylesheet" href="{{url_for('.static', filename='admin/css/styles.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='admin/css/styles.css')}}">
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@ Admin login page
     <br>
     <h2>The default Admin login page</h2>
     <br>
-    <p class="admin_login_flash">{{print_message()}}</p>
+    <p class="admin_login_flash">{{print_message(class="danger")}}</p>
     <center>
       <form class="form form-horizontal" method="post" role="form" action="/admin/login/">
         {{ form.csrf_token }}
