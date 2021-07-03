@@ -111,7 +111,7 @@ class Response:
             self.status_code = code
             return self
 
-    def render(self, *wargs:t.Any, **context:t.Any):
+    def render(self, *wargs:t.Any, **context:t.Any) -> t.Type[str]:
 
         if not len(wargs):
             raise InsufficientArgumentsError("atleast 1 argument is required for render method.")

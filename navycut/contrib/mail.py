@@ -8,7 +8,7 @@ mail = Mail()
 
 __all__ = ('mail', 'send_email', 'send_plain_mail', 'send_html_mail', 'send_mass_mail')
 
-def _set_mimetype(msg:Message, message:str, mimetype:str):
+def _set_mimetype(msg:Message, message:str, mimetype:str) -> t.Type[Message]:
     if  mimetype == "html":
         msg.html = message
     else:
