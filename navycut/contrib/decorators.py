@@ -26,9 +26,9 @@ def _get_req_res_view(f):
             if is_response is True:
                 args:list = list(args)
                 if len(args):
-                    args.insert(1, Response)
+                    args.insert(1, Response())
                 else:
-                    args.insert(0, Response)
+                    args.insert(0, Response())
            
             args:tuple = tuple(args)
             return f(*args, **kwargs)

@@ -1,0 +1,36 @@
+.login_page_main {
+    text-align: center;
+}
+.admin_login_flash{
+    color: red;
+    font-size: large;
+    font-weight: bold;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+#usernameField {
+    background-color: #EDE2F4;
+    width: 50%;
+}
+
+#passwordField {
+    background-color: #EDE2F4;
+    width: 50%;
+}
+
+.login-button {
+    width: 165px;
+    margin-top: 14px;
+}
+
+.danger {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+.warning {
+    color: blue;
+}

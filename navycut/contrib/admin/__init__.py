@@ -1,28 +1,8 @@
-from flask import redirect
 from flask_admin import Admin
-from ..urls import MethodView
-from ..auth import login_user
 from .site.models import *
 from .site.views import *
+from .site.forms import *
 from navycut.orm import sql
-from ..utils.security import check_password_hash
-
-class AdminLoginView(MethodView):
-
-    def get(self):
-        return self.render("admin/_adm_login.html")
-
-    def post(self):
-        username = self.request.form.get('username')
-        password = self.request.form.get('password')
-        user = User.query.filter_by(username=username).first()
-        if not user: 
-            return "Invalid username"
-            
-        if not check_password_hash(user.password, password): 
-            return "Invalid password"
-        login_user(user)
-        return redirect('/admin')
 
 
 class NavycutAdmin(Admin):
@@ -32,7 +12,6 @@ class NavycutAdmin(Admin):
 
     def init_app(self, app):
         self.app = app
-        self._add_admin_login_view()
         super(NavycutAdmin, self).__init__(self.app, template_mode="bootstrap4", index_view=NavAdminIndexView())
         self._register_administrator_model()
 
@@ -56,8 +35,5 @@ class NavycutAdmin(Admin):
             self.add_view(custom_view(model, sql.session, category=category))
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
-
-    def _add_admin_login_view(self):
-        self.app.add_url_rule('/admin/login', view_func=AdminLoginView.as_view("admin_login"), methods=['POST', 'GET'])
 
 admin:NavycutAdmin = NavycutAdmin()

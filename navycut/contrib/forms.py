@@ -4,3 +4,4 @@ form creation and validation.
 """
 
 from wtforms import *
+from flask_wtf import FlaskForm as Form

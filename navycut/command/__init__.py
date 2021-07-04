@@ -7,7 +7,7 @@ from ..core import app
 from ..conf import get_settings_module
 from ..orm.sqla.migrator import (
             Config as MigratorConfig, 
-            _perform_migration,
+            _perform_migrate,
             _perform_makemigrations
             )
 
@@ -49,7 +49,7 @@ def runserver(addrport):
                     'one'))
 @click.option('-x', '--x-arg', multiple=True,
               help='Additional arguments consumed by custom env.py scripts')
-def migrate(directory, message, sql, head, splice, branch_label, version_path,
+def makemigrations(directory, message, sql, head, splice, branch_label, version_path,
             rev_id, x_arg):
     
     """Updates database schema. Manages both apps with migrations and those without."""
@@ -64,12 +64,12 @@ def migrate(directory, message, sql, head, splice, branch_label, version_path,
             .migrate.call_configure_callbacks(config)
         command.init(config, directory, 'flask')
         with app.app_context():
-            _perform_migration(directory, message, sql, head, splice, branch_label, version_path,
+            _perform_makemigrations(directory, message, sql, head, splice, branch_label, version_path,
                             rev_id, x_arg)
     
     else: 
         with app.app_context():
-            _perform_migration(directory, message, sql, head, splice, branch_label, version_path,
+            _perform_makemigrations(directory, message, sql, head, splice, branch_label, version_path,
                         rev_id, x_arg)
 
 @manage_command.command()
@@ -84,11 +84,11 @@ def migrate(directory, message, sql, head, splice, branch_label, version_path,
 @click.option('-x', '--x-arg', multiple=True,
               help='Additional arguments consumed by custom env.py scripts')
 @click.argument('revision', default='head')
-def makemigrations(directory, sql, tag, x_arg, revision):
+def migrate(directory, sql, tag, x_arg, revision):
     """Creates new migration(s) for apps."""
-    from ..admin.site.models import _insert_intial_data
+    from ..contrib.admin.site.models import _insert_intial_data
     with app.app_context():
-        _perform_makemigrations(directory, revision, sql, tag, x_arg)
+        _perform_migrate(directory, revision, sql, tag, x_arg)
         try: 
             _insert_intial_data()
         except:
@@ -109,7 +109,7 @@ def createsuperuser(name, username, email):
     
     """Create the superuser account to access the admin panel."""
     
-    from ..admin.site.models import User, Group
+    from ..contrib.admin.site.models import User, Group
             
     name:str = name or Console.input.String("enter admin name: ")
     email:str = email or Console.input.String("enter admin email: ")

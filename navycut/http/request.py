@@ -1,7 +1,7 @@
 from flask.wrappers import Request as RequestBase
-from flask.globals import request
+from ..datastructures._object import NCObject
 
-from flask_login import current_user
+from ..contrib.auth import current_user
 
 
 class Request(RequestBase):
@@ -12,3 +12,15 @@ class Request(RequestBase):
     @property
     def user(self):
         return current_user
+
+    @property
+    def json(self):
+        return NCObject(self.get_json())
+
+    @property
+    def query(self):
+        return NCObject(self.args)
+
+    @property
+    def body(self):
+        return NCObject(self.form)

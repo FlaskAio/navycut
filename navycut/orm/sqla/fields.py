@@ -10,11 +10,14 @@ from sqlalchemy import (Column as ColumnType,
                     Date as DateType,
                     Time as TimeType,
                     ForeignKey as ForeignKeyType,
-                    DateTime as DateTimeType
+                    DateTime as DateTimeType, 
+                    Table as TableType
                     )
 from sqlalchemy.orm import relationship
 from sqlalchemy_jsonfield import JSONField as JSONType
+from flask_sqlalchemy.model import camel_to_snake_case
 from .types import ImageType
+from .meta import meta
 from datetime import datetime
 
 class Column(ColumnType):
@@ -655,8 +658,7 @@ class Fields:
                 backref:str=None) -> Column:
 
         """
-        The Datetime fields for sqlalchemy,
-        if No maximum_length, it will seted to max_val.
+        The OneToOne relation for navycut orm.
         
         :param model: 
             Mention the name of the Model class here in str format only.
@@ -679,9 +681,9 @@ class Fields:
                 name = sql.fields.Char(required=True, unique=True)
                 blog_id = sql.fields.ForiegnKey("Blog", unique=True)
         """
-        
+        _table_name:str = camel_to_snake_case(model)
         if backref is None:
-            backref = model.lower()
+            backref = _table_name
 
         return relationship(model, uselist=uselist, backref=backref)
 
@@ -690,8 +692,7 @@ class Fields:
                 backref:str=None) -> Column:
 
         """
-        The Datetime fields for sqlalchemy,
-        if No maximum_length, it will seted to max_val.
+        The OneToMany relation for navycut orm.
         
         :param model: 
             Mention the name of the Model class here in str format only.

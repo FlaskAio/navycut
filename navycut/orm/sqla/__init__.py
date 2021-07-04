@@ -2,13 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from .model import Model
 from .query import BaseQuery
 from .fields import Fields
-from sqlalchemy import MetaData
+from .meta import meta
 
 
 __all__ = ("sql", "meta")
-
-
-meta = MetaData()
 
 
 class SqlaNcOrm(SQLAlchemy):

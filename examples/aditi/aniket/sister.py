@@ -5,7 +5,6 @@ how to handle it, otherwise it may mess the server.
 
 from navycut.core import AppSister
 from navycut.utils import path
-from pathlib import Path
 from .urls import url_patterns
 
 

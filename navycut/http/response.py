@@ -1,4 +1,4 @@
-from flask import json
+from flask import json, redirect, flash
 from json.decoder import JSONDecodeError
 from flask.wrappers import Response as ResponseBase
 from flask.templating import (render_template, 
@@ -6,14 +6,13 @@ from flask.templating import (render_template,
                     )
 from ..errors.misc import (DataTypeMismatchError, 
                     InsufficientArgumentsError, 
-                    InvalidArgumentsError,
                     NCBaseError
                     )
 import typing as t
 from werkzeug.exceptions import *
 
 
-STATUS_DICT:dict = {
+ERROR_DICT:dict = {
             400 : Unauthorized,
             403 : Forbidden,
             404 : NotFound,
@@ -42,34 +41,37 @@ STATUS_DICT:dict = {
             502 : BadGateway,
             503 : ServiceUnavailable,
             504 : GatewayTimeout,
-            505 : HTTPVersionNotSupported
+            505 : HTTPVersionNotSupported,
 }
 
 
-class Response(ResponseBase):
+class Response:
+    def __init__(self):
+        self.status_code = 200
 
+    def flash(self, message:str) -> t.Type["Response"]:
+        flash(message)
+        return self
 
-    @classmethod
-    def send(cls, content:t.Union[str, dict, t.List[t.Any]]) -> t.Type[ResponseBase]:
+    def send(self, content:t.Union[str, dict, t.List[t.Any]]) -> t.Type[ResponseBase]:
         
         if isinstance(content, dict) or isinstance(content, list):
-            return cls.json(content)
+            return self.json(content)
 
         if hasattr(content, 'to_dict'):
-            return cls.json(content.to_dict())
+            return self.json(content.to_dict())
 
         try:
             _ = json.loads(content)
-            return cls.json(content)
+            return self.json(content)
 
         except JSONDecodeError:
-            return cls(content)
+            return ResponseBase(content, status_code=self.status_code)
 
         except Exception as e:
             raise NCBaseError(e)
 
-    @classmethod
-    def json(cls, *wargs:t.Any, **kwargs:t.Any) -> ResponseBase:
+    def json(self, *wargs:t.Any, **kwargs:t.Any) -> ResponseBase:
         
         data:str = json.dumps(dict())
         
@@ -91,25 +93,25 @@ class Response(ResponseBase):
             if kwargs is not None:
                 data:str = json.dumps(kwargs)
 
-        return cls(data, mimetype="application/json", status=200)
+        return ResponseBase(data, mimetype="application/json", status=self.status_code)
 
-    @classmethod
-    def end(cls, code:int=None):
+    def end(self, code:int=None):
         if code is not None:
-            cls.set_status(code)
+            self.set_status(code)
 
         else:
-            return cls("")
+            return ResponseBase("", status=self.status_code)
 
-    @classmethod
-    def set_status(cls, code:int) -> None:
-        if not code in STATUS_DICT:
-            raise InvalidArgumentsError(f"{code} is the invalid web status code.")
+    def status(self, code:int) -> t.Optional["Response"]:
+        
+        if code in ERROR_DICT:
+            raise ERROR_DICT.get(code)
+        
         else:
-            raise STATUS_DICT.get(code)
+            self.status_code = code
+            return self
 
-    @classmethod
-    def render(cls, *wargs:t.Any, **context:t.Any):
+    def render(self, *wargs:t.Any, **context:t.Any) -> t.Type[str]:
 
         if not len(wargs):
             raise InsufficientArgumentsError("atleast 1 argument is required for render method.")
@@ -126,3 +128,6 @@ class Response(ResponseBase):
             
             else: 
                 return render_template(wargs[0], **context)
+
+    def redirect(self, route):
+        return redirect(route)

@@ -3,11 +3,10 @@ from flask.views import MethodView as _MethodView
 from flask import (request, 
                 render_template, 
                 render_template_string, 
-                session, 
                 abort
                 )
 from ..errors.misc import DataTypeMismatchError
-from ..datastructures import NCObject
+from ..http.response import Response
 from importlib import import_module
 import typing as t
 
@@ -30,7 +29,8 @@ class MethodView(_MethodView):
     def __init__(self, *wargs, **kwargs) -> None:
         super(MethodView, self).__init__(*wargs, **kwargs)
 
-        self.request = request
+        self.req = self.request = request
+        self.res = self.response = Response()
         self.context = dict()
 
 
@@ -58,19 +58,6 @@ class MethodView(_MethodView):
         """simply override this function for option request"""
         abort(405)
 
-    @property
-    def query(self) -> NCObject:
-        """It returns the url query as NCObject format."""
-        return NCObject(self.request.args)
-    
-    @property
-    def json(self):
-        return NCObject(self.request.get_json())
-
-    
-    @property
-    def session(self) -> None:
-        return session
 
     def render(self, template_name_or_raw:str, *wargs:tuple, **context:t.Any):
         
@@ -124,7 +111,6 @@ class include:
 
             url_pattern.url = url_rule+url_pattern.url
             url_pattern.name = url_rule+url_pattern.name
-
 
     def __repr__(self) -> str:
         return f"include <{self.url}>"

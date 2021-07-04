@@ -1,12 +1,14 @@
 from flask import Flask, Blueprint
+from flask_bootstrap import Bootstrap
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
 from ..errors.misc import (ImportNameNotFoundError, 
-                    ConfigurationError
+                    ConfigurationError,
+                    NCBaseError
                     )
-from ..auth import login_manager
+from ..contrib.auth import login_manager
 from ..urls import MethodView
 from ..conf import settings
 from ..contrib.mail import mail
@@ -51,6 +53,8 @@ class Navycut(Flask):
         self.config['SECRET_KEY'] = settings.SECRET_KEY
         self.debugging(settings.DEBUG)
         self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
+        self.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
+        self.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
         
         if settings.MAIL_USING_SMTP:
             self._configure_smtp_mail()
@@ -84,8 +88,8 @@ class Navycut(Flask):
         self.initIns(sql)
         self.initIns(login_manager)
         self.initIns(mail)
-
         migrate.init_app(self, sql)
+        Bootstrap(self)
 
 
     def _perform_app_registration(self):
@@ -152,8 +156,8 @@ class Navycut(Flask):
                 app.import_name = app_file.__name__
             try: 
                 app.init()
-            except:
-                pass
+            except Exception as e:
+                raise NCBaseError(e)
         
         except AttributeError: 
             raise AttributeError(f"{app_name} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
