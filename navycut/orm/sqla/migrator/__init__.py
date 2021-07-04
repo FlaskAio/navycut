@@ -37,7 +37,7 @@ class Migrate(_Migrate):
         return self.call_configure_callbacks(config)
 
 
-def _perform_migration(directory=None, message=None, sql=False, head='head', splice=False,
+def _perform_makemigrations(directory=None, message=None, sql=False, head='head', splice=False,
             branch_label=None, version_path=None, rev_id=None, x_arg=None):
     """Alias for 'revision --autogenerate'"""
     config = current_app.extensions['migrate'].migrate.get_config(
@@ -46,7 +46,7 @@ def _perform_migration(directory=None, message=None, sql=False, head='head', spl
                      head=head, splice=splice, branch_label=branch_label,
                      version_path=version_path, rev_id=rev_id)
 
-def _perform_makemigrations(directory=None, revision='head', sql=False, tag=None, x_arg=None):
+def _perform_migrate(directory=None, revision='head', sql=False, tag=None, x_arg=None):
     
     config = current_app.extensions['migrate'].migrate.get_config(directory,
                                                                   x_arg=x_arg)

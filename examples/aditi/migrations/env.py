@@ -7,6 +7,8 @@ from flask import current_app
 
 from alembic import context
 
+from navycut.utils.console import Console
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -63,7 +65,7 @@ def run_migrations_online():
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
-                logger.info('No changes in schema detected.')
+                Console.log.Info('No changes in schema detected.')
 
     connectable = current_app.extensions['migrate'].db.engine
 
