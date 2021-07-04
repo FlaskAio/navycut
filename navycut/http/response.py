@@ -10,6 +10,7 @@ from ..errors.misc import (DataTypeMismatchError,
                     )
 import typing as t
 from werkzeug.exceptions import *
+from sqlalchemy.orm.collections import InstrumentedList
 
 
 ERROR_DICT:dict = {
@@ -80,7 +81,11 @@ class Response:
                 data:str = json.dumps(wargs[0])
             
             except TypeError:
-                if hasattr(wargs[0], 'to_dict'):
+                if isinstance(wargs[0], InstrumentedList):
+                    _res_list:list = [d.to_dict() for d in wargs[0]]
+                    data = json.dumps(_res_list)
+
+                elif hasattr(wargs[0], 'to_dict'):
                     data:str = json.dumps(wargs[0].to_dict())
                 
                 else:

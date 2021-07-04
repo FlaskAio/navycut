@@ -14,8 +14,8 @@ class SqlaNcOrm(SQLAlchemy):
     it's a subclass of SQLALchemy. It contains all the sqlalchemy features
     with some extra own's special.
     """
-    fields = Fields()
-
+    fields = Fields
+    
     def __init__(self):
 
         super(SqlaNcOrm, self).__init__(model_class=Model,

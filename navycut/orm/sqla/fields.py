@@ -39,7 +39,8 @@ class Fields:
     """
     The default field class for sqlalchemy object.
     """
-    def Text(self, required:bool=False,
+    @classmethod
+    def Text(cls, required:bool=False,
             unique:bool=False,
             help_text:str=None,
             widget:str="ckeditor") -> Column:
@@ -78,8 +79,8 @@ class Fields:
             widget=widget
         )
 
-
-    def Char(self, max_length:int=255, 
+    @classmethod
+    def Char(cls, max_length:int=255, 
             required:bool=False, 
             pk:bool=False, 
             unique:bool=False, 
@@ -131,7 +132,8 @@ class Fields:
                 help_text=help_text,
                 primary_key=pk)
 
-    def Float(self, required:bool=False,
+    @classmethod
+    def Float(cls, required:bool=False,
             pk:bool=False,
             unique:bool=False,
             choices:tuple=None,
@@ -176,7 +178,8 @@ class Fields:
             help_text=help_text 
         )
 
-    def Integer(self, required:bool=False,
+    @classmethod
+    def Integer(cls, required:bool=False,
                 pk:bool=True,
                 unique:bool=False,
                 choices:tuple=None,
@@ -222,7 +225,8 @@ class Fields:
             help_text=help_text
         )
 
-    def BigInteger(self, required:bool=False,
+    @classmethod
+    def BigInteger(cls, required:bool=False,
                 pk:bool=False,
                 unique:bool=False,
                 choices:tuple=None,
@@ -268,7 +272,8 @@ class Fields:
             help_text=help_text
         )
 
-    def SmallInteger(self, required:bool=False,
+    @classmethod
+    def SmallInteger(cls, required:bool=False,
                 pk:bool=False,
                 unique:bool=False,
                 choices:tuple=None,
@@ -314,6 +319,7 @@ class Fields:
             help_text=help_text
         )
 
+    @classmethod
     def Boolean(required:bool=False,
             default:bool=None,
             help_text:str=None,
@@ -351,7 +357,8 @@ class Fields:
             default=default
         )
     
-    def Json(self, required:bool=False,
+    @classmethod
+    def Json(cls, required:bool=False,
             default:dict=dict(),
             help_text:str=None) -> Column:
         
@@ -384,7 +391,8 @@ class Fields:
             help_text=help_text
             )
 
-    def Image(self, required:bool=True,
+    @classmethod
+    def Image(cls, required:bool=True,
             help_text:str = None
             ) -> Column:
 
@@ -413,7 +421,8 @@ class Fields:
                 help_text=help_text
         )
 
-    def Binary(self, required:bool=False,
+    @classmethod
+    def Binary(cls, required:bool=False,
             default:bytes=None,
             help_text:str=None) -> Column:
 
@@ -445,7 +454,8 @@ class Fields:
             help_text=help_text
         )
 
-    def LargeBinary(self, required:bool=False,
+    @classmethod
+    def LargeBinary(cls, required:bool=False,
             default:bytes=None,
             help_text:str=None) -> Column:
 
@@ -477,7 +487,8 @@ class Fields:
             help_text=help_text
         )
 
-    def Time(self, required:bool=False,
+    @classmethod
+    def Time(cls, required:bool=False,
             default:datetime.time=None,
             help_text:str=None,
             choices:tuple=None
@@ -521,7 +532,8 @@ class Fields:
             choices=choices
         )
 
-    def Date(self, required:bool=False,
+    @classmethod
+    def Date(cls, required:bool=False,
             default:datetime.date=None,
             help_text:str=None,
             choices:tuple=None
@@ -564,7 +576,8 @@ class Fields:
             choices=choices
         )
 
-    def DateTime(self, required:bool=False,
+    @classmethod
+    def DateTime(cls, required:bool=False,
             default:datetime.now=None,
             help_text:str=None,
             choices:tuple=None
@@ -609,7 +622,8 @@ class Fields:
 
     #relationship field
 
-    def ForeignKey(self, model:str,
+    @classmethod
+    def ForeignKey(cls, model:str,
                     unique:bool=False,
                     required:bool=False,
                     help_text:str=None) -> Column:
@@ -653,9 +667,12 @@ class Fields:
             help_text=help_text,
         )
 
-    def OneToOne(self, model:str, 
+    @classmethod
+    def OneToOne(cls, 
+                model:str, 
+                backref:str=None,
                 uselist:bool = False,
-                backref:str=None) -> Column:
+                ) -> Column:
 
         """
         The OneToOne relation for navycut orm.
@@ -684,13 +701,16 @@ class Fields:
         _table_name:str = camel_to_snake_case(model)
         if backref is None:
             backref = _table_name
-
+        # ptr_id = 
+        # setattr(cls, f"{_table_name}_ptr_id", )
         return relationship(model, uselist=uselist, backref=backref)
 
-    def OneToMany(self, model:str, 
+    @classmethod
+    def OneToMany(cls, 
+                model:str, 
+                backref:str,
                 uselist:bool = True,
-                backref:str=None) -> Column:
-
+                ) -> Column:
         """
         The OneToMany relation for navycut orm.
         

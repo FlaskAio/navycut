@@ -3,7 +3,7 @@ from datetime import datetime
 from navycut.orm import sql
 from navycut.utils.security import create_password_hash
 from navycut.utils.console import Console
-# from navycut.contrib.auth import login_manager
+
 
 # class Permission(sql.Model):
 #     id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
@@ -41,6 +41,7 @@ class User(sql.Model, UserMixin):
     is_active = sql.Column(sql.Boolean, default=True)
     groups = sql.relationship("Group", secondary=group_user_con, backref=sql.backref("users", lazy='dynamic'))
     date_joined = sql.Column(sql.DateTime, default=datetime.now)
+    # cstm_user_ptr_id = sql.fields.ForeignKey("CustomUser", unique=True, help_text="custom user field")
 
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
