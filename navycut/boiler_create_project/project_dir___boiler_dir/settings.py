@@ -53,3 +53,5 @@ SMTP_CONFIGURATION = {
     "is_using_tls" : None,
     "options" : {}
 } 
+
+EXTRA_ARGS = None

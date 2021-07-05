@@ -8,6 +8,30 @@ from navycut.utils.tools import snake_to_camel_case
 from navycut.conf import settings
 
 
+class site:
+    def __init__(self, ncadmin) -> None:
+        self.admin = ncadmin
+    
+    def register(self, model, custom_view=None, category=None):
+        """
+        register the app specific model with the admin
+        :param model: 
+            specific model to register.
+        :param custom_view:
+            The custom Model View class.
+        :param category:
+            Custom category to categorize the model
+        
+        for example ::
+
+            from navycut.contrib.admin import admin
+            from .models import Blog
+
+            admin.site.register(Blog)
+        """
+        self.admin.register_model(model, custom_view, category)
+        return True
+
 class NavycutAdmin(Admin):
     def __init__(self,app=None):
         if app is not None:
@@ -21,6 +45,7 @@ class NavycutAdmin(Admin):
                         name=snake_to_camel_case(settings.PROJECT_NAME)+" Admin"
                         )
         self._register_administrator_model()
+        self.site = site(self)
 
     def _register_administrator_model(self):
         self.register_model(User, category="Users")
@@ -33,6 +58,8 @@ class NavycutAdmin(Admin):
             specific model to register.
         :param custom_view:
             The custom Model View class.
+        :param category:
+            Custom category to categorize the model
         
         for example ::
 
@@ -50,5 +77,7 @@ class NavycutAdmin(Admin):
             self.add_view(custom_view(model, sql.session, category=category))
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
+
+    
 
 admin:NavycutAdmin = NavycutAdmin()

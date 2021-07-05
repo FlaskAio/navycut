@@ -44,8 +44,6 @@ class Navycut(Flask):
         self._configure_core_features()
         self._perform_app_registration()
 
-    # def _init_settings_module(self):
-    #     setattr(settings, "INSTALLED_APPS", None)
 
     def _add_config(self) -> None:
         self.import_name = settings.IMPORT_NAME
@@ -60,6 +58,9 @@ class Navycut(Flask):
         self.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
         self.config['SETTINGS'] = settings
         self.debugging(settings.DEBUG)
+
+        if settings.EXTRA_ARGS is not None:
+            self._add_extra_config()
         
         if settings.MAIL_USING_SMTP:
             self._configure_smtp_mail()
@@ -85,6 +86,10 @@ class Navycut(Flask):
         self.config['MAIL_USE_SSL'] = settings.SMTP_CONFIGURATION.get("is_using_ssl", None)
         self.config['MAIL_USERNAME'] = settings.SMTP_CONFIGURATION.get("username", None)
         self.config['MAIL_PASSWORD'] = settings.SMTP_CONFIGURATION.get("password", None)
+
+    def _add_extra_config(self) -> None:
+        for key, value in settings.EXTRA_ARGS.items():
+            self.config[key] = value
     
 
     def _configure_core_features(self):
@@ -181,11 +186,6 @@ class Navycut(Flask):
     def debugging(self, flag:bool) -> None:
         self.debug = flag
         self.config['DEBUG'] =flag
-        if flag is True:
-            self.config['ENV'] = 'development'
-
-        else:
-            self.config['ENV'] = 'production'
 
     def run_wsgi(self, host, port, **options) -> None:
         self._configure_default_index()
