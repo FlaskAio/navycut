@@ -6,13 +6,14 @@ from navycut.orm import sql
 from inspect import getfile
 from navycut.utils.tools import snake_to_camel_case
 from navycut.conf import settings
+from flask_sqlalchemy import model
 
 
 class site:
     def __init__(self, ncadmin) -> None:
         self.admin = ncadmin
     
-    def register(self, model, custom_view=None, category=None):
+    def register(self, model:model.DefaultMeta, custom_view:str=None, category:str=None):
         """
         register the app specific model with the admin
         :param model: 
@@ -77,7 +78,5 @@ class NavycutAdmin(Admin):
             self.add_view(custom_view(model, sql.session, category=category))
         self.add_view(NCAdminModelView(model, sql.session, category=category))
         return True
-
-    
 
 admin:NavycutAdmin = NavycutAdmin()
