@@ -11,6 +11,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
     {% endblock %}
+    <link rel="shortcut icon" href="{{url_for('static', filename='admin/images/icons/navycut-logo.png')}}" type="image/x-icon"> 
     {% block head_css %}
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap4/swatch/{swatch}/bootstrap.min.css'.format(swatch=config.get('FLASK_ADMIN_SWATCH', 'default')), v='4.2.1') }}"
               rel="stylesheet">
@@ -19,6 +20,7 @@
         {% endif %}
         <link href="{{ admin_static.url(filename='admin/css/bootstrap4/admin.css', v='1.1.1') }}" rel="stylesheet">
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap4/css/font-awesome.min.css', v='4.7.0') }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{url_for('static', filename='admin/css/styles.css')}}">
         {% if admin_view.extra_css %}
           {% for css_url in admin_view.extra_css %}
             <link href="{{ css_url }}" rel="stylesheet">
@@ -47,6 +49,7 @@
             <!-- navbar content -->
             <div class="collapse navbar-collapse" id="admin-navbar-collapse">
             {% block brand %}
+            <img src="{{url_for('static', filename='admin/images/icons/navycut-logo.png')}}" class="admin-navbar-logo">
                 <a class="navbar-brand" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
             {% endblock %}
             {% block main_menu %}
@@ -58,6 +61,11 @@
                 {% block menu_links %}
                 <ul class="nav navbar-nav navbar-right">
                     {{ layout.menu_links() }}
+                    <li>
+                        <a class="btn btn-danger" href="/admin/logout/">
+                            <span style="color: aliceblue;">Logout</span>
+                        </a>
+                    </li>
                 </ul>
                 {% endblock %}
             {% block access_control %}

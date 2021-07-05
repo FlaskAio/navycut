@@ -13,7 +13,9 @@ from sqlalchemy import (Column as ColumnType,
                     DateTime as DateTimeType, 
                     Table as TableType
                     )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import (relationship, 
+                    backref as backref_func
+                    )
 from sqlalchemy_jsonfield import JSONField as JSONType
 from flask_sqlalchemy.model import camel_to_snake_case
 from .types import ImageType
@@ -670,7 +672,7 @@ class Fields:
     @classmethod
     def OneToOne(cls, 
                 model:str, 
-                backref:str=None,
+                backref:str,
                 uselist:bool = False,
                 ) -> Column:
 
@@ -699,14 +701,11 @@ class Fields:
                 blog_id = sql.fields.ForiegnKey("Blog", unique=True)
         """
         _table_name:str = camel_to_snake_case(model)
-        if backref is None:
-            backref = _table_name
-        # ptr_id = 
-        # setattr(cls, f"{_table_name}_ptr_id", )
-        return relationship(model, uselist=uselist, backref=backref)
+        
+        return relationship(model, backref=backref_func(backref, uselist=False))
 
     @classmethod
-    def OneToMany(cls, 
+    def ManyToOne(cls, 
                 model:str, 
                 backref:str,
                 uselist:bool = True,

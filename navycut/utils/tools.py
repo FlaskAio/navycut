@@ -1,4 +1,5 @@
 from secrets import choice
+import re
 
 def generate_random_secret_key(length):
     """
@@ -12,6 +13,10 @@ def generate_random_secret_key(length):
     allowed_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*+:;><?/][}{'
     return ''.join(choice(allowed_chars) for _ in range(length))
 
-def snake_to_camel(snake_str:str) -> str:
+def snake_to_camel_case(snake_str:str) -> str:
     first, *others = snake_str.split('_')
     return ''.join([first.title(), *map(str.title, others)])
+
+def camel_to_snake_case(name) -> str:
+    name = re.sub(r"((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))", r"_\1", name)
+    return name.lower().lstrip("_")

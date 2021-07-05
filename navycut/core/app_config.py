@@ -18,7 +18,7 @@ from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
 from ..utils import path
-from ..utils.tools import snake_to_camel
+from ..utils.tools import snake_to_camel_case
 
 _basedir = path.abspath(__file__).parent.parent
 
@@ -44,17 +44,22 @@ class Navycut(Flask):
         self._configure_core_features()
         self._perform_app_registration()
 
+    # def _init_settings_module(self):
+    #     setattr(settings, "INSTALLED_APPS", None)
 
     def _add_config(self) -> None:
         self.import_name = settings.IMPORT_NAME
         self.project_name = settings.PROJECT_NAME
+        self.config['PROJECT_NAME'] = self.project_name
+        self.config['IMPORT_NAME'] = self.import_name
         self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         self.config["BASE_DIR"] = settings.BASE_DIR
         self.config['SECRET_KEY'] = settings.SECRET_KEY
-        self.debugging(settings.DEBUG)
         self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
         self.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
         self.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+        self.config['SETTINGS'] = settings
+        self.debugging(settings.DEBUG)
         
         if settings.MAIL_USING_SMTP:
             self._configure_smtp_mail()
@@ -136,7 +141,7 @@ class Navycut(Flask):
         return True
 
     def _import_app(self, app_name:str):
-        
+        app = app_name
         try: 
             if not app_name.endswith("Sister"):
                 _pure_app_name = app_name.rsplit(".", 1)
@@ -146,8 +151,7 @@ class Navycut(Flask):
                 else:
                     _pure_app_name = _pure_app_name[1]
 
-                app_name = f"{app_name}.sister.{snake_to_camel(_pure_app_name)}Sister"
-
+                app_name = f"{app_name}.sister.{snake_to_camel_case(_pure_app_name)}Sister"
             app_location, app_str_class = tuple(app_name.rsplit(".", 1))
             app_file = import_module(app_location)
             real_app_class = getattr(app_file, app_str_class)
@@ -166,11 +170,11 @@ class Navycut(Flask):
     def _registerApp(self, _appList:list):
         for str_app in _appList: 
             
-            try: 
-                app = self._import_app(str_app)    
+            # try: 
+            app = self._import_app(str_app)    
             
-            except: 
-                app = self._import_app(f"{self.project_name}.{str_app}")
+            # except: 
+            #     app = self._import_app(f"{self.project_name}.{str_app}")
 
             self.register_blueprint(app, url_prefix=app.url_prefix)
 

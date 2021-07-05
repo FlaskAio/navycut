@@ -1,7 +1,9 @@
 from flask.wrappers import Request as RequestBase
+from flask.globals import session
 from ..datastructures._object import NCObject
 
 from ..contrib.auth import current_user
+import typing as t
 
 
 class Request(RequestBase):
@@ -14,13 +16,17 @@ class Request(RequestBase):
         return current_user
 
     @property
-    def json(self):
+    def json(self) ->t.Type[NCObject]:
         return NCObject(self.get_json())
 
     @property
-    def query(self):
+    def query(self) ->t.Type[NCObject]:
         return NCObject(self.args)
 
     @property
-    def body(self):
+    def body(self) ->t.Type[NCObject]:
         return NCObject(self.form)
+
+    @property
+    def session():
+        return session

@@ -4,7 +4,7 @@ from navycut.conf import get_settings_module
 settings = get_settings_module()
 
 
-class UploadserverSister(AppSister):
+class UploadServerSister(AppSister):
     static_folder = settings.BASE_DIR / "uploads",
     static_url_path = "/",
     url_prefix = "/static_upload"
