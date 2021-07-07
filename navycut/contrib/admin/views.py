@@ -1,7 +1,8 @@
 from .site.forms import AdminLoginForm
 from ..auth import (login_user, 
                 logout_user, 
-                authenticate
+                authenticate,
+                has_group
                 )
 
 def admin_login(req, res):
@@ -11,6 +12,9 @@ def admin_login(req, res):
         if user is None: 
             return res.flash("Invalid username or password")\
                     .redirect("/admin/login")
+        if not has_group(user, 'super_admin'):
+            return res.flash("admin section is only available for super-admin.")\
+                .redirect("/admin/login/")
 
         login_user(user)
         return res.redirect('/admin')

@@ -10,7 +10,7 @@ from flask_sqlalchemy import model
 
 
 class site:
-    def __init__(self, ncadmin) -> None:
+    def __init__(self, ncadmin:"NavycutAdmin") -> None:
         self.admin = ncadmin
     
     def register(self, model:model.DefaultMeta, custom_view:str=None, category:str=None):
@@ -46,6 +46,7 @@ class NavycutAdmin(Admin):
                         name=snake_to_camel_case(settings.PROJECT_NAME)+" Admin"
                         )
         self._register_administrator_model()
+
         self.site = site(self)
 
     def _register_administrator_model(self):
