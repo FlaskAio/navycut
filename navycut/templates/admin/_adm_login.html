@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
-{% from "_utils/_message.html" import print_message with context %}
+{% from "admin/layout.html" import messages with context %}
 
 {% block title %}
 Admin login page
@@ -16,7 +16,7 @@ Admin login page
     <br>
     <h2>The default Admin login page</h2>
     <br>
-    <p class="admin_login_flash">{{print_message(class="danger")}}</p>
+    <p class="admin_login_flash">{{messages(class="danger")}}</p>
     <center>
       <form class="form form-horizontal" method="post" role="form" action="/admin/login/">
         {{ form.csrf_token }}
