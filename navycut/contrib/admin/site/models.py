@@ -76,7 +76,7 @@ class User(sql.Model, UserMixin):
         """
         return the name of the user.
         """
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
 
     def __str__(self) -> str:
         """return the string representation of the user model object."""

@@ -50,8 +50,8 @@ class Response:
     def __init__(self):
         self.status_code = 200
 
-    def flash(self, message:str) -> t.Type["Response"]:
-        flash(message)
+    def flash(self, message:str, category:str="info") -> t.Type["Response"]:
+        flash(message, category=category)
         return self
 
     def send(self, content:t.Union[str, dict, t.List[t.Any]]) -> t.Type[ResponseBase]:
