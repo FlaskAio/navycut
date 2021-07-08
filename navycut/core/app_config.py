@@ -19,6 +19,7 @@ from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
 from ..utils import path
 from ..utils.tools import snake_to_camel_case
+# import click as c
 
 _basedir = path.abspath(__file__).parent.parent
 
@@ -163,10 +164,11 @@ class Navycut(Flask):
             app = real_app_class()
             if getattr(app, "import_name") is None:
                 app.import_name = app_file.__name__
-            try: 
-                app.init()
-            except Exception as e:
-                raise NCBaseError(e)
+            app.init()
+            # try: 
+            #     app.init()
+            # except Exception as e:
+            #     raise Exception(e)
         
         except AttributeError: 
             raise AttributeError(f"{app_name} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
@@ -175,25 +177,24 @@ class Navycut(Flask):
     def _registerApp(self, _appList:list):
         for str_app in _appList: 
             
-            # try: 
             app = self._import_app(str_app)    
-            
-            # except: 
-            #     app = self._import_app(f"{self.project_name}.{str_app}")
-
             self.register_blueprint(app, url_prefix=app.url_prefix)
 
     def debugging(self, flag:bool) -> None:
         self.debug = flag
         self.config['DEBUG'] =flag
 
-    def run_wsgi(self, host, port, **options) -> None:
+    def run_wsgi(self, host:str, port:int, **options) -> None:
         self._configure_default_index()
+
+        addr = f"http://{host}:{port}"
 
         _run_with_debug = self.config['DEBUG']
         _run_with_reloader = self.config['DEBUG']
 
         options.setdefault("threaded", True)
+
+        # c.launch(addr) # open the webbrowser containg the provided addr.
 
         run_simple_wsgi(host, 
                         port, 

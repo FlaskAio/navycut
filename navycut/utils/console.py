@@ -1,26 +1,92 @@
-import logging
 from .colours import colours
 from getpass import getpass
-import logging
+import click as c
+
+
+class _logger:
+
+    @classmethod
+    def _open_box(cls, **options) ->str:
+        return c.style("[ ", fg="white", bold=True)
+
+    @classmethod
+    def _close_box(cls, **options) -> str:
+        options.setdefault("fg", "white")
+        options.setdefault("bold", True)
+        return c.style(" ] ", **options)
+
+    @classmethod
+    def _create_log_base_msg(cls, type:str, **options):
+
+        colour:str = "blue" 
+
+        if options.get("colour", None) is None:
+
+            if type.lower() == "info":
+                colour = "blue"
+            
+            elif type.lower() == "warning":
+                colour = "magenta"
+            
+            elif type.lower() == "success":
+                colour = "green"
+
+            elif type.lower() == "error":
+                colour = "red"
+
+        else:
+            colour = options.get("colour")
+
+        options.setdefault("fg", colour)
+        options.setdefault("bold", True)
+        return c.style(type.upper(), **options)
+
+    @classmethod
+    def _message(cls, msg:str, **options):
+        options.setdefault("fg", "yellow")
+        return c.style(msg, **options)
 
 class Console:
+
+
     class log:
-        def Success(message:str=None) -> str:
-            print (colours.white+'[ '+colours.green+colours.bright+'SUCCESS'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset)
-        
-        def Error(message:str=None) -> str:
-            print (colours.white+'[ '+colours.red+colours.bright+'ERROR'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset)
-        
-        def Info(message:str=None) -> str:
-            def _print(message_) -> None:
-                print (colours.white+'[ '+colours.blue+colours.bright+'INFO'+colours.reset+colours.white+' ] '+colours.yellow+message_+colours.reset)
+
+        _logger_class = _logger
+
+        @classmethod
+        def _clogger(cls, type:str, message_:str) -> None:
+                c.echo(cls._logger_class._open_box()+\
+                        cls._logger_class._create_log_base_msg(type)+\
+                            cls._logger_class._close_box()+\
+                                cls._logger_class._message(message_))
+
+        @classmethod
+        def Success(cls, message:str=None) -> str:
             if "\n" in message:
                 message_line_list:list = message.split("\n")
-                for _message in message_line_list: _print(_message)
-            else: _print(message)
+                for _message in message_line_list: cls._clogger("success", _message)
+            else: cls._clogger("success", message)
         
-        def Warning(message:str=None) -> str:
-            print (colours.white+'[ '+colours.magenta+colours.bright+'WARNING'+colours.reset+colours.white+' ] '+colours.yellow+message+colours.reset) 
+        @classmethod
+        def Error(cls, message:str=None) -> str:
+            if "\n" in message:
+                message_line_list:list = message.split("\n")
+                for _message in message_line_list: cls._clogger("error", _message)
+            else: cls._clogger("error", message)
+        
+        @classmethod
+        def Info(cls, message:str=None) -> str:
+            if "\n" in message:
+                message_line_list:list = message.split("\n")
+                for _message in message_line_list: cls._clogger("info", _message)
+            else: cls._clogger("info", message)
+        
+        @classmethod
+        def Warning(cls, message:str=None) -> str:
+            if "\n" in message:
+                message_line_list:list = message.split("\n")
+                for _message in message_line_list: cls._clogger("warning", _message)
+            else: cls._clogger("warning", message)
 
     class input:
         def String(input_message:str=None) -> str:
