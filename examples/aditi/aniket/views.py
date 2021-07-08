@@ -1,6 +1,6 @@
 # from flask.wrappers import Request
 from navycut.contrib.auth import login_required
-# from .models import Blog, Author
+from .models import Blog, Author
 
 def homepage(req, res):
     return res.json(dict(req.headers))
@@ -23,5 +23,7 @@ def aditi(req, res):
 def get_blog(req, res, id):
     # author = Author.query.get(id)
     blog =Blog.query.get(id)
-    print (blog.author)
-    return res.json(blog.author)
+    print (blog.__table__)
+    # print (blog.author)
+    return res.json(blog)
+

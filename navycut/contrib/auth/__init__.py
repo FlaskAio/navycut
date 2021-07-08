@@ -183,4 +183,4 @@ def has_group(user: t.Type["User"],
         return False
 
     else:
-        raise DataTypeMismatchError(type(group).__name__, "has_group function", "str or list")
+        raise DataTypeMismatchError(group, "has_group function", "str or list")

@@ -5,7 +5,7 @@ from .fields import Fields
 from .meta import meta
 
 
-__all__ = ("sql", "meta")
+__all__ = ("sql",)
 
 
 class SqlaNcOrm(SQLAlchemy):

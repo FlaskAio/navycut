@@ -102,7 +102,7 @@ class Response:
 
     def end(self, code:int=None):
         if code is not None:
-            self.set_status(code)
+            self.status(code)
 
         else:
             return ResponseBase("", status=self.status_code)

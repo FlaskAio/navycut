@@ -734,8 +734,5 @@ class Fields:
                 name = sql.fields.Char(required=True, unique=True)
                 blog_id = sql.fields.ForiegnKey("Blog")
         """
-        
-        if backref is None:
-            backref = model.lower()
 
         return relationship(model, uselist=uselist, backref=backref)
