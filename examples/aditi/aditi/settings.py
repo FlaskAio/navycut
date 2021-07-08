@@ -32,8 +32,8 @@ SECRET_KEY = r"f7>Rn2eJli}>kVr7Hj@6^$&2P35Bx^>C^}FsOKG94SER!lwgtx[Wa" #should ge
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
-    "navycut.contrib.admin.sister.AdminSister",
-    "navycut.helpers.upload_server.sister.UploadserverSister",
+    "navycut.contrib.admin",
+    "navycut.helpers.upload_server",
     "aniket"
     #"first_app.sister.FirstappSister", 
 ]
@@ -54,3 +54,5 @@ SMTP_CONFIGURATION = {
     "is_using_tls" : None,
     "options" : {}
 } 
+
+EXTRA_ARGS = None

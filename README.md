@@ -324,8 +324,12 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 ##### If you are from India, You can donate directly Using VPA(UPI):
 
     my vpa id: aniketsarkar@ybl
-<a href="https://raw.githubusercontent.com/navycut/navycut/main/logos/phonepe.jpeg">
+<a href="https://cdn.worldvectorlogo.com/logos/phonepe-1.svg">
 <img src="https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png" height="120px" width="180px">
+</a>
+<br>
+<a href="https://paytm.me/vA-DF7O">
+    <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Paytm-Logo-With-White-Border-PNG-image.png" height="50px" width="100px">
 </a>
 
 ### Contributors

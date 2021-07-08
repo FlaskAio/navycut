@@ -1,6 +1,5 @@
 from __future__ import with_statement
 
-import logging
 from logging.config import fileConfig
 
 from flask import current_app
@@ -16,7 +15,6 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
-logger = logging.getLogger('alembic.env')
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -65,7 +63,7 @@ def run_migrations_online():
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
-                Console.log.Info('No changes in schema detected.')
+                Console.log.Info("No changes in schema detected.")
 
     connectable = current_app.extensions['migrate'].db.engine
 

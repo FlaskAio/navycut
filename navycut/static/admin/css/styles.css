@@ -34,3 +34,23 @@
 .warning {
     color: blue;
 }
+
+.admin_index_base{
+    text-align: center;
+    padding: 50px;
+}
+
+.admin-index-p {
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+.admin-navbar-logo {
+    height: 46px;
+    width: 80px;
+}
+
+#main_content {
+    padding: 17px;
+  }

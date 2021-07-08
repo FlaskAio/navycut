@@ -2,7 +2,7 @@ from os import makedirs, listdir
 from ..utils import path
 from ..utils.console import Console
 from ..utils.tools import (generate_random_secret_key, 
-                    snake_to_camel
+                    snake_to_camel_case
                     )
 from ..errors.misc import  DirectoryAlreadyExistsError
 
@@ -79,7 +79,7 @@ def _create_boiler_app(app_name, project_dir, *wargs):
                     sister_data = fb.read()
                     #now replace the import_name with the real one at the new project directory.
                     sister_data=sister_data.replace("import_name___boiler_var", app_name)
-                    sister_data=sister_data.replace("classname___boiler_var", f"{snake_to_camel(app_name)}Sister")
+                    sister_data=sister_data.replace("classname___boiler_var", f"{snake_to_camel_case(app_name)}Sister")
                     wb.write(sister_data)
                 else: wb.write(fb.read())
             Console.log.Info(f'Data from {boilerplate_dir}/{boiler_file} successfully transferred to {app_dir}/{boiler_file}')

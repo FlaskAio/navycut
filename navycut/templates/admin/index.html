@@ -1,0 +1,27 @@
+{% extends "admin/master.html" %}
+
+
+{% block body %}
+
+<div class="admin_index_base">
+    <h2>Hello {{request.user.name}}</h2>
+    <br>
+    <h3>Welcome to the default Admin section.</h3>
+    <div class="box-container">
+        <p class="admin-index-p">Project name : {{config.SETTINGS.PROJECT_NAME}}</p>
+        <p class="admin-index-p">Settings File : {{config.SETTINGS.SETTINGS_FILE_NAME}}</p>
+        <p class="admin-index-p">Installed apps:<br>
+            <center>
+                <div class="card" style="width: 500px;">
+                    <ul class="list-group list-group-flush">
+                        {% for apps in config.SETTINGS.INSTALLED_APPS %}
+                            <li class="list-group-item admin-index-p warning">{{ apps }}</li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+            </center>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

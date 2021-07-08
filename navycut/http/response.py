@@ -10,6 +10,7 @@ from ..errors.misc import (DataTypeMismatchError,
                     )
 import typing as t
 from werkzeug.exceptions import *
+from sqlalchemy.orm.collections import InstrumentedList
 
 
 ERROR_DICT:dict = {
@@ -49,8 +50,8 @@ class Response:
     def __init__(self):
         self.status_code = 200
 
-    def flash(self, message:str) -> t.Type["Response"]:
-        flash(message)
+    def flash(self, message:str, category:str="info") -> t.Type["Response"]:
+        flash(message, category=category)
         return self
 
     def send(self, content:t.Union[str, dict, t.List[t.Any]]) -> t.Type[ResponseBase]:
@@ -80,7 +81,11 @@ class Response:
                 data:str = json.dumps(wargs[0])
             
             except TypeError:
-                if hasattr(wargs[0], 'to_dict'):
+                if isinstance(wargs[0], InstrumentedList):
+                    _res_list:list = [d.to_dict() for d in wargs[0]]
+                    data = json.dumps(_res_list)
+
+                elif hasattr(wargs[0], 'to_dict'):
                     data:str = json.dumps(wargs[0].to_dict())
                 
                 else:
@@ -97,7 +102,7 @@ class Response:
 
     def end(self, code:int=None):
         if code is not None:
-            self.set_status(code)
+            self.status(code)
 
         else:
             return ResponseBase("", status=self.status_code)

@@ -3,7 +3,7 @@ from datetime import datetime
 from navycut.orm import sql
 from navycut.utils.security import create_password_hash
 from navycut.utils.console import Console
-# from navycut.contrib.auth import login_manager
+
 
 # class Permission(sql.Model):
 #     id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
@@ -14,7 +14,6 @@ class Group(sql.Model):
     """
     default group model for users.
     """
-    id = sql.fields.Integer(pk=True, unique=True, required=True)
     name = sql.fields.Char(required=True, unique=True)
 
     def __repr__(self) -> str:
@@ -29,7 +28,6 @@ class User(sql.Model, UserMixin):
     """
     The default user model.
     """
-    id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
     first_name = sql.Column(sql.String(255), nullable=False)
     last_name = sql.Column(sql.String(255), nullable=True)
     email = sql.Column(sql.String(255), nullable=True)
@@ -41,6 +39,7 @@ class User(sql.Model, UserMixin):
     is_active = sql.Column(sql.Boolean, default=True)
     groups = sql.relationship("Group", secondary=group_user_con, backref=sql.backref("users", lazy='dynamic'))
     date_joined = sql.Column(sql.DateTime, default=datetime.now)
+
 
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
@@ -64,12 +63,20 @@ class User(sql.Model, UserMixin):
         self.save()
         return True
 
+    def enable_user(self) -> bool:
+        """
+        to enable a particular user.
+        """
+        self.is_active = True
+        self.save()
+        return True
+
     @property
     def name(self) -> str:
         """
         return the name of the user.
         """
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
 
     def __str__(self) -> str:
         """return the string representation of the user model object."""
