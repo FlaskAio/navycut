@@ -29,6 +29,13 @@ class Model(_Model):
         except Exception as e:
             raise NCBaseError(e)
 
+    def delete(self):
+        """
+        To delete a record object.
+        """
+        current_app.extensions['sqlalchemy'].db.session.delete(self)
+        current_app.extensions['sqlalchemy'].db.session.commit()
+
     def to_dict(self) -> dict:
         """
         returns the dictionary output of the particular model.

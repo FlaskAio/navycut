@@ -7,13 +7,23 @@ from inspect import getfile
 from navycut.utils.tools import snake_to_camel_case
 from navycut.conf import settings
 from flask_sqlalchemy import model
+import typing as t
+
+
+class UsersCustomAdminView(NCAdminModelView):
+    def __init__(self, *wargs, **kwargs):
+        super().__init__(*wargs, **kwargs)
 
 
 class site:
-    def __init__(self, ncadmin:"NavycutAdmin") -> None:
+    def __init__(self, ncadmin:t.Type["NavycutAdmin"]) -> None:
         self.admin = ncadmin
     
-    def register(self, model:model.DefaultMeta, custom_view:str=None, category:str=None):
+    def register(self, 
+            model:t.Type["model.DefaultMeta"], 
+            custom_view:t.Optional[str]=None, 
+            category:t.Optional[str]=None
+            ) -> bool:
         """
         register the app specific model with the admin
         :param model: 
@@ -50,10 +60,14 @@ class NavycutAdmin(Admin):
         self.site = site(self)
 
     def _register_administrator_model(self):
-        self.register_model(User, category="Users")
-        self.register_model(Group, category="Users")
+        self.register_model(User, category="Authentication")
+        self.register_model(Group, category="Authentication")
 
-    def register_model(self, model, custom_view=None, category=None) -> bool:
+    def register_model(self, 
+                model:t.Type["model.DefaultMeta"], 
+                custom_view:t.Type["NCAdminModelView"]=None, 
+                category:str=None
+                ) -> bool:
         """
         register the app specific model with the admin
         :param model: 
@@ -77,7 +91,9 @@ class NavycutAdmin(Admin):
         
         if custom_view is not None:
             self.add_view(custom_view(model, sql.session, category=category))
+
         self.add_view(NCAdminModelView(model, sql.session, category=category))
+
         return True
 
-admin:NavycutAdmin = NavycutAdmin()
+admin:t.Type["NavycutAdmin"] = NavycutAdmin()

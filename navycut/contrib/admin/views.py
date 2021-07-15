@@ -7,11 +7,14 @@ from ..auth import (login_user,
 
 def admin_login(req, res):
     form = AdminLoginForm()
+    
     if form.validate_on_submit():
         user = authenticate(form.username.data, form.password.data)
+        
         if user is None: 
             return res.flash("Invalid username or password", 'error')\
                     .redirect("/admin/login")
+        
         if not has_group(user, 'super_admin'):
             return res.flash("admin section is only available for super-admin.", 'warning')\
                 .redirect("/admin/login/")
