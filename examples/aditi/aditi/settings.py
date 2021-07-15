@@ -35,9 +35,9 @@ INSTALLED_APPS = [ # should change to first_app to get the app.
     "navycut.contrib.admin",
     "navycut.helpers.upload_server",
     "aniket",
-    # "sarkar",
-    # "kolkata",
-    # "plassey"
+    "sarkar",
+    "kolkata",
+    "plassey"
     #"first_app.sister.FirstappSister", 
 ]
 
