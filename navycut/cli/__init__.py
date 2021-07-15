@@ -19,7 +19,9 @@ def createproject(name):
 
 @click.command()
 def version():
-    print (get_version())
+    click.echo(get_version())
+
+
 
 
 _execute_from_command_line.add_command(createproject)

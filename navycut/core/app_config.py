@@ -4,22 +4,20 @@ from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
+from .helper_decorators import _get_req_res_view
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError,
-                    NCBaseError
                     )
 from ..contrib.auth import login_manager
 from ..urls import MethodView
-from ..conf import settings
 from ..contrib.mail import mail
 from ..http.request import Request
-from ..contrib.decorators import _get_req_res_view
 from ..orm.sqla import sql
 from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
 from ..utils import path
 from ..utils.tools import snake_to_camel_case
-# import click as c
+
 
 _basedir = path.abspath(__file__).parent.parent
 
@@ -33,20 +31,24 @@ class Navycut(Flask):
 
     def __init__(self):
 
-        self.settings = settings
+        # self.settings = settings
 
-        super(Navycut, self).__init__(settings.IMPORT_NAME, 
+        super(Navycut, self).__init__(__name__, 
                     template_folder=_basedir / 'templates',
                     static_folder=str(_basedir / "static"),
                     static_url_path="/static")
 
     def _attach_settings_modules(self):
-        self._add_config()
+        from ..conf import settings
+
+        self.settings = settings
+
+        self._add_config(settings)
         self._configure_core_features()
-        self._perform_app_registration()
+        self._perform_app_registration(settings)
 
 
-    def _add_config(self) -> None:
+    def _add_config(self, settings) -> None:
         self.import_name = settings.IMPORT_NAME
         self.project_name = settings.PROJECT_NAME
         self.config['PROJECT_NAME'] = self.project_name
@@ -61,12 +63,12 @@ class Navycut(Flask):
         self.debugging(settings.DEBUG)
 
         if settings.EXTRA_ARGS is not None:
-            self._add_extra_config()
+            self._add_extra_config(settings)
         
         if settings.MAIL_USING_SMTP:
-            self._configure_smtp_mail()
+            self._configure_smtp_mail(settings)
 
-    def _configure_smtp_mail(self):
+    def _configure_smtp_mail(self, settings):
         """
         The default config function to take smtp creds 
         from settings file and attach with the navycut app.
@@ -88,7 +90,7 @@ class Navycut(Flask):
         self.config['MAIL_USERNAME'] = settings.SMTP_CONFIGURATION.get("username", None)
         self.config['MAIL_PASSWORD'] = settings.SMTP_CONFIGURATION.get("password", None)
 
-    def _add_extra_config(self) -> None:
+    def _add_extra_config(self, settings) -> None:
         for key, value in settings.EXTRA_ARGS.items():
             self.config[key] = value
     
@@ -103,7 +105,7 @@ class Navycut(Flask):
         Bootstrap(self)
 
 
-    def _perform_app_registration(self):
+    def _perform_app_registration(self, settings):
         self._registerApp(settings.INSTALLED_APPS)
 
 
@@ -228,7 +230,8 @@ class AppSister:
     extra_ins:tuple = None
     
     def init(self, **kwargs) -> None:
-
+        from navycut.conf import settings
+        
         if self.import_name is None:
             raise ImportNameNotFoundError("app_register")
 

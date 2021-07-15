@@ -11,7 +11,6 @@ from flask_admin._compat import string_types, urljoin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.upload import ImageUploadField, ImageUploadInput
 from flask_admin.contrib.sqla.form import AdminModelConverter
-from navycut.conf import settings
 from wtforms.widgets import html_params, TextArea
 from wtforms import fields, validators, TextAreaField
 from dotenv import load_dotenv; load_dotenv()
@@ -149,6 +148,8 @@ class _ImageUploadField(ImageUploadField):
     widget= _ImageUploadInput()
 
     def __init__(self, *wargs, **kwargs):
+        from navycut.conf import settings
+
         super(_ImageUploadField, self).__init__(*wargs, **kwargs)
         self.base_path = str(settings.BASE_DIR / "uploads/images/")
         self.url_relative_path = "/static_upload/images/"

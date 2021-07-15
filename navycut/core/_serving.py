@@ -1,7 +1,6 @@
 import typing as t
 import socket
 import os
-from ..conf import settings
 from ..utils.console import Console
 from werkzeug.serving import (WSGIRequestHandler, 
                         _TSSLContextArg,
@@ -22,6 +21,8 @@ LISTEN_QUEUE = 128
 
 
 def _navycut_base_logger() -> None:
+    from ..conf import settings
+    
     Console.log.Info("Started Navycut Development server.")
     Console.log.Info(f"Project Name: {settings.PROJECT_NAME}")
     Console.log.Info(f"Settings file: {settings.SETTINGS_FILE_NAME}")

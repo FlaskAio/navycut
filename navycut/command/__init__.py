@@ -1,23 +1,29 @@
 import click
-from os import path
+import sys
+from os import environ
+from ..utils import path
+import typing as t
 from alembic import command
 from ..cli._exec_cli import _create_boiler_app
 from ..utils.console import Console
 from ..core import app
-from ..conf import get_settings_module
+from ..contrib.decorators import with_appcontext
+from ..conf import settings
 from ..orm.sqla.migrator import (
             Config as MigratorConfig, 
             _perform_migrate,
             _perform_makemigrations
             )
 
+if t.TYPE_CHECKING:
+    from ..core import Navycut
 
 @click.group()
 def manage_command():
     """manage the command executed using manage.py"""
     app._attach_settings_modules()
 
-@manage_command.command()
+@manage_command.command("runserver")
 @click.argument('addrport', default="127.0.0.1:8888")
 def runserver(addrport):
     
@@ -28,7 +34,7 @@ def runserver(addrport):
         host = str(addrport.split(":")[0])
     app.run_wsgi(port=port, host=host)
 
-@manage_command.command()
+@manage_command.command("makemigrations")
 @click.option('-d', '--directory', default=None,
               help=('Migration script directory (default is "migrations")'))
 @click.option('-m', '--message', default=None, help='Revision message')
@@ -72,7 +78,7 @@ def makemigrations(directory, message, sql, head, splice, branch_label, version_
             _perform_makemigrations(directory, message, sql, head, splice, branch_label, version_path,
                         rev_id, x_arg)
 
-@manage_command.command()
+@manage_command.command("migrate")
 @click.option('-d', '--directory', default=None,
               help=('Migration script directory (default is "migrations")'))
 @click.option('--sql', is_flag=True,
@@ -95,7 +101,7 @@ def migrate(directory, sql, tag, x_arg, revision):
             pass
     return None
 
-@manage_command.command()
+@manage_command.command("createsuperuser")
 @click.option('-n', '--name', default=None,
               help=('Provide the name of superuser (default is None)'))
 
@@ -134,10 +140,63 @@ def createsuperuser(name, username, email):
     else: 
         Console.log.Error("superuser creation canceled!")
 
-@manage_command.command()
+@manage_command.command("createapp")
 @click.argument("name")
 def createapp(name):
     """Creates a Navycut app directory structure for the given app name in the current directory."""
-    settings = get_settings_module()
     project_dir = settings.BASE_DIR
     _create_boiler_app(name, project_dir)
+
+@manage_command.command("shell", short_help="Run a shell in the app context.")
+@with_appcontext
+def shell():
+    """
+    Run an interactive Python shell in the context of a given
+    navycut application.  The application will populate the default
+    namespace of this shell according to its configuration.
+
+    This is useful for executing small snippets of management code
+    without having to manually configure the application.
+    """
+    import code
+    from flask.globals import _app_ctx_stack
+
+    _app:t.Type["Navycut"] = _app_ctx_stack.top.app
+    banner = (
+        f"Python {sys.version} on {sys.platform}\n"
+        f"Project: {_app.config.get('PROJECT_NAME')} \n"
+        f"Debug mode: {'on' if _app.debug else 'off'}\n"
+        f"Instance: {_app.instance_path}\n"
+        "(InteractiveConsole)"
+    )
+    ctx: dict = dict()
+
+    # Support the regular Python interpreter startup script if someone
+    # is using it.
+    startup = environ.get("PYTHONSTARTUP")
+    if startup and path.isfile(startup):
+        with open(startup) as f:
+            eval(compile(f.read(), startup, "exec"), ctx)
+
+    ctx.update(app.make_shell_context())
+
+    # Site, customize, or startup script can set a hook to call when
+    # entering interactive mode. The default one sets up readline with
+    # tab and history completion.
+    interactive_hook = getattr(sys, "__interactivehook__", None)
+    
+
+    if interactive_hook is not None:
+        try:
+            import readline
+            from rlcompleter import Completer
+        except ImportError:
+            pass
+        else:
+            # rlcompleter uses __main__.__dict__ by default, which is
+            # flask.__main__. Use the shell context instead.
+            readline.set_completer(Completer(ctx).complete)
+
+        interactive_hook()
+
+    code.interact(banner=banner, local=ctx)

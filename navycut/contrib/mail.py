@@ -1,7 +1,6 @@
 from flask_mail import Mail, Message
 from flask.globals import current_app
 import typing as t
-from ..conf import get_settings_module
 
 
 mail = Mail()
@@ -49,7 +48,7 @@ def send_mail(subject:str,
         the kwargs based param.
         to provide the reply_to system, use options.
     """
-    settings = get_settings_module()
+    from ..conf import settings
 
     sender = sender or settings.SMTP_CONFIGURATION.get('username')
 
@@ -141,6 +140,8 @@ def send_mass_mail(datas:t.Union[list, tuple], mimetype:str="plain"):
         the mimetype for message body.
         default is "plain", another option is "html".
     """
+    from ..conf import settings
+    
     if not isinstance(datas, tuple):
         datas = tuple(datas)
 
@@ -149,7 +150,6 @@ def send_mass_mail(datas:t.Union[list, tuple], mimetype:str="plain"):
             subject, message, sender, recipients = data
 
             if sender == str() or sender is None:
-                settings = get_settings_module()
                 sender = settings.SMTP_CONFIGURATION.get("username")
             
             msg = Message(subject,
