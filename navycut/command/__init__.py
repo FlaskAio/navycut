@@ -3,8 +3,11 @@ import sys
 from os import environ
 from ..utils import path
 import typing as t
+from operator import attrgetter
 from alembic import command
+from flask.globals import current_app
 from ..cli._exec_cli import _create_boiler_app
+from ..utils.tools import get_default_username
 from ..utils.console import Console
 from ..core import app
 from ..contrib.decorators import with_appcontext
@@ -101,6 +104,16 @@ def migrate(directory, sql, tag, x_arg, revision):
             pass
     return None
 
+@manage_command.command("sqlmigrate")
+@click.argument('revision', default='head')
+def sql_migrate(revision):
+    """
+    Prints the SQL statements for the named migration.
+    """
+    with app.app_context():
+        _perform_migrate(revision=revision, sql=True)
+
+
 @manage_command.command("createsuperuser")
 @click.option('-n', '--name', default=None,
               help=('Provide the name of superuser (default is None)'))
@@ -139,6 +152,31 @@ def createsuperuser(name, username, email):
             Console.log.Success("superuser created successfully.")
     else: 
         Console.log.Error("superuser creation canceled!")
+
+@manage_command.command("changepassword")
+@click.argument("username", default=get_default_username())
+@with_appcontext
+def change_password(username):
+    """
+    Change a user's password for django.contrib.admin.
+    """
+    from ..contrib.admin.site.models import _get_user_by_username
+
+    user = _get_user_by_username(username)
+    if user is None:
+        Console.log.Error(f"user '{username}' does not exists.")
+    else:
+        while True:
+            passwd1 = Console.input.Password("Enter password: ")
+            passwd2 = Console.input.Password("Enter password again: ")
+            if not passwd1 == passwd2:
+                Console.log.Warning("password not matched.\nTry again.")
+                continue
+            else:
+                user.set_password(passwd1)
+                Console.log.Success(f"Password changed successfully for user '{username}'")
+                break
+
 
 @manage_command.command("createapp")
 @click.argument("name")
@@ -200,3 +238,51 @@ def shell():
         interactive_hook()
 
     code.interact(banner=banner, local=ctx)
+
+@manage_command.command("routes", short_help="Show the routes for the app.")
+@click.option(
+    "--sort",
+    "-s",
+    type=click.Choice(("endpoint", "methods", "rule", "match")),
+    default="endpoint",
+    help=(
+        'Method to sort routes by. "match" is the order that Flask will match '
+        "routes when dispatching a request."
+    ),
+)
+@click.option("--all-methods", is_flag=True, help="Show HEAD and OPTIONS methods.")
+@with_appcontext
+def routes_command(sort: str, all_methods: bool) -> None:
+    """Show all registered routes with endpoints and methods."""
+
+    rules = list(current_app.url_map.iter_rules())
+    if not rules:
+        click.echo("No routes were registered.")
+        return
+
+    ignored_methods = set(() if all_methods else ("HEAD", "OPTIONS"))
+
+    if sort in ("endpoint", "rule"):
+        rules = sorted(rules, key=attrgetter(sort))
+    elif sort == "methods":
+        rules = sorted(rules, key=lambda rule: sorted(rule.methods))  # type: ignore
+
+    rule_methods = [
+        ", ".join(sorted(rule.methods - ignored_methods))  # type: ignore
+        for rule in rules
+    ]
+
+    headers = ("Endpoint", "Methods", "Rule")
+    widths = (
+        max(len(rule.endpoint) for rule in rules),
+        max(len(methods) for methods in rule_methods),
+        max(len(rule.rule) for rule in rules),
+    )
+    widths = [max(len(h), w) for h, w in zip(headers, widths)]
+    row = "{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}".format(*widths)
+
+    click.echo(row.format(*headers).strip())
+    click.echo(row.format(*("-" * width for width in widths)))
+
+    for rule, methods in zip(rules, rule_methods):
+        click.echo(row.format(rule.endpoint, methods, rule.rule).rstrip())
