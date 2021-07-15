@@ -5,7 +5,6 @@ from .site.forms import *
 from navycut.orm import sql
 from inspect import getfile
 from navycut.utils.tools import snake_to_camel_case
-from navycut.conf import settings
 from flask_sqlalchemy import model
 import typing as t
 
@@ -49,6 +48,8 @@ class NavycutAdmin(Admin):
             self.init_app(app)
 
     def init_app(self, app):
+        from navycut.conf import settings
+
         self.app = app
         super(NavycutAdmin, self).__init__(self.app, 
                         template_mode="bootstrap4", 

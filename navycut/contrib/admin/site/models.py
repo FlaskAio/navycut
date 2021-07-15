@@ -3,6 +3,7 @@ from datetime import datetime
 from navycut.orm import sql
 from navycut.utils.security import create_password_hash
 from navycut.utils.console import Console
+import typing as t
 
 
 # class Permission(sql.Model):
@@ -92,3 +93,15 @@ def _insert_intial_data() -> None:
         grp=Group(name=group)
         grp.save()
     Console.log.Success("initial data for admin privilage added successfully.")
+
+def _get_user_by_username(username:str) -> t.Optional[User]:
+    """
+    get the user object if the entered username 
+    present in the database or return None.
+
+    :param username:
+        provide the username. Default is the current username.
+    """
+    user:t.Optional[t.Type["User"]] = User.query.filter_by(username=username).first()
+    
+    return user
