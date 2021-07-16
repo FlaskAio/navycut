@@ -60,9 +60,22 @@ class MethodView(_MethodView):
 
 
     def render(self, template_name_or_raw:str, *wargs:tuple, **context:t.Any):
-        
-        context = context
-        
+        """
+        The function to rend to html templates.
+        :param template_name_or_raw:
+            single template name or html raw string.
+        :param wargs:
+            only accept dictionary type value.
+        :param context:
+            provide the context for the html.
+
+        example::
+
+            class BlogView(MethodView):
+                def get(self):
+                    blogs = Blog.query.all()
+                    return self.render("blog-list.html", blogs=blogs)
+        """        
         if len(wargs) and not isinstance(wargs[0], dict): 
             raise DataTypeMismatchError(wargs[0], "template rendering", "dict")
         

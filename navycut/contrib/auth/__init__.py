@@ -1,63 +1,37 @@
-from flask_login import (LoginManager, 
-                    login_required as _login_required,
-                    login_user as _login_user,
+from flask_login import (LoginManager as _LoginManager, 
                     logout_user as _logout_user,
-                    current_user
+                    login_user as _login_user
                     )
-from flask import (abort, 
-                current_app
-                )
-from functools import wraps
 import typing as t
 from ..admin.site.models import User
 from navycut.utils.security import check_password_hash
 from navycut.errors.misc import DataTypeMismatchError
 
+from .decorators import login_required, group_required
+
 if t.TYPE_CHECKING:
+    from navycut.core.app_config import Navycut
     from datetime import timedelta
+    from ..admin.site.models import User
 
 
-login_manager = LoginManager()
+class LoginManager(_LoginManager):
+    def __init__(self, 
+                app:t.Type["Navycut"]=None, 
+                add_context_processor:bool=True
+                ) -> None:
+
+        
+        super(LoginManager, self).__init__(app=app, 
+                                add_context_processor=add_context_processor)
+        # self. login_view = "/login/"
+
+
+login_manager = _LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id) -> t.Type["User"]:
     return User.query.get(int(user_id))
-
-
-
-def login_required(func):
-    """
-    If you decorate a view with this, it will ensure that the current user is
-    logged in and authenticated before calling the actual view. (If they are
-    not, it calls the :attr:`LoginManager.unauthorized` callback.) For
-    example::
-
-        @login_required
-        def post(req, res):
-            pass
-
-    If there are only certain times you need to require that your user is
-    logged in, you can do so with::
-
-        if not current_user.is_authenticated:
-            return current_app.login_manager.unauthorized()
-
-    ...which is essentially the code that this function adds to your views.
-
-    It can be convenient to globally turn off authentication when unit testing.
-    To enable this, if the application configuration variable `LOGIN_DISABLED`
-    is set to `True`, this decorator will be ignored.
-
-    .. Note ::
-
-        Per `W3 guidelines for CORS preflight requests
-        <http://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0>`_,
-        HTTP ``OPTIONS`` requests are exempt from login checks.
-
-    :param func: The view function to decorate.
-    :type func: function
-    """
-    return _login_required(func)
 
 def login_user(user:t.Type["User"], 
             remember:bool=False, 
@@ -88,7 +62,8 @@ def login_user(user:t.Type["User"],
         marked as not "fresh". Defaults to ``True``.
     :type fresh: bool
     """
-    return _login_user(user, remember=False, duration=None, force=False, fresh=True)
+    return _login_user(user, remember=remember, duration=duration, force=force, fresh=fresh)
+
 
 def logout_user() -> bool:
     """
@@ -96,42 +71,6 @@ def logout_user() -> bool:
     This will also clean up the remember me cookie if it exists.
     """
     return _logout_user()
-
-
-def group_required(*groups_name):
-    """
-    If you decorate a view with this, it will ensure that the 
-    current user is under the provided group names before 
-    calling the actual view. 
-    (If they arenot, it calls the :attr:`LoginManager.unauthorized` callback.) 
-    For example::
-
-        @group_required("super_admin", "admin")
-        def post(req, res):
-            pass
-
-    If the current user dosen't belong from the provided groups, it will 
-    throw the 400 Unauthorized error.
-    """
-    def decorated_function(f):
-        @wraps(f)
-
-        def wrapper_func(*wargs, **kwargs):
-
-            if current_user.is_authenticated:
-
-                for group in current_user.groups:
-                    if group.name in groups_name:
-                        return f(*wargs, **kwargs)
-
-                abort(400)
-            
-            else:
-                return current_app.login_manager.unauthorized()
-        
-        return wrapper_func
-    
-    return decorated_function
 
 
 def authenticate(username:str, password:str) -> t.Optional["User"]:

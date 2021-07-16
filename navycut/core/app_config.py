@@ -8,7 +8,6 @@ from .helper_decorators import _get_req_res_view
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError,
                     )
-from ..contrib.auth import login_manager
 from ..urls import MethodView
 from ..contrib.mail import mail
 from ..http.request import Request
@@ -18,6 +17,7 @@ from ..orm.engine import _generate_engine_uri
 from ..utils import path
 from ..utils.tools import snake_to_camel_case
 
+import typing as t
 
 _basedir = path.abspath(__file__).parent.parent
 
@@ -99,7 +99,6 @@ class Navycut(Flask):
         # add all the core features of navycut app here.
 
         self.initIns(sql)
-        self.initIns(login_manager)
         self.initIns(mail)
         migrate.init_app(self, sql)
         Bootstrap(self)
@@ -210,6 +209,26 @@ class Navycut(Flask):
         return self.import_name
 
 class AppSister:
+    """
+    The default class to create the 
+    helper(side) apps for navycut core app.
+
+    supported params are:
+    
+    :param import_app_feature:
+        type: bool
+        Default is False. If True then the app 
+        will try to import the default fetaures, i.e admin and models.
+
+    :param url_pattern:
+        type: t.Tuple[t.List[t.Union["urls.url", "urls.path", "urls.include"]]]
+        add the default url_patterns for the app.
+        for example::
+            
+            from .urls import url_patterns
+            class AdminSister(AppSister):
+                url_pattern = (url_patterns,)
+    """
 
     import_app_feature:bool = False
 
