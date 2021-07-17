@@ -7,5 +7,5 @@ from . import sql
 migrate.db = sql
 
 class SqlaSister(AppSister):
-    name="sql_orm_service"
+    name="sqla_orm_service"
     extra_ins = (sql, migrate)
