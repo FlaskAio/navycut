@@ -1,10 +1,11 @@
+from navycut.http.response import Response
 from flask import Flask, Blueprint
 from flask_bootstrap import Bootstrap
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
-from .helper_decorators import _get_req_res_view
+from .helper_decorators import _get_main_ctx_view
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError,
                     )
@@ -21,27 +22,41 @@ import typing as t
 
 if t.TYPE_CHECKING:
     from ..middleware import MiddlewareMixin
+    from .. import urls
 
 _basedir = path.abspath(__file__).parent.parent
 
 class _BaseIndexView(MethodView):
+    """
+    The default index view for a navycut project.
+    """
     def get(self):
         return self.render("_index.html")
 
 class Navycut(Flask):
+    """
+    The base class of navycut project.
+    It's basically inheritaing the services from the class Flask.
+
+    We have customized some the core flask features 
+    to provide this huge and fullstack service.
+    """
 
     request_class = Request
 
+    response_class = Response
+
     def __init__(self):
-
-        # self.settings = settings
-
         super(Navycut, self).__init__(__name__, 
                     template_folder=_basedir / 'templates',
                     static_folder=str(_basedir / "static"),
                     static_url_path="/static")
 
     def _attach_settings_modules(self):
+        """
+        attach all the available and required
+        settings features with the core app.
+        """
         from ..conf import settings
 
         self.settings = settings
@@ -53,6 +68,13 @@ class Navycut(Flask):
 
 
     def _add_config(self, settings) -> None:
+        """
+        add teh required and default 
+        configuration with the core app.
+
+        :param settings:
+            the settings object from the project directory.
+        """
         self.import_name = settings.IMPORT_NAME
         self.project_name = settings.PROJECT_NAME
         self.config['PROJECT_NAME'] = self.project_name
@@ -76,6 +98,9 @@ class Navycut(Flask):
         """
         The default config function to take smtp creds 
         from settings file and attach with the navycut app.
+
+        :param settings:
+            the settings object from the project directory.
         """
             
         if settings.SMTP_CONFIGURATION.get("is_using_tls") == settings.SMTP_CONFIGURATION.get("is_using_ssl"):
@@ -95,13 +120,21 @@ class Navycut(Flask):
         self.config['MAIL_PASSWORD'] = settings.SMTP_CONFIGURATION.get("password", None)
 
     def _add_extra_config(self, settings) -> None:
+        """
+        config the extra settings provided 
+        from settings.py - `EXTRA_ARGS`.
+
+        :param settings:
+            the settings object from the project directory.
+        """
         for key, value in settings.EXTRA_ARGS.items():
             self.config[key] = value
     
 
     def _configure_core_features(self):
-        # add all the core features of navycut app here.
-
+        """
+        add all the core features of navycut app here.
+        """
         self.initIns(sql)
         self.initIns(mail)
         migrate.init_app(self, sql)
@@ -112,6 +145,9 @@ class Navycut(Flask):
         """
         attach the available apps on seetings 
         file with the core navycut app.
+
+        :param settings:
+            the settings object from the project directory.
         """
         self._registerApp(settings.INSTALLED_APPS)
 
@@ -119,10 +155,22 @@ class Navycut(Flask):
         """
         attach the available middlewares on 
         settings file with the core navycut app.
+
+        :param settings:
+            the settings object from the project directory.
         """
         self._registerMiddleware(settings.MIDDLEWARE)
 
     def _get_view_function(self, url, method="GET") -> tuple:
+        """
+        get the view function for a particulat url.
+
+        :param url:
+            the url whose view function you want to find out.
+
+        :param method:
+            the request method. default is `GET`
+        """
         adapter = self.url_map.bind('0.0.0.0')
         try:
             match = adapter.match(url, method=method)
@@ -141,6 +189,16 @@ class Navycut(Flask):
             return None
     
     def _has_view_function(self, url, method="GET") -> bool:
+        """
+        check wheather a view fucntion is 
+        present or not for the provided url.
+
+        :param url:
+            the url whose view function you want to check i.e present or not.
+
+        :param method:
+            the request method. default is `GET`
+        """
         res = self._get_view_function(url, method)
         
         if res: 
@@ -150,6 +208,12 @@ class Navycut(Flask):
             return False
 
     def _configure_default_index(self):
+        """
+        If the project directory dosen't contain the view 
+        for the index page and teh debug is in true mode, 
+        then navycut will show a default index page 
+        with the help of this function.
+        """
         
         if self.debug is not False and not self._has_view_function("/"):
             self.add_url_rule(rule="/", view_func=_BaseIndexView.as_view("index"), methods=['GET'])
@@ -158,10 +222,21 @@ class Navycut(Flask):
             pass
     
     def initIns(self, ins) -> bool:
+        """
+        initialize the extra instances with the core app.
+        :param ins:
+            extra instance object.
+        """
         ins.init_app(self)
         return True
 
     def _import_app(self, app_name:str):
+        """
+        import the app by app_name.
+
+        :param app_name:
+            string type full name fo the app.
+        """
         app = app_name
         try: 
             if not app_name.endswith("Sister"):
@@ -186,6 +261,12 @@ class Navycut(Flask):
         return app.get_app()
 
     def _registerApp(self, _appList:list):
+        """
+        register all the apps present in the settings.py - `INSTALLED_APPS`.
+
+        :param _appList:
+            the list containing the name of the apps.
+        """
         for str_app in _appList: 
             
             app = self._import_app(str_app)    
@@ -193,6 +274,12 @@ class Navycut(Flask):
 
 
     def _import_middleware(self, mw_name:str) -> t.Type["MiddlewareMixin"]:
+        """
+        import the middleware by middleware name.
+
+        :param mw_name:
+            teh str name of teh middleware, want to import.
+        """
         mw_file, mw_class_name = tuple(mw_name.rsplit(".", 1))
 
         mw_module = import_module(mw_file)
@@ -202,26 +289,62 @@ class Navycut(Flask):
 
 
     def _registerMiddleware(self, _mwList:t.List["str"]):
+        """
+        register all the middlewares present at settings.py - `MIDDLEWARE`.
+
+        :param _mwList:
+            the list containing the name of the middlewares.
+        """
         for middleware in _mwList:
-            mw_class = self._import_middleware(middleware)
+            mw_class:t.Type["MiddlewareMixin"] = self._import_middleware(middleware)
             mw_maker = getattr(mw_class, "__maker__")
 
-            _before_request, \
-                _before_first_request, \
-                    _after_request = mw_maker()
+            mw_maker() # attach the request, response object with the middleware function.
 
-            self.before_request(_before_request)
+            self.before_first_request_funcs\
+                    .append(mw_class._before_first_request)
+                    
+            self.after_request_funcs\
+                .setdefault(None, [])\
+                    .append(mw_class._after_request)
 
-            self.before_first_request(_before_first_request)
+            self.before_request_funcs\
+                .setdefault(None, [])\
+                    .append(mw_class._before_request)
 
-            # self.after_request(_after_request) # not working, need to check.
+            self.teardown_request_funcs\
+                .setdefault(None, [])\
+                    .append(mw_class._teardown_request)
+
 
 
     def debugging(self, flag:bool) -> None:
+        """
+        to change the debugging mode of the core app 
+        then please play with this function.
+
+        make it `False` for production use.
+
+        :param flag:
+            your desired state of the app's debug feature.
+        """
         self.debug = flag
         self.config['DEBUG'] =flag
 
     def run_wsgi(self, host:str, port:int, **options) -> None:
+        """
+        run the default wsgi server.
+
+        :param host:
+            the default hostname to run the interactive server.
+
+        :param port:
+            the default port number to run the interactive server.
+
+        :param options:
+            other kwargs type vaule to provide more 
+            options to the werkzeug run_simple server.
+        """
         self._configure_default_index()
 
         addr = f"http://{host}:{port}"
@@ -242,49 +365,90 @@ class Navycut(Flask):
                         )
 
     def __repr__(self) -> str:
+        """
+        The representation of the Navycut class.
+        """
         return self.import_name
 
 class AppSister:
     """
     The default class to create the 
-    helper(side) apps for navycut core app.
+    sister(side) app for navycut core app.
 
     supported params are:
     
     :param import_app_feature:
-        type: bool
+    :type: bool
         Default is False. If True then the app 
         will try to import the default fetaures, i.e admin and models.
 
     :param url_pattern:
-        type: t.Tuple[t.List[t.Union["urls.url", "urls.path", "urls.include"]]]
+    :type: t.Optional[t.Tuple[t.List[t.Union["urls.url", "urls.path", "urls.include"]]]]
         add the default url_patterns for the app.
-        for example::
-            
-            from .urls import url_patterns
-            class AdminSister(AppSister):
-                url_pattern = (url_patterns,)
+
+    :param import_name:
+    :type: t.Optional[str]
+        the import_name parameter for the sister's blueprint object.
+
+    :param name:
+    :type: t.Optional[str]
+        the name parameter for the sister's blueprint object. 
+        This is required if you turn the `import_app_feature` to True.
+
+    :param template_folder:
+    :type: t.Optional[str]
+        define the template folder for the sister app.
+
+    :param static_folder:
+    :type: t.Optional[str]
+        define the static folder for the sister app.
+
+    :param static_url_path:
+    :type: t.Optional[str]
+        define the url path for the static files.
+
+    :param url_prefix:
+    :type: t.Optional[str]
+        url_prefix for all the routes of a sister app.
+
+    :extra_ins:
+    :type: t.Optional[t.Tuple[object]]
+        provide extra instances to init with main navycut app.
+
+    :for example::
+
+        from navycut.core import AppSister
+        from .urls import url_patterns
+
+        class CustomSister(AppSister):
+            import_name = __name__
+            name = "custom"
+            url_pattern = (url_patterns, )
+            ...
     """
 
     import_app_feature:bool = False
 
-    url_pattern:tuple = None
+    url_pattern:t.Optional[t.Tuple[t.List[t.Union["urls.url", "urls.path", "urls.include"]]]] = None
 
-    import_name:str = None
+    import_name: t.Optional[str] = None
 
-    name:str = None
+    name: t.Optional[str] = None
 
-    template_folder = None
+    template_folder: t.Optional[str] = None
 
-    static_folder = None
+    static_folder: t.Optional[str] = None
 
-    static_url_path = None
+    static_url_path: t.Optional[str] = None
 
-    url_prefix = None
+    url_prefix: t.Optional[str] = None
     
-    extra_ins:tuple = None
+    extra_ins:t.Optional[t.Tuple[object]] = None
     
     def init(self, **kwargs) -> None:
+        """
+        start initializing the sister app features.
+        """
         from navycut.conf import settings
         
         if self.import_name is None:
@@ -342,9 +506,19 @@ class AppSister:
 
 
     def get_app(self) -> Blueprint:
+        """
+        return the default blueprint 
+        object for the selected sister app.
+        """
         return self.power     
 
     def add_url_pattern(self, pattern_list:list) -> None:
+        """
+        add the url pattern with the blueprint power object.
+
+        :param pattern_list:
+            the url_pattern list.
+        """
 
         methods=['GET','PUT', 'DELETE', 'POST', 'HEAD', 'OPTIONS']
 
@@ -353,7 +527,7 @@ class AppSister:
                 self.power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
             
             elif repr(url_path).startswith("url"):
-                view_func = _get_req_res_view(url_path.views)
+                view_func = _get_main_ctx_view(url_path.views)
                 self.power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             elif repr(url_path).startswith("include"):
@@ -373,9 +547,15 @@ class AppSister:
         import_module(f"{self.name}.admin", package=None)
 
     def register_blueprint(self, *wargs, **kwargs) -> None:
+        """
+        register extra blueprints with the coer app.
+        """
         app.register_blueprint(*wargs, **kwargs)
 
     def __repr__(self):
+        """
+        the representation of the AppSister class
+        """
         return self.import_name
 
 

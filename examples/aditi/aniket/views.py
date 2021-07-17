@@ -11,10 +11,10 @@ def another_page(req, res):
     # r = Request(request.environ)
     # print (req.user.username)
     # return res.status(201).json(name=req.user.name)
-    # return res.end()
-    return res \
-        .status(200)\
-        .render("<h1>Hello {{name}}</h1>", name="Aniket")
+    return res.end(200)
+    # return res \
+    #     .set_status(404)\
+    #         .render("<h1>Hello {{name}}</h1>", name="Aniket")
 
 @login_required
 def aditi(req, res):

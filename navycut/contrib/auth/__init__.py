@@ -3,7 +3,7 @@ from flask_login import (LoginManager as _LoginManager,
                     login_user as _login_user
                     )
 import typing as t
-from ..admin.site.models import User
+from .models import User
 from navycut.utils.security import check_password_hash
 from navycut.errors.misc import DataTypeMismatchError
 
@@ -12,7 +12,7 @@ from .decorators import login_required, group_required
 if t.TYPE_CHECKING:
     from navycut.core.app_config import Navycut
     from datetime import timedelta
-    from ..admin.site.models import User
+    from .models import User
 
 
 class LoginManager(_LoginManager):
@@ -107,7 +107,7 @@ def has_group(user: t.Type["User"],
     example::
 
         from navycut.contrib.auth import has_group
-        from navycut.contrib.admin.site.models import user
+        from navycut.contrib.auth.models import user
         user = User.query.get(1)
         is_group_present = has_group(user, 'super_admin')
     """
