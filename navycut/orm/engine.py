@@ -4,7 +4,7 @@ from .sqla._engine import (MYSQL_ENGINE,
 import typing as t
 
 avaliable_engine:t.DefaultDict = {
-            "sql.mysql" : "MYSQL_ENGINE",
+            "sqla.mysql" : "MYSQL_ENGINE",
             "sqla.sqlite" : "SQLITE_ENGINE",
             "sqla.sqlite3" : "SQLITE_ENGINE",
             "sqla.postgresql" : "POSTRESQL_ENGINE"
