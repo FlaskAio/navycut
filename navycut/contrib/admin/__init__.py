@@ -53,7 +53,7 @@ class NavycutAdmin(Admin):
         self.app = app
         super(NavycutAdmin, self).__init__(self.app, 
                         template_mode="bootstrap4", 
-                        index_view=NavAdminIndexView(),
+                        # index_view=NavAdminIndexView(),
                         name=snake_to_camel_case(settings.PROJECT_NAME)+" Admin"
                         )
         self._register_administrator_model()

@@ -4,7 +4,7 @@ from flask.globals import request
 
 def _get_req_res_view(f):
         """
-        adding the default request object with view function
+        adding the default request, response object with view function
         """
 
         request_param = signature(f).parameters.get('request', None) \

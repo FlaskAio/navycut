@@ -19,6 +19,9 @@ from ..utils.tools import snake_to_camel_case
 
 import typing as t
 
+if t.TYPE_CHECKING:
+    from ..middleware import MiddlewareMixin
+
 _basedir = path.abspath(__file__).parent.parent
 
 class _BaseIndexView(MethodView):
@@ -46,6 +49,7 @@ class Navycut(Flask):
         self._add_config(settings)
         self._configure_core_features()
         self._perform_app_registration(settings)
+        self._perform_middleware_registration(settings)
 
 
     def _add_config(self, settings) -> None:
@@ -105,8 +109,18 @@ class Navycut(Flask):
 
 
     def _perform_app_registration(self, settings):
+        """
+        attach the available apps on seetings 
+        file with the core navycut app.
+        """
         self._registerApp(settings.INSTALLED_APPS)
 
+    def _perform_middleware_registration(self, settings):
+        """
+        attach the available middlewares on 
+        settings file with the core navycut app.
+        """
+        self._registerMiddleware(settings.MIDDLEWARE)
 
     def _get_view_function(self, url, method="GET") -> tuple:
         adapter = self.url_map.bind('0.0.0.0')
@@ -163,13 +177,9 @@ class Navycut(Flask):
             app_file = import_module(app_location)
             real_app_class = getattr(app_file, app_str_class)
             app = real_app_class()
-            if getattr(app, "import_name") is None:
+            if getattr(app, "import_name", None) is None:
                 app.import_name = app_file.__name__
             app.init()
-            # try: 
-            #     app.init()
-            # except Exception as e:
-            #     raise Exception(e)
         
         except AttributeError: 
             raise AttributeError(f"{app_name} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {app} ?")
@@ -180,6 +190,32 @@ class Navycut(Flask):
             
             app = self._import_app(str_app)    
             self.register_blueprint(app, url_prefix=app.url_prefix)
+
+
+    def _import_middleware(self, mw_name:str) -> t.Type["MiddlewareMixin"]:
+        mw_file, mw_class_name = tuple(mw_name.rsplit(".", 1))
+
+        mw_module = import_module(mw_file)
+        real_mw_class = getattr(mw_module, mw_class_name)
+
+        return real_mw_class
+
+
+    def _registerMiddleware(self, _mwList:t.List["str"]):
+        for middleware in _mwList:
+            mw_class = self._import_middleware(middleware)
+            mw_maker = getattr(mw_class, "__maker__")
+
+            _before_request, \
+                _before_first_request, \
+                    _after_request = mw_maker()
+
+            self.before_request(_before_request)
+
+            self.before_first_request(_before_first_request)
+
+            # self.after_request(_after_request) # not working, need to check.
+
 
     def debugging(self, flag:bool) -> None:
         self.debug = flag
