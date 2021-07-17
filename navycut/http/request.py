@@ -1,10 +1,19 @@
+from flask.ctx import has_request_context
 from flask.wrappers import Request as RequestBase
-from flask.globals import session
+from flask.globals import (session, 
+                    current_app, 
+                    _request_ctx_stack
+                    ) 
 from ..datastructures._object import NCObject
-
-from ..contrib.auth import current_user
+from werkzeug.local import LocalProxy
 import typing as t
 
+
+def _get_user():
+    if has_request_context() and not hasattr(_request_ctx_stack.top, 'user'):
+        current_app.login_manager._load_user()
+
+    return getattr(_request_ctx_stack.top, 'user', None)
 
 class Request(RequestBase):
 
@@ -13,7 +22,7 @@ class Request(RequestBase):
 
     @property
     def user(self):
-        return current_user
+        return LocalProxy(lambda: _get_user())
 
     @property
     def json(self) ->t.Type[NCObject]:

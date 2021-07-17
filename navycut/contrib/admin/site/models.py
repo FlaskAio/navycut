@@ -48,7 +48,7 @@ class User(sql.Model, UserMixin):
         self.save()
 
     def set_password(self, password:str):
-        """
+        """UserMixin
         change the password for the user.
         :param password: the new password for the user.
         """
@@ -80,10 +80,15 @@ class User(sql.Model, UserMixin):
         return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
 
     def __str__(self) -> str:
-        """return the string representation of the user model object."""
+        """
+        return the string representation of the user model object.
+        """
         return self.name
 
     def __repr__(self) -> str:
+        """
+        return the representation of the user model object.
+        """
         return self.name
 
 def _insert_intial_data() -> None:

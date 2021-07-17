@@ -32,10 +32,17 @@ SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
+    "navycut.contrib.auth",
     "navycut.contrib.admin",
     "navycut.helpers.upload_server",
     #"first_app", 
 ]
+
+MIDDLEWARE = [
+    "navycut.middleware.ipfilter.IPFilterMiddleware",
+    "navycut.contrib.admin.middleware.AdminAuthMiddleware",
+]
+
 
 ALLOWED_HOST = [ # 
     '127.0.0.1', 

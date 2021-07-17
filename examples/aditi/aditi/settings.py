@@ -32,6 +32,7 @@ SECRET_KEY = r"f7>Rn2eJli}>kVr7Hj@6^$&2P35Bx^>C^}FsOKG94SER!lwgtx[Wa" #should ge
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
+    "navycut.contrib.auth",
     "navycut.contrib.admin",
     "navycut.helpers.upload_server",
     "aniket",
@@ -39,6 +40,11 @@ INSTALLED_APPS = [ # should change to first_app to get the app.
     "kolkata",
     "plassey"
     #"first_app.sister.FirstappSister", 
+]
+
+MIDDLEWARE = [
+    "navycut.middleware.ipfilter.IPFilterMiddleware",
+    "navycut.contrib.admin.middleware.AdminAuthMiddleware",
 ]
 
 ALLOWED_HOST = [ # 

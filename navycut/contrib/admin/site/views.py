@@ -164,15 +164,13 @@ class NavAdminIndexView(AdminIndexView):
         return request.user.is_authenticated and request.user.is_active
     
     def inaccessible_callback(self, name, **kwargs):
-        if not request.user.is_active:
-            flash("The user is not active")
 
         return redirect('/admin/login')
 
 
 class _AdminModelConverter(AdminModelConverter):
     
-    def __init__(self, session, view) ->typing.NoReturn:
+    def __init__(self, session, view) -> None:
         super(_AdminModelConverter, self).__init__(session, view)
 
     def _get_description(self, name, field_args):
