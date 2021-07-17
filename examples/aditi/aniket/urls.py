@@ -6,5 +6,6 @@ url_patterns = [
     url("", views.homepage, "index"),
     url("/another", views.another_page, "another"),
     url("/aditi", views.aditi, "aditi"),
+    url("/mail", views.send_email, "send-email"),
     url("/blog/<int:id>", views.get_blog, "get_blog")
 ]

@@ -10,10 +10,7 @@ from ..errors.misc import (ImportNameNotFoundError,
                     ConfigurationError,
                     )
 from ..urls import MethodView
-from ..contrib.mail import mail
 from ..http.request import Request
-from ..orm.sqla import sql
-from ..orm.sqla.migrator import migrate
 from ..orm.engine import _generate_engine_uri
 from ..utils import path
 from ..utils.tools import snake_to_camel_case
@@ -135,9 +132,6 @@ class Navycut(Flask):
         """
         add all the core features of navycut app here.
         """
-        self.initIns(sql)
-        self.initIns(mail)
-        migrate.init_app(self, sql)
         Bootstrap(self)
 
 
@@ -556,7 +550,7 @@ class AppSister:
         """
         the representation of the AppSister class
         """
-        return self.import_name
+        return self.name
 
 
 app:Navycut = Navycut()

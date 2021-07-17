@@ -17,7 +17,7 @@ DEBUG = True
 
 #defining the base database configuration.
 DATABASE = {
-    "engine" : "sqlite3",
+    "engine" : "sqla.sqlite3",
     "creds" : {
         "host"     : None,
         "username" : None,
@@ -32,7 +32,9 @@ SECRET_KEY = r"f7>Rn2eJli}>kVr7Hj@6^$&2P35Bx^>C^}FsOKG94SER!lwgtx[Wa" #should ge
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
+    "navycut.orm.sqla",
     "navycut.contrib.auth",
+    "navycut.contrib.mail",
     "navycut.contrib.admin",
     "navycut.helpers.upload_server",
     "aniket",
@@ -55,13 +57,13 @@ ALLOWED_HOST = [ #
 MAIL_USING_SMTP = False
 
 SMTP_CONFIGURATION = {
-    "host" : None,
-    "post" : None,
-    "username" : None,
-    "password" : None,
-    "is_using_ssl" : None,
-    "is_using_tls" : None,
+    "host" : "smtp.gmail.com",
+    "post" : 587,
+    "username" : "aniketsarkar1998@gmail.com",
+    "password" : "kcvnpmvxtogjrxrl",
+    "is_using_ssl" : False,
+    "is_using_tls" : True,
     "options" : {}
-} 
+}  
 
 EXTRA_ARGS = None

@@ -1,6 +1,7 @@
 # from flask.wrappers import Request
 from navycut.contrib.auth import login_required
 from .models import Blog, Author
+from navycut.contrib.mail import send_mail
 
 def homepage(req, res):
     return res.json(dict(req.headers))
@@ -19,6 +20,10 @@ def another_page(req, res):
 @login_required
 def aditi(req, res):
     return res.json(username=req.user.username)
+
+def send_email(req, res):
+    send_mail("this is subject", "this is message", "aniketsarkar@yahoo.com")
+    return res.json(mesage="email sended successfully.")
 
 def get_blog(req, res, id):
     # author = Author.query.get(id)

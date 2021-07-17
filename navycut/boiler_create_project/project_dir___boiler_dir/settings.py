@@ -17,7 +17,7 @@ DEBUG = True
 
 #defining the base database configuration.
 DATABASE = {
-    "engine" : "sqlite3",
+    "engine" : "sqla.sqlite3",
     "creds" : {
         "host"     : None,
         "username" : None,
@@ -32,7 +32,9 @@ SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
+    "navycut.orm.sqla",
     "navycut.contrib.auth",
+    "navycut.contrib.mail",
     "navycut.contrib.admin",
     "navycut.helpers.upload_server",
     #"first_app", 
