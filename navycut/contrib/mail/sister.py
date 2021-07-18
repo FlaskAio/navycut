@@ -17,5 +17,6 @@ You can always reach me at: aniketsarkar@yahoo.com
 
 
 class MailSister(AppSister):
+    seize_power = True
     name="mail_service_sister"
     extra_ins = (mail, )

@@ -7,5 +7,6 @@ from . import sql
 migrate.db = sql
 
 class SqlaSister(AppSister):
+    seize_power = True
     name="sqla_orm_service"
     extra_ins = (sql, migrate)

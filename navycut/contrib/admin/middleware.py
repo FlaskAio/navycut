@@ -13,7 +13,7 @@ class AdminAuthMiddleware(MiddlewareMixin):
 
     def before_request(req:t.Type["Request"], res:t.Type["Response"]):
         if "/admin/" in req.url \
-            and not req.blueprint == "navycut_contrib_admin_sister" \
+            and not 'admin/login'in req.path\
                 and not "/static/admin/" in req.url:
 
             if not req.user.is_authenticated is True:

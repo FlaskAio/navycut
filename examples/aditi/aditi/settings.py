@@ -16,15 +16,15 @@ TEMPLATE_DIR = BASE_DIR / "templates"
 DEBUG = True
 
 #defining the base database configuration.
-DATABASE = {
-    "engine" : "sqla.sqlite3",
-    "creds" : {
-        "host"     : None,
-        "username" : None,
-        "password" : None,
-        "database" : BASE_DIR / "navycut.sqlite3"
-    }
-}
+DATABASE = dict(
+    engine = "navycut.orm.sqla.engine.sqlite3",
+    creds = dict(
+        host = None,
+        username = None,
+        password = None,
+        database = BASE_DIR / "navycut.sqlite3"
+    )
+)
 
 #defining the navycut app secret key
 SECRET_KEY = r"f7>Rn2eJli}>kVr7Hj@6^$&2P35Bx^>C^}FsOKG94SER!lwgtx[Wa" #should generate randomly at the time of creation.
@@ -56,14 +56,15 @@ ALLOWED_HOST = [ #
 # Email SMTP Configuration
 MAIL_USING_SMTP = False
 
-SMTP_CONFIGURATION = {
-    "host" : "smtp.gmail.com",
-    "post" : 587,
-    "username" : "aniketsarkar1998@gmail.com",
-    "password" : "kcvnpmvxtogjrxrl",
-    "is_using_ssl" : False,
-    "is_using_tls" : True,
-    "options" : {}
-}  
+SMTP_CONFIGURATION = dict(
+    host = None,
+    port = None,
+    username = None,
+    password = None,
+    is_using_ssl = None,
+    is_using_tls = None,
+    options = None
+)
+
 
 EXTRA_ARGS = None
