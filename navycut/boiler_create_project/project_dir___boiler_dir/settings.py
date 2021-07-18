@@ -16,15 +16,15 @@ TEMPLATE_DIR = BASE_DIR / "templates"
 DEBUG = True
 
 #defining the base database configuration.
-DATABASE = {
-    "engine" : "sqlite3",
-    "creds" : {
-        "host"     : None,
-        "username" : None,
-        "password" : None,
-        "database" : BASE_DIR / "navycut.sqlite3"
-    }
-}
+DATABASE = dict(
+    engine = "navycut.orm.sqla.engine.sqlite3",
+    creds = dict(
+        host = None,
+        username = None,
+        password = None,
+        database = BASE_DIR / "navycut.sqlite3"
+    )
+)
 
 #defining the navycut app secret key
 SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time of creation.
@@ -32,7 +32,9 @@ SECRET_KEY = r"__secretkey_____boiler_var" #should generate randomly at the time
 
 #available installed app add here to bloom.
 INSTALLED_APPS = [ # should change to first_app to get the app.
+    "navycut.orm.sqla",
     "navycut.contrib.auth",
+    "navycut.contrib.mail",
     "navycut.contrib.admin",
     "navycut.helpers.upload_server",
     #"first_app", 
@@ -51,14 +53,14 @@ ALLOWED_HOST = [ #
 # Email SMTP Configuration
 MAIL_USING_SMTP = False
 
-SMTP_CONFIGURATION = {
-    "host" : None,
-    "post" : None,
-    "username" : None,
-    "password" : None,
-    "is_using_ssl" : None,
-    "is_using_tls" : None,
-    "options" : {}
-} 
+SMTP_CONFIGURATION = dict(
+    host = None,
+    port = None,
+    username = None,
+    password = None,
+    is_using_ssl = None,
+    is_using_tls = None,
+    options = None
+)
 
 EXTRA_ARGS = None

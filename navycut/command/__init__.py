@@ -95,7 +95,7 @@ def makemigrations(directory, message, sql, head, splice, branch_label, version_
 @click.argument('revision', default='head')
 def migrate(directory, sql, tag, x_arg, revision):
     """Creates new migration(s) for apps."""
-    from ..contrib.admin.site.models import _insert_intial_data
+    from ..contrib.auth.models import _insert_intial_data
     with app.app_context():
         _perform_migrate(directory, revision, sql, tag, x_arg)
         try: 
@@ -128,7 +128,7 @@ def createsuperuser(name, username, email):
     
     """Create the superuser account to access the admin panel."""
     
-    from ..contrib.admin.site.models import User, Group
+    from ..contrib.auth.models import User, Group
             
     name:str = name or Console.input.String("enter admin name: ")
     email:str = email or Console.input.String("enter admin email: ")
@@ -160,7 +160,7 @@ def change_password(username):
     """
     Change a user's password for django.contrib.admin.
     """
-    from ..contrib.admin.site.models import _get_user_by_username
+    from ..contrib.auth.models import _get_user_by_username
 
     user = _get_user_by_username(username)
     if user is None:

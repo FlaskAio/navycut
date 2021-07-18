@@ -1,3 +1,3 @@
-__SQL_ORM__ = "SQLAlchemy"
+__SQLA_ORM__ = "SQLAlchemy"
 
 from .sqla import sql

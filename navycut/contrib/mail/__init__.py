@@ -48,7 +48,7 @@ def send_mail(subject:str,
         the kwargs based param.
         to provide the reply_to system, use options.
     """
-    from ..conf import settings
+    from navycut.conf import settings
 
     sender = sender or settings.SMTP_CONFIGURATION.get('username')
 
@@ -140,7 +140,7 @@ def send_mass_mail(datas:t.Union[list, tuple], mimetype:str="plain"):
         the mimetype for message body.
         default is "plain", another option is "html".
     """
-    from ..conf import settings
+    from navycut.conf import settings
     
     if not isinstance(datas, tuple):
         datas = tuple(datas)

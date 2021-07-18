@@ -8,6 +8,9 @@ from ..datastructures._object import NCObject
 from werkzeug.local import LocalProxy
 import typing as t
 
+if t.TYPE_CHECKING:
+    from ..contrib.auth.models import User
+
 
 def _get_user():
     if has_request_context() and not hasattr(_request_ctx_stack.top, 'user'):
@@ -21,7 +24,7 @@ class Request(RequestBase):
         super(Request, self).__init__(*wargs, **kwargs)
 
     @property
-    def user(self):
+    def user(self) -> t.Type["User"]:
         return LocalProxy(lambda: _get_user())
 
     @property

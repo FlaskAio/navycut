@@ -1,12 +1,7 @@
 import typing
 from json import dumps
 from warnings import warn
-from flask.globals import request
-from flask_admin import AdminIndexView
-from flask import (redirect, 
-            render_template_string as rts, 
-            flash
-            )
+from flask import render_template_string as rts 
 from flask_admin._compat import string_types, urljoin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.upload import ImageUploadField, ImageUploadInput
@@ -153,19 +148,6 @@ class _ImageUploadField(ImageUploadField):
         super(_ImageUploadField, self).__init__(*wargs, **kwargs)
         self.base_path = str(settings.BASE_DIR / "uploads/images/")
         self.url_relative_path = "/static_upload/images/"
-
-
-class NavAdminIndexView(AdminIndexView):
-
-    def __init__(self, *args, **kwargs):
-        super(NavAdminIndexView, self).__init__(*args, **kwargs)
-    
-    def is_accessible(self):
-        return request.user.is_authenticated and request.user.is_active
-    
-    def inaccessible_callback(self, name, **kwargs):
-
-        return redirect('/admin/login')
 
 
 class _AdminModelConverter(AdminModelConverter):

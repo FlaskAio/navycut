@@ -1,10 +1,10 @@
 from flask_admin import Admin
-from .site.models import *
 from .site.views import *
 from .site.forms import *
 from navycut.orm import sql
 from inspect import getfile
 from navycut.utils.tools import snake_to_camel_case
+from navycut.contrib.auth.models import User, Group
 from flask_sqlalchemy import model
 import typing as t
 
@@ -53,7 +53,6 @@ class NavycutAdmin(Admin):
         self.app = app
         super(NavycutAdmin, self).__init__(self.app, 
                         template_mode="bootstrap4", 
-                        # index_view=NavAdminIndexView(),
                         name=snake_to_camel_case(settings.PROJECT_NAME)+" Admin"
                         )
         self._register_administrator_model()

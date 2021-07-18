@@ -1,23 +1,38 @@
-from ..core.helper_decorators import _get_req_res_view
+from ..core.helper_decorators import (_get_main_ctx_view, 
+                            _get_request_ctx_view
+                            )
+import typing as t
+
+if t.TYPE_CHECKING:
+    from ..http.request import Request
+    from ..http.response import Response
 
 class MiddlewareMixin(object):
     """
     The default middleware mixin class to provide the default
     middleware service for navycut app.
     """
-    def before_request(req, res):
-        pass
+    @staticmethod
+    def before_request(req:t.Type["Request"], res:t.Type["Response"]):
+        return None
+    
+    @staticmethod
+    def before_first_request(req:t.Type["Request"], res:t.Type["Response"]):
+        return None
+    
+    @staticmethod
+    def after_request(req:t.Type["Request"], res:t.Type["Response"]):
+        return res
 
-    def before_first_request(req, res):
-        pass
-
-    def after_request(req, res):
-        pass
+    @staticmethod
+    def teardown_request(req:t.Type["Request"], res:t.Type["Response"], exception):
+        return exception
 
     @classmethod
-    def __maker__(cls):
-        _before_request = _get_req_res_view(cls.before_request)
-        _before_first_request = _get_req_res_view(cls.before_first_request)
-        _after_request = _get_req_res_view(cls.after_request)
+    def __maker__(cls) -> None:
+        cls._before_request = _get_main_ctx_view(cls.before_request)
+        cls._before_first_request = _get_main_ctx_view(cls.before_first_request)
+        cls._after_request = _get_request_ctx_view(cls.after_request)
+        cls._teardown_request = _get_main_ctx_view(cls.teardown_request)
 
-        return (_before_request, _before_first_request, _after_request)
+        return None

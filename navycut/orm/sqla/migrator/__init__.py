@@ -15,6 +15,9 @@ class Migrate(_Migrate):
     def __init__(self, *wargs, **kwargs):
         super(Migrate, self).__init__(*wargs, **kwargs)
 
+    # def init_app(self, app, db, directory, **kwargs):
+    #     return super().init_app(app, db=db, directory=directory, **kwargs)
+
     def get_config(self, directory=None, x_arg=None, opts=None):
         if directory is None:
             directory = str(self.directory)
