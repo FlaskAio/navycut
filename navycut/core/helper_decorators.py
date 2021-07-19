@@ -1,72 +1,121 @@
-from inspect import signature
+from inspect import (signature, 
+            iscoroutinefunction as is_async_func
+            )
 from functools import wraps
 from ..http.response import Response
 from flask.globals import request
 
 
-def _get_main_ctx_view(f):
+def _get_main_ctx_view(func):
     """
     adding the default request, response object with view function
     """
-    request_param = signature(f).parameters.get('request', None) \
-                            or signature(f).parameters.get('req', None)
+    request_param = signature(func).parameters.get('request', None) \
+                            or signature(func).parameters.get('req', None)
     
-    is_request = True if request_param is not None else False
+    is_request:bool = True if request_param is not None else False
 
-    response_param = signature(f).parameters.get('response', None) \
-                            or signature(f).parameters.get('res', None)
+    response_param = signature(func).parameters.get('response', None) \
+                            or signature(func).parameters.get('res', None)
+    
+    is_response:bool = True if response_param is not None else False
+
+    if is_async_func(func) is not True:
+        @wraps(func)
+        def decorator(*args, **kwargs):
+            if is_request is True:
+
+                args:list = list(args)
+                args.insert(0, request)
+
+            if is_response is True:
+                args:list = list(args)
+                if len(args):
+                    args.insert(1, Response())
+                else:
+                    args.insert(0, Response())
+            
+            args:tuple = tuple(args)
+            return func(*args, **kwargs)
+        return decorator
+    else:
+        @wraps(func)
+        async def decorator(*args, **kwargs):
+            if is_request is True:
+
+                args:list = list(args)
+                args.insert(0, request)
+
+            if is_response is True:
+                args:list = list(args)
+                if len(args):
+                    args.insert(1, Response())
+                else:
+                    args.insert(0, Response())
+            
+            args:tuple = tuple(args)
+            return await func(*args, **kwargs)
+        return decorator
+
+
+def _get_request_ctx_view(func):
+    """
+    add only the request object with the view function.
+    """
+    request_param = signature(func).parameters.get('request', None) \
+                            or signature(func).parameters.get('req', None)
+    
+    is_request:bool = True if request_param is not None else False
+    
+    if is_async_func(func) is not True:
+        wraps(func)
+        def decorator(*wargs, **kwargs):
+            if is_request is True:
+                wargs = list(wargs)
+                wargs.insert(0, request)
+                wargs = tuple(wargs)
+            return func(*wargs, **kwargs)
+        return decorator
+    
+    else:
+        wraps(func)
+        async def decorator(*wargs, **kwargs):
+            if is_request is True:
+                wargs = list(wargs)
+                wargs.insert(0, request)
+                wargs = tuple(wargs)
+            return await func(*wargs, **kwargs)
+        return decorator
+
+def _get_response_ctx_view(func):
+    """
+    add only the response object with the view function.
+    """
+    response_param = signature(func).parameters.get('response', None) \
+                            or signature(func).parameters.get('res', None)
     
     is_response = True if response_param is not None else False
+    
+    if is_async_func(func) is not True:
+        wraps(func)
+        def decorator(*wargs, **kwargs):
+            if is_response is True:
+                wargs = list(wargs)
+                wargs.insert(0, Response())
+                wargs = tuple(wargs)
 
-    @wraps(f)
-    def decorator(*args, **kwargs):
-        if is_request is True:
-
-            args:list = list(args)
-            args.insert(0, request)
-
-        if is_response is True:
-            args:list = list(args)
-            if len(args):
-                args.insert(1, Response())
-            else:
-                args.insert(0, Response())
+            return func(*wargs, **kwargs)
         
-        args:tuple = tuple(args)
-        return f(*args, **kwargs)
-    return decorator
+        return decorator
+    
+    else:
+        wraps(func)
+        async def decorator(*wargs, **kwargs):
+            if is_response is True:
+                wargs = list(wargs)
+                wargs.insert(0, Response())
+                wargs = tuple(wargs)
 
-
-def _get_request_ctx_view(f):
-    request_param = signature(f).parameters.get('request', None) \
-                            or signature(f).parameters.get('req', None)
-    
-    is_request = True if request_param is not None else False
-    
-    wraps(f)
-    def decorator(*wargs, **kwargs):
-        if is_request is True:
-            wargs = list(wargs)
-            wargs.insert(0, request)
-            wargs = tuple(wargs)
-
-        return f(*wargs, **kwargs)
-    
-    return decorator
-
-def _get_response_ctx_view(f):
-    response_param = signature(f).parameters.get('response', None) \
-                            or signature(f).parameters.get('res', None)
-    
-    is_response = True if response_param is not None else False
-    
-    wraps(f)
-    def decorator(*wargs, **kwargs):
-        if is_response is True:
-            wargs = list(wargs)
-            wargs.insert(0, Response())
-            wargs = tuple(wargs)
-
-        return f(*wargs, **kwargs)
-    
-    return decorator
+            return await func(*wargs, **kwargs)
+        
+        return decorator

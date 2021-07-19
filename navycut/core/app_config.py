@@ -1,4 +1,3 @@
-from navycut.http.response import Response
 from flask import Flask, Blueprint
 from flask_bootstrap import Bootstrap
 from importlib import import_module
@@ -7,6 +6,7 @@ from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
 from .helper_decorators import _get_main_ctx_view
 from ..datastructures._object import NCObject
+from ..http.response import Response
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError,
                     )
@@ -99,7 +99,7 @@ class Navycut(Flask):
     def _configure_database(self, settings) -> bool:
         """
         configure the default database as per the 
-        details provided from the settings.py `DATABASE`
+        details provided from settings.py `DATABASE`
 
         :param settings:
             the default settings object from the project directory.

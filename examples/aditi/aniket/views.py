@@ -3,8 +3,10 @@ from navycut.contrib.auth import login_required
 from .models import Blog, Author
 from navycut.contrib.mail import send_mail
 
-def homepage(req, res):
+
+async def homepage(req, res):
     return res.json(dict(req.headers))
+
 
 # @login_required
 # @group_required("super_admin")
