@@ -1,5 +1,5 @@
-from ..core.helper_decorators import (_get_main_ctx_view, 
-                            _get_request_ctx_view
+from ..core._helper_decorators import (get_main_ctx_view, 
+                            get_request_ctx_view
                             )
 import typing as t
 
@@ -30,9 +30,9 @@ class MiddlewareMixin(object):
 
     @classmethod
     def __maker__(cls) -> None:
-        cls._before_request = _get_main_ctx_view(cls.before_request)
-        cls._before_first_request = _get_main_ctx_view(cls.before_first_request)
-        cls._after_request = _get_request_ctx_view(cls.after_request)
-        cls._teardown_request = _get_main_ctx_view(cls.teardown_request)
+        cls._before_request = get_main_ctx_view(cls.before_request)
+        cls._before_first_request = get_main_ctx_view(cls.before_first_request)
+        cls._after_request = get_request_ctx_view(cls.after_request)
+        cls._teardown_request = get_main_ctx_view(cls.teardown_request)
 
         return None

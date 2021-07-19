@@ -4,7 +4,7 @@ from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
-from .helper_decorators import _get_main_ctx_view
+from ._helper_decorators import get_main_ctx_view
 from ..datastructures._object import NCObject
 from ..http.response import Response
 from ..errors.misc import (ImportNameNotFoundError, 
@@ -569,7 +569,7 @@ class AppSister:
                 power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
             
             elif repr(url_path).startswith("url"):
-                view_func = _get_main_ctx_view(url_path.views)
+                view_func = get_main_ctx_view(url_path.views)
                 power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             elif repr(url_path).startswith("include"):

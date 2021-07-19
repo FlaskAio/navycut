@@ -8,8 +8,9 @@ from flask import (request,
 from ..errors.misc import DataTypeMismatchError
 from ..http.response import Response
 from importlib import import_module
+from asgiref.sync import async_to_sync
+from inspect import iscoroutinefunction as is_async_func
 import typing as t
-
 
 class MethodView(_MethodView):
     """
@@ -26,6 +27,8 @@ class MethodView(_MethodView):
         class IndexView(MethodView):
             return self.render("index.html") # html templates must be present at app's specified template folder.
     """
+    # available_methods = []
+
     def __init__(self, *wargs, **kwargs) -> None:
         super(MethodView, self).__init__(*wargs, **kwargs)
 
@@ -54,9 +57,9 @@ class MethodView(_MethodView):
         """simply override this function for head request"""
         abort(405)
 
-    def option(self, *args, **kwargs):
-        """simply override this function for option request"""
-        abort(405)
+    # def option(self, *args, **kwargs):
+    #     """simply override this function for option request"""
+    #     abort(405)
 
 
     def render(self, template_name_or_raw:str, *wargs:tuple, **context:t.Any):
@@ -88,6 +91,14 @@ class MethodView(_MethodView):
             
             else: 
                 return render_template(template_name_or_raw, **context)
+
+    @classmethod
+    def as_view(cls, name: str, *class_args: t.Any, **class_kwargs: t.Any):
+        for method in list(cls.methods):
+            if is_async_func(getattr(cls, method.lower())):
+                setattr(cls, method.lower(), async_to_sync(getattr(cls, method.lower())))
+
+        return super(MethodView, cls).as_view(name, *class_args, **class_kwargs)
 
 
 class path:

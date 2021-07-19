@@ -5,8 +5,12 @@ from functools import wraps
 from ..http.response import Response
 from flask.globals import request
 
+from asgiref.sync import async_to_sync as asgiref_async_to_sync
 
-def _get_main_ctx_view(func):
+def async_to_sync(func):
+    return asgiref_async_to_sync(func)
+
+def get_main_ctx_view(func):
     """
     adding the default request, response object with view function
     """
@@ -58,7 +62,7 @@ def _get_main_ctx_view(func):
         return decorator
 
 
-def _get_request_ctx_view(func):
+def get_request_ctx_view(func):
     """
     add only the request object with the view function.
     """
@@ -87,7 +91,7 @@ def _get_request_ctx_view(func):
             return await func(*wargs, **kwargs)
         return decorator
 
-def _get_response_ctx_view(func):
+def get_response_ctx_view(func):
     """
     add only the response object with the view function.
     """

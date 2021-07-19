@@ -78,7 +78,9 @@ class Response(ResponseBase):
             raise NCBaseError(e)
 
     def json(self, *wargs:t.Any, **kwargs:t.Any) -> ResponseBase:
-        
+        """
+        return the json seriliazed data.
+        """
         data:str = json.dumps(dict())
         
         if len(wargs):
@@ -94,7 +96,7 @@ class Response(ResponseBase):
                     data:str = json.dumps(wargs[0].to_dict())
                 
                 else:
-                    raise DataTypeMismatchError(wargs[0], "response class", "dict or list")
+                    raise DataTypeMismatchError(wargs[0], "response class", "json serializable dict or list")
             
             except Exception as e:
                 raise NCBaseError(e)
