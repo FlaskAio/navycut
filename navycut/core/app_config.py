@@ -79,8 +79,6 @@ class Navycut(Flask):
         self.config['IMPORT_NAME'] = self.import_name
         self.config["BASE_DIR"] = settings.BASE_DIR
         self.config['SECRET_KEY'] = settings.SECRET_KEY
-        # self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-        # self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
         self.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
         self.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
         self.config['SETTINGS'] = settings
@@ -566,14 +564,14 @@ class AppSister:
 
         for url_path in pattern_list:
             if repr(url_path).startswith("path"):
-                power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
+                power.add_url_rule(rule=url_path.url_rule, view_func=url_path.views.as_view(url_path.name), methods=methods)
             
             elif repr(url_path).startswith("url"):
                 view_func = get_main_ctx_view(url_path.views)
-                power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
+                power.add_url_rule(rule=url_path.url_rule, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             elif repr(url_path).startswith("include"):
-                self.add_url_pattern(url_path.url_patterns)
+                self.add_url_pattern(power, url_path.url_patterns)
             
             else:
                 pass

@@ -94,6 +94,10 @@ class MethodView(_MethodView):
 
     @classmethod
     def as_view(cls, name: str, *class_args: t.Any, **class_kwargs: t.Any):
+        """
+        create view functions from the source class. 
+        It also converts the async functions into sync.
+        """
         for method in list(cls.methods):
             if is_async_func(getattr(cls, method.lower())):
                 setattr(cls, method.lower(), async_to_sync(getattr(cls, method.lower())))
@@ -102,39 +106,119 @@ class MethodView(_MethodView):
 
 
 class path:
-    def __init__(self, url:str, views, name=None) -> None:
-        self.url:str = "/"+url if not url.startswith('/') else url
-        self.url = self.url+"/" if not self.url.endswith("/") else self.url
+    """
+    create the url_rule map for navycut project using this class.
+
+    :param url_rule:
+        the url rule name.
+    
+    :param views:
+        the view class.(Remeber path class takes only class like views.)
+    
+    :param name:
+        the name of the view class. default is views.__name__
+
+    :for example::
+
+        #views.py
+        from navycut.urls import MethodView
+
+        class IndexView(MethodView):
+            def get(self):
+                return "Hello world"
+        
+        #urls.py
+        from navycut.urls import path
+        from . import views
+
+        url_patterns = [path("/index", views.IndexView, 'index')]
+    """
+    def __init__(self, url_rule:str, views, name=None) -> None:
+        self.url_rule:str = "/"+url_rule if not url_rule.startswith('/') else url_rule
+        self.url_rule = self.url_rule+"/" if not self.url_rule.endswith("/") else self.url_rule
         self.views = views
         self.name:str = name or self.views.__name__
     
     def __repr__(self) -> str:
-        return f"path <{self.url}>"
+        """
+        return the string representation of the class.
+        """
+        return f"path <{self.url_rule}>"
 
 class url:
-    def __init__(self, url:str, views, name=None) -> None:
-        self.url = "/"+url if not url.startswith('/') else url
-        self.url = self.url+"/" if not self.url.endswith("/") else self.url
+    """
+    create the url map for navycut project using this class.
+
+    :param url_rule:
+        the url rule name.
+    
+    :param views:
+        the view function.(Remeber url class takes only function like views.)
+    
+    :param name:
+        the name of the view class. default is views.__name__
+
+    :for example::
+
+        #views.py
+        def indexview(req, res):
+            return res.send("Hello world")
+        
+        #urls.py
+        from navycut.urls import url
+        from . import views
+
+        url_patterns = [path("/index", views.indexview, 'index')]
+    """
+    def __init__(self, url_rule:str, views, name=None) -> None:
+        self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
+        self.url_rule = self.url_rule+"/" if not self.url_rule.endswith("/") else self.url_rule
         self.views = views
         self.name = name or self.views.__name__
 
     def __repr__(self) -> str:
-        return f"url <{self.url}>"
+        """
+        return the string representation of the class.
+        """
+        return f"url <{self.url_rule}>"
 
 class include:
+    """
+    Include the urls from another app using this class.
+
+    :param url_rule:
+        the url_rule prefix for the urls present in the imported app.
+
+    :param url_module_name:
+        the url module name from where you want to import the urls.
+
+    :for example::
+
+        #urls.py
+
+        #suppose you want to import paths from blog app, 
+        # present at your project directory.
+
+        from navycut.urls import include
+
+        url_patterns = [include("/blogs", "blogs.urls")]
+    """
     def __init__(self, 
                 url_rule:str,
                 url_module_name:str) -> None:
 
-        self.url = "/"+url_rule if not url_rule.startswith('/') else url_rule
-        self.url = self.url[:-1] if self.url.endswith("/") else self.url
+        self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
+        self.url_rule = self.url_rule[:-1] if self.url_rule.endswith("/") else self.url_rule
         self.url_module = import_module(url_module_name)
         self.url_patterns = self.url_module.url_patterns
 
         for url_pattern in self.url_patterns:
 
-            url_pattern.url = url_rule+url_pattern.url
+            url_pattern.url_rule = url_rule+url_pattern.url_rule
             url_pattern.name = url_rule+url_pattern.name
 
     def __repr__(self) -> str:
-        return f"include <{self.url}>"
+        """
+        return the string representation of the class.
+        """
+        return f"include <{self.url_rule}>"
