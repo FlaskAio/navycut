@@ -1,7 +1,12 @@
 import typing
 from json import dumps
 from warnings import warn
-from flask import render_template_string as rts 
+from flask_admin import AdminIndexView
+from flask import (redirect, 
+            render_template_string as rts, 
+            flash,
+            )
+from flask.globals import request
 from flask_admin._compat import string_types, urljoin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.upload import ImageUploadField, ImageUploadInput
@@ -148,6 +153,20 @@ class _ImageUploadField(ImageUploadField):
         super(_ImageUploadField, self).__init__(*wargs, **kwargs)
         self.base_path = str(settings.BASE_DIR / "uploads/images/")
         self.url_relative_path = "/static_upload/images/"
+
+
+class NCAdminIndexView(AdminIndexView):
+
+    def __init__(self, *args, **kwargs):
+        super(NCAdminIndexView, self).__init__(*args, **kwargs)
+    
+    def is_accessible(self):
+        return request.user.is_authenticated and request.user.is_active
+    
+    def inaccessible_callback(self, name, **kwargs):
+        flash("a login is required to access the admin panel.")
+
+        return redirect('/admin/login')
 
 
 class _AdminModelConverter(AdminModelConverter):
@@ -347,6 +366,27 @@ class _AdminModelConverter(AdminModelConverter):
         return None
 
 class NCAdminModelView(ModelView):
+    
+    def is_accessible(self):
+        self.can_create = False
+        self.can_edit = False
+        self.can_delete = False
+        if request.user.is_authenticated and request.user.is_active:
+            groups = request.user.groups
+            permissions:list = list()
+            for group in groups:
+                permissions.extend(list(group.permissions))
+            perms = [perm.name for perm in permissions]
+            for perm in perms:
+                setattr(self, f"can_{perm}", True)
+            return True
+        else:
+            return False
+    
+    def inaccessible_callback(self, name, **kwargs):
+        flash("a login is required to access the admin panel.")
+
+        return redirect('/admin/login')
     
     model_form_converter = _AdminModelConverter
 

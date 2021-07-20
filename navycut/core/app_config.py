@@ -1,12 +1,12 @@
-from navycut.http.response import Response
 from flask import Flask, Blueprint
 from flask_bootstrap import Bootstrap
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
-from .helper_decorators import _get_main_ctx_view
+from ._helper_decorators import get_main_ctx_view
 from ..datastructures._object import NCObject
+from ..http.response import Response
 from ..errors.misc import (ImportNameNotFoundError, 
                     ConfigurationError,
                     )
@@ -45,7 +45,7 @@ class Navycut(Flask):
     response_class = Response
 
     def __init__(self):
-        super(Navycut, self).__init__(__name__, 
+        super(Navycut, self).__init__("app_default_name", 
                     template_folder=_basedir / 'templates',
                     static_folder=str(_basedir / "static"),
                     static_url_path="/static")
@@ -79,8 +79,6 @@ class Navycut(Flask):
         self.config['IMPORT_NAME'] = self.import_name
         self.config["BASE_DIR"] = settings.BASE_DIR
         self.config['SECRET_KEY'] = settings.SECRET_KEY
-        # self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-        # self.config['SQLALCHEMY_DATABASE_URI'] = _generate_engine_uri(settings.DATABASE)
         self.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
         self.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
         self.config['SETTINGS'] = settings
@@ -99,7 +97,7 @@ class Navycut(Flask):
     def _configure_database(self, settings) -> bool:
         """
         configure the default database as per the 
-        details provided from the settings.py `DATABASE`
+        details provided from settings.py `DATABASE`
 
         :param settings:
             the default settings object from the project directory.
@@ -352,6 +350,9 @@ class Navycut(Flask):
         self.debug = flag
         self.config['DEBUG'] =flag
 
+    def run(self, host:str="0.0.0.0", port:int=8888, **options) -> None:
+        return self.run_wsgi(host, port, **options)
+
     def run_wsgi(self, host:str, port:int, **options) -> None:
         """
         run the default wsgi server.
@@ -566,14 +567,14 @@ class AppSister:
 
         for url_path in pattern_list:
             if repr(url_path).startswith("path"):
-                power.add_url_rule(rule=url_path.url, view_func=url_path.views.as_view(url_path.name), methods=methods)
+                power.add_url_rule(rule=url_path.url_rule, view_func=url_path.views.as_view(url_path.name), methods=methods)
             
             elif repr(url_path).startswith("url"):
-                view_func = _get_main_ctx_view(url_path.views)
-                power.add_url_rule(rule=url_path.url, endpoint= url_path.name, view_func=view_func, methods=methods)
+                view_func = get_main_ctx_view(url_path.views)
+                power.add_url_rule(rule=url_path.url_rule, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             elif repr(url_path).startswith("include"):
-                self.add_url_pattern(url_path.url_patterns)
+                self.add_url_pattern(power, url_path.url_patterns)
             
             else:
                 pass

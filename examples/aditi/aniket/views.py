@@ -1,10 +1,23 @@
-# from flask.wrappers import Request
 from navycut.contrib.auth import login_required
 from .models import Blog, Author
 from navycut.contrib.mail import send_mail
+from navycut.typing import *
+from navycut.urls import MethodView
 
-def homepage(req, res):
+
+class HelloView(MethodView):
+    async def get(self):
+        # print (list(self.methods))
+        return "hello from index page"
+        
+
+    async def post(self):
+        return "request from post page"
+
+
+async def homepage(req:ncRequest, res:ncResponse):
     return res.json(dict(req.headers))
+
 
 # @login_required
 # @group_required("super_admin")

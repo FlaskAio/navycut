@@ -4,43 +4,13 @@ from .site.forms import *
 from navycut.orm import sql
 from inspect import getfile
 from navycut.utils.tools import snake_to_camel_case
-from navycut.contrib.auth.models import User, Group
+from navycut.contrib.auth.models import (User, 
+                                Group, 
+                                UsersCustomAdminView, 
+                                Permission
+                                )
 from flask_sqlalchemy import model
 import typing as t
-
-
-class UsersCustomAdminView(NCAdminModelView):
-    def __init__(self, *wargs, **kwargs):
-        super().__init__(*wargs, **kwargs)
-
-
-class site:
-    def __init__(self, ncadmin:t.Type["NavycutAdmin"]) -> None:
-        self.admin = ncadmin
-    
-    def register(self, 
-            model:t.Type["model.DefaultMeta"], 
-            custom_view:t.Optional[str]=None, 
-            category:t.Optional[str]=None
-            ) -> bool:
-        """
-        register the app specific model with the admin
-        :param model: 
-            specific model to register.
-        :param custom_view:
-            The custom Model View class.
-        :param category:
-            Custom category to categorize the model
-        
-        for example ::
-
-            from navycut.contrib.admin import admin
-            from .models import Blog
-
-            admin.site.register(Blog)
-        """
-        self.admin.register_model(model, custom_view, category)
-        return True
 
 class NavycutAdmin(Admin):
     def __init__(self,app=None):
@@ -53,15 +23,17 @@ class NavycutAdmin(Admin):
         self.app = app
         super(NavycutAdmin, self).__init__(self.app, 
                         template_mode="bootstrap4", 
+                        index_view=NCAdminIndexView(),
                         name=snake_to_camel_case(settings.PROJECT_NAME)+" Admin"
                         )
         self._register_administrator_model()
 
-        self.site = site(self)
+        # self.site:t.Type["site"] = site(self)
 
     def _register_administrator_model(self):
-        self.register_model(User, category="Authentication")
+        self.register_model(User, category="Authentication", custom_view=UsersCustomAdminView)
         self.register_model(Group, category="Authentication")
+        self.register_model(Permission, category="Authentication")
 
     def register_model(self, 
                 model:t.Type["model.DefaultMeta"], 
@@ -92,8 +64,9 @@ class NavycutAdmin(Admin):
         if custom_view is not None:
             self.add_view(custom_view(model, sql.session, category=category))
 
-        self.add_view(NCAdminModelView(model, sql.session, category=category))
-
+        else:
+            self.add_view(NCAdminModelView(model, sql.session, category=category))
+        
         return True
 
 admin:t.Type["NavycutAdmin"] = NavycutAdmin()
