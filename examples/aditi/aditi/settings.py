@@ -46,7 +46,6 @@ INSTALLED_APPS = [ # should change to first_app to get the app.
 
 MIDDLEWARE = [
     "navycut.middleware.ipfilter.IPFilterMiddleware",
-    "navycut.contrib.admin.middleware.AdminAuthMiddleware",
 ]
 
 ALLOWED_HOST = [ # 

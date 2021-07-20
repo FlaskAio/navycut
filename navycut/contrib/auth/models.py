@@ -4,25 +4,42 @@ from navycut.orm import sql
 from navycut.utils.security import create_password_hash
 from navycut.utils.console import Console
 import typing as t
+from ..admin.site.views import NCAdminModelView
 
 
-# class Permission(sql.Model):
-#     id = sql.Column(sql.Integer, primary_key=True, unique=True, nullable=False)
-#     type = sql.Column(sql.String(50), nullable=False, unique=True)
+class Permission(sql.Model):
+    name = sql.fields.Char(max_length=100, 
+                        required=True, 
+                        unique=True, 
+                        help_text="The default name field for the permission model.")
+    is_active = sql.fields.Boolean(default=True)
+    created_at = sql.fields.DateTime(default=datetime.now())
 
+    def __repr__(self) -> str:
+        return f"<Permission '{self.name.capitalize()}'>"
+
+
+group_perm_con = sql.Table("group_perm_con",
+                sql.Column('perm_id', sql.Integer, sql.ForeignKey("permission.id")),
+                sql.Column('group_id', sql.Integer, sql.ForeignKey("group.id"))
+                )
 
 class Group(sql.Model):
     """
     default group model for users.
     """
     name = sql.fields.Char(required=True, unique=True)
+    permissions = sql.relationship("Permission", 
+                secondary=group_perm_con, 
+                backref=sql.backref("groups", lazy='dynamic'))
+    created_at = sql.fields.DateTime(default=datetime.now())
 
     def __repr__(self) -> str:
-        return self.name
+        return f"<Group '{self.name.capitalize()}'>"
 
 group_user_con = sql.Table("group_user_con", 
-                    sql.Column('user_id', sql.Integer, sql.ForeignKey("user.id")),
-                    sql.Column('zone_id', sql.Integer, sql.ForeignKey("group.id"))
+                    sql.Column('user_ptr_id', sql.Integer, sql.ForeignKey("user.id")),
+                    sql.Column('group_ptr_id', sql.Integer, sql.ForeignKey("group.id"))
                     )
 
 class User(sql.Model, UserMixin):
@@ -92,11 +109,24 @@ class User(sql.Model, UserMixin):
         return self.name
 
 def _insert_intial_data() -> None:
-    #insert all the initial data to the equivalent table.
+    """
+    insert all the initial data to the equivalent table.
+    """
     available_groups = ['super_admin','admin', 'staff', 'customer']
+    available_perms = ['create', 'edit', 'delete']
+
     for group in available_groups:
         grp=Group(name=group)
         grp.save()
+
+    grp:t.Type["Group"] = Group.query.filter_by(name='super_admin').first()
+    for prm in available_perms:
+        perm = Permission(name=prm)
+        perm.save()
+        grp.permissions.append(perm)
+        grp.save()
+    
+
     Console.log.Success("initial data for admin privilage added successfully.")
 
 def _get_user_by_username(username:str) -> t.Optional[User]:
@@ -105,8 +135,16 @@ def _get_user_by_username(username:str) -> t.Optional[User]:
     present in the database or return None.
 
     :param username:
-        provide the username. Default is the current username.
+        provide the username to get the User object or None.
     """
     user:t.Optional[t.Type["User"]] = User.query.filter_by(username=username).first()
     
     return user
+
+class UsersCustomAdminView(NCAdminModelView):
+    # edit_modal = True
+    # form_overrides = dict(password=forms.FileField)
+    # form_extra_fields = {
+    #                 'gobinda': forms.FileField('Gobinda')
+    #             }
+    column_searchable_list = ["first_name", "username", "email"]

@@ -1,4 +1,5 @@
 from json import loads, dumps, decoder
+import typing as t
 from ..errors.datastructure import NCObjectDataTypeMisMatchError
 
 class NCObject(object):
@@ -37,7 +38,7 @@ class NCObject(object):
 
         self.__dict__.update({k: self.__elt(v) for k, v in self.dict.items()})
 
-    def get(self, attr):
+    def get(self, attr) ->t.Any:
         """
         return the attribute value.
         :param attr: attribute name

@@ -45,7 +45,7 @@ class Navycut(Flask):
     response_class = Response
 
     def __init__(self):
-        super(Navycut, self).__init__(__name__, 
+        super(Navycut, self).__init__("app_default_name", 
                     template_folder=_basedir / 'templates',
                     static_folder=str(_basedir / "static"),
                     static_url_path="/static")
@@ -349,6 +349,9 @@ class Navycut(Flask):
         """
         self.debug = flag
         self.config['DEBUG'] =flag
+
+    def run(self, host:str="0.0.0.0", port:int=8888, **options) -> None:
+        return self.run_wsgi(host, port, **options)
 
     def run_wsgi(self, host:str, port:int, **options) -> None:
         """
