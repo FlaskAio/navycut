@@ -102,6 +102,7 @@ class Navycut(Flask):
             the default settings object from the project directory.
         """
         db_setting = NCObject(settings.DATABASE)
+
         db_engine_name:str = db_setting.engine
 
         db_engine_file_name, db_engine_type = db_engine_name.rsplit(".", 1)
@@ -109,7 +110,7 @@ class Navycut(Flask):
 
         db_engineer = getattr(db_engine_module, db_engine_type)
 
-        db_engineer(self, db_setting.creds.to_dict())
+        db_engineer(self, db_setting.creds)
 
         return True
 

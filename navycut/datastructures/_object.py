@@ -1,8 +1,6 @@
-from json import loads, dumps, decoder
-import typing as t
-from ..errors.datastructure import NCObjectDataTypeMisMatchError
+from munch import Munch, munchify
 
-class NCObject(object):
+class NCObject(Munch):
     """
     The special object of Navycut fullstack web framework.
     It's basically gives you the feel like javascript while dealing with json or dictionary.
@@ -16,83 +14,18 @@ class NCObject(object):
         nob = NCObject(data)
         print (nob.name, nob.planet)
     """
-
-    def __init__(self, *wargs, **kwargs):
-        
-        if not len(wargs) and kwargs is not None:
-            self.dict = kwargs
-        
-        elif len(wargs) is not None and isinstance(wargs[0], str):
-            try:
-                self.dict = loads(wargs[0])
-            except decoder.JSONDecodeError:
-                raise NCObjectDataTypeMisMatchError(wargs[0])
-            except Exception as e:
-                raise Exception("something went wrong.\nError: "+e)
-        
-        elif len(wargs) is not None and isinstance(wargs[0], dict): 
-            self.dict = wargs[0]
-
-        else:
-            raise NCObjectDataTypeMisMatchError(wargs[0])
-
-        self.__dict__.update({k: self.__elt(v) for k, v in self.dict.items()})
-
-    def get(self, attr) ->t.Any:
-        """
-        return the attribute value.
-        :param attr: attribute name
-        """
-        return self.__getattribute__(attr)
-
-    def update(self, *wargs, **kwargs):
-        """
-        update single/multiple attribute values.
-        :param *wargs:A simple dictionary object.
-        :param **kwargs: the kwargs based values.
-        :example::
-            a= NCObject({"name":"pluto"})
-            print (a.name)
-            a.update({"name":"mars"})
-            #or simply
-            a.update(name="mars")
-            print (a.name)
-        """
-        if len(wargs) and not isinstance(wargs[0], dict): 
-            raise NCObjectDataTypeMisMatchError(wargs[0])
-
-        if len(wargs): 
-            self.__dict__.update({k: self.__elt(v) for k, v in wargs[0].items()})
-            
-        else: 
-            self.__dict__.update({k: self.__elt(v) for k, v in kwargs.items()})
-
-    def _convert_to_dict(self, obj):
-            _dict = obj.__dict__
-            _dict.pop('dict')
-            for key, value in _dict.items():
-                if isinstance(value, NCObject):
-                    _dict.update({key:self._convert_to_dict(value)})
-            return _dict
+    def __init__(self, *args, **kwargs):
+        super(NCObject, self).__init__(*args, **kwargs)
+        self.update(munchify(self))
     
-    def to_dict(self) -> dict: 
+    def to_dict(self):
         """
-        It return the equivalent dictionary value of the NCObject.
+        Recursively converts a NCObject back into a dictionary.
+        >>> b = NCObject(foo=NCObject(lol=True), hello=42, ponies='are pretty!')
+        >>> sorted(b.to_dict().items())
+        [('foo', {'lol': True}), ('hello', 42), ('ponies', 'are pretty!')]
         """
+        return self.toDict()
 
-        return self._convert_to_dict(self)
-
-    def __elt(self, elt):
-        """Recurse into elt to create leaf namespace objects"""
-        if type(elt) is dict:
-            return type(self)(elt)
-        if type(elt) in (list, tuple):
-            return [self.__elt(i) for i in elt]
-        return elt
-
-    def __repr__(self):
-        """Return repr(self)."""
-        return "%s(%s)" % (type(self).__name__, repr(self.__dict__))
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+    def to_json(self):
+        return self.toJSON()

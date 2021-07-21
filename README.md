@@ -3,6 +3,10 @@
 <img src="https://raw.githubusercontent.com/navycut/navycut/main/logos/navycut_logo.png">
 <br>
 
+# Downloads
+[![Downloads](https://pepy.tech/badge/navycut)](https://pepy.tech/project/navycut) [![Downloads](https://pepy.tech/badge/navycut/month)](https://pepy.tech/project/navycut/month) [![Downloads](https://pepy.tech/badge/navycut/week)](https://pepy.tech/project/navycut/week)
+<br>
+
 #### contributor wanted : feel free to contact me at aniketsarkar@yahoo.com
 
 Navycut is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. Thanks for checking it out.
