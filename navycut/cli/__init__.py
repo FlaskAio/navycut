@@ -2,11 +2,7 @@ import click
 from ._exec_cli import _create_boiler_project
 from navycut import get_version
 
-@click.group()
-@click.option("--version", 
-        callback=get_version,
-        help="Get the Navycut version.")
-        
+@click.group()        
 def _execute_from_command_line():
     """execute navycut commands from command line."""
     pass
