@@ -12,7 +12,6 @@ from ..errors.misc import (ImportNameNotFoundError,
                     )
 from ..urls import MethodView
 from ..http.request import Request
-# from ..orm.engine import _generate_engine_uri
 from ..utils import path
 from ..utils.tools import snake_to_camel_case
 
