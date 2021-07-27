@@ -63,3 +63,5 @@ SMTP_CONFIGURATION = dict(
 )
 
 EXTRA_ARGS = None
+
+CORS_RESOURCES = {}
