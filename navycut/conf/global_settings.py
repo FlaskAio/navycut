@@ -3,6 +3,8 @@ Default Navycut settings. Override these with settings in the module pointed to
 by the DJANGO_SETTINGS_MODULE environment variable.
 """
 
+import typing as t
+
 
 ####################
 # CORE             #
@@ -49,3 +51,5 @@ SMTP_CONFIGURATION = {
 } 
 
 EXTRA_ARGS = None
+
+CORS_RESOURCES:t.Union[dict, list] = {}
