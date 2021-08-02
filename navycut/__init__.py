@@ -6,7 +6,7 @@ Introduction :
 
 """
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __author__ = "Aniket Sarkar"
 
 def get_version(ctx=None, param=None):
