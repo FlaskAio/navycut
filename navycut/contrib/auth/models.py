@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from datetime import datetime
 from navycut.orm import sql
 from navycut.utils.security import create_password_hash
-from navycut.utils.console import Console
+from nc_console import Console
 import typing as t
 from ..admin.site.views import NCAdminModelView
 

@@ -6,7 +6,7 @@ from flask import current_app
 
 from alembic import context
 
-from navycut.utils.console import Console
+from nc_console import Console
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -1,7 +1,7 @@
 import typing as t
 import socket
 import os
-from ..utils.console import Console
+from nc_console import Console
 from werkzeug.serving import (WSGIRequestHandler, 
                         _TSSLContextArg,
                         get_interface_ip,
