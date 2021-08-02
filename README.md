@@ -11,7 +11,7 @@
 
 Navycut is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. Thanks for checking it out.
 
-It's actually a Fullstack web framework using <a href="https://flask.palletsprojects.com">Flask(werkzeug)</a> as backend wsgi server and trying to deliver the service like Django does.
+It's actually a Full Stack web framework using <a href="https://flask.palletsprojects.com">Flask(werkzeug)</a> as backend wsgi server and try to deliver the service and api like Django.
 
 The official documentation is online at <a href="navycut.github.io">navycut.github.io</a>.
 
