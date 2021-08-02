@@ -5,7 +5,7 @@ import threading
 import subprocess
 import typing as t
 from itertools import chain
-from ..utils.console import Console
+from nc_console import Console
 from werkzeug._reloader import (ReloaderLoop as _ReloaderLoop,
                         _get_args_for_reloading,
                         _find_stat_paths,

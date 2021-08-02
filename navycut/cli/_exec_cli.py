@@ -1,6 +1,6 @@
 from os import makedirs, listdir
 from ..utils import path
-from ..utils.console import Console
+from nc_console import Console
 from ..utils.tools import (generate_random_secret_key, 
                     snake_to_camel_case
                     )

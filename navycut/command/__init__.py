@@ -8,7 +8,7 @@ from alembic import command
 from flask.globals import current_app
 from ..cli._exec_cli import _create_boiler_app
 from ..utils.tools import get_default_username
-from ..utils.console import Console
+from nc_console import Console
 from ..core import app
 from ..contrib.decorators import with_appcontext
 from ..conf import settings
