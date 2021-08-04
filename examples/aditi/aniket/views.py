@@ -1,8 +1,12 @@
 from navycut.contrib.auth import login_required
-from .models import Blog, Author
+from .models import Blog, ExtraUser
 from navycut.contrib.mail import send_mail
 from navycut.typing import *
 from navycut.urls import MethodView
+from navycut.orm import sql
+from navycut.contrib.forms import ModelForm
+
+from wtforms_sqlalchemy.orm import model_form
 
 
 class HelloView(MethodView):
@@ -45,3 +49,23 @@ def get_blog(req, res, id):
     # print (blog.author)
     return res.json(blog)
 
+class BlogForm(ModelForm):
+    model = ExtraUser
+
+
+def blogger(req, res):
+    blog = ExtraUser()
+    success = False
+    blogform = BlogForm()
+
+    if req.method == "POST":
+        
+        form = blogform(req.form, blog)
+        if form.validate():
+            form.populate_obj(blog)
+            blog.save()
+            success = True
+    else:
+        form = blogform(instance=blog)
+
+    return res.render("create.html", form=form, success=success)
