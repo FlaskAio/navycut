@@ -23,4 +23,4 @@ class IPFilterMiddleware(MiddlewareMixin):
         
         else:
             if req.remote_addr not in allowed_host:
-                return res.status(403)
+                return res.end(403)

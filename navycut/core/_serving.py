@@ -1,3 +1,9 @@
+"""
+This code is copied from the original code of Werkzeug.
+link : https://github.com/pallets/werkzeug/blob/main/src/werkzeug/serving.py
+"""
+
+
 import typing as t
 import socket
 import os

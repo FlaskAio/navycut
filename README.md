@@ -142,9 +142,13 @@ Your settings.py file should look like this:
 
 ```python
 INSTALLED_APPS = [
-    "navycut.admin.sister.AdminSister",
-    "navycut.helpers.upload_server.sister.UploadserverSister",
-    "blogapp.sister.BlogappSister",
+    "navycut.orm.sqla",
+    "navycut.contrib.cors",
+    "navycut.contrib.auth",
+    "navycut.contrib.mail",
+    "navycut.contrib.admin",
+    "navycut.helpers.upload_server",
+    "blogapp"
 ]
 ```
 

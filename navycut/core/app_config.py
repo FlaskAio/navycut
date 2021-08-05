@@ -7,9 +7,7 @@ from ._serving import run_simple_wsgi
 from ._helper_decorators import get_main_ctx_view
 from ..datastructures._object import NCObject
 from ..http.response import Response
-from ..errors.misc import (ImportNameNotFoundError, 
-                    ConfigurationError,
-                    )
+from ..errors.misc import ImportNameNotFoundError
 from ..urls import MethodView
 from ..http.request import Request
 from ..utils import path
@@ -83,15 +81,12 @@ class Navycut(Flask):
         self.config['SETTINGS'] = settings
 
         self._configure_database(settings)
-
+        self._configure_smtp_mail(settings)
         self.debugging(settings.DEBUG)
 
         if settings.EXTRA_ARGS is not None:
             self._add_extra_config(settings)
         
-        if settings.MAIL_USING_SMTP:
-            self._configure_smtp_mail(settings)
-
 
     def _configure_database(self, settings) -> bool:
         """
@@ -122,22 +117,20 @@ class Navycut(Flask):
         :param settings:
             the settings object from the project directory.
         """
-            
-        if settings.SMTP_CONFIGURATION.get("is_using_tls") == settings.SMTP_CONFIGURATION.get("is_using_ssl"):
-            raise ConfigurationError("the value of 'is_using_ssl' and 'is_using_tls' can't be same at a time for SMTP.")
-        
-        for key, value in settings.SMTP_CONFIGURATION.items():
-            
-            if value is None:
-                raise ConfigurationError(f"The value for {key} in SMTP CONFIGURATION can't be None, \
-                    \nwhile the MAIL_USING_SMTP settings is true.")
-
-        self.config['MAIL_SERVER'] = settings.SMTP_CONFIGURATION.get("host", None)
-        self.config['MAIL_PORT'] = settings.SMTP_CONFIGURATION.get("port", None)
-        self.config['MAIL_USE_TLS'] = settings.SMTP_CONFIGURATION.get("is_using_tls", None)
-        self.config['MAIL_USE_SSL'] = settings.SMTP_CONFIGURATION.get("is_using_ssl", None)
-        self.config['MAIL_USERNAME'] = settings.SMTP_CONFIGURATION.get("username", None)
-        self.config['MAIL_PASSWORD'] = settings.SMTP_CONFIGURATION.get("password", None)
+        self.config['MAIL_SERVER'] = settings.EMAIL_HOST
+        self.config['MAIL_PORT'] = settings.EMAIL_PORT
+        self.config['MAIL_USE_TLS'] = settings.EMAIL_USE_TLS
+        self.config['MAIL_USE_SSL'] = settings.EMAIL_USE_SSL
+        self.config['MAIL_USERNAME'] = settings.EMAIL_HOST_USER
+        self.config['MAIL_PASSWORD'] = settings.EMAIL_HOST_PASSWORD
+        self.config['MAIL_TIMEOUT'] = settings.EMAIL_TIMEOUT
+        self.config['MAIL_SSL_KEYFILE'] = settings.EMAIL_SSL_KEYFILE
+        self.config['MAIL_SSL_CERTFILE'] = settings.EMAIL_SSL_CERTFILE
+        self.config['MAIL_DEFAULT_SENDER'] = settings.DEFAULT_FROM_EMAIL
+        self.config['MAIL_BACKEND'] = settings.EMAIL_BACKEND
+        self.config['MAIL_FILE_PATH'] = settings.EMAIL_FILE_PATH
+        self.config['MAIL_USE_LOCALTIME'] = settings.EMAIL_USE_LOCALTIME
+        self.config['MAIL_DEFAULT_CHARSET'] = settings.EMAIL_DEFAULT_CHARSET
 
     def _add_extra_config(self, settings) -> None:
         """

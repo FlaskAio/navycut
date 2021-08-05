@@ -3,6 +3,6 @@ from . import cors
 
 
 class CorsSister(AppSister):
-    import_name = __name__
+    seize_power = True
     name = "cors_custom_sister"
     extra_ins = (cors, )

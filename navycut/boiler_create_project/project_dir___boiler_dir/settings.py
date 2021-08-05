@@ -52,15 +52,6 @@ ALLOWED_HOST = [ #
 # Email SMTP Configuration
 MAIL_USING_SMTP = False
 
-SMTP_CONFIGURATION = dict(
-    host = None,
-    port = None,
-    username = None,
-    password = None,
-    is_using_ssl = None,
-    is_using_tls = None,
-    options = None
-)
 
 EXTRA_ARGS = None
 

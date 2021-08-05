@@ -1,8 +1,9 @@
 from navycut.contrib.auth import login_required
-from .models import Blog, Author
+from .models import Blog, ExtraUser
 from navycut.contrib.mail import send_mail
 from navycut.typing import *
 from navycut.urls import MethodView
+from navycut.contrib.forms import ModelForm
 
 
 class HelloView(MethodView):
@@ -35,7 +36,7 @@ def aditi(req, res):
     return res.json(username=req.user.username)
 
 def send_email(req, res):
-    send_mail("this is subject", "this is message", "aniketsarkar@yahoo.com")
+    send_mail("this is subject", "this is message", recipient_list=['aniketsarkar@yahoo.com'], html_message="<h1>this is html text</h1>")
     return res.json(mesage="email sended successfully.")
 
 def get_blog(req, res, id):
@@ -45,3 +46,23 @@ def get_blog(req, res, id):
     # print (blog.author)
     return res.json(blog)
 
+class BlogForm(ModelForm):
+    model = ExtraUser
+
+
+def blogger(req, res):
+    blog = ExtraUser()
+    success = False
+    blogform = BlogForm()
+
+    if req.method == "POST":
+        
+        form = blogform(req.form, blog)
+        if form.validate():
+            form.populate_obj(blog)
+            blog.save()
+            success = True
+    else:
+        form = blogform(instance=blog)
+
+    return res.render("create.html", form=form, success=success)

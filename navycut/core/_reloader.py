@@ -1,3 +1,9 @@
+"""
+This code is copied from the original code of Werkzeug.
+link : https://github.com/pallets/werkzeug/blob/main/src/werkzeug/_reloader.py
+"""
+
+
 import os
 import sys
 import time
