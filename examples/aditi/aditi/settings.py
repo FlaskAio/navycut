@@ -42,7 +42,6 @@ INSTALLED_APPS = [ # should change to first_app to get the app.
     "sarkar",
     "kolkata",
     "plassey"
-    #"first_app.sister.FirstappSister", 
 ]
 
 MIDDLEWARE = [
@@ -51,21 +50,25 @@ MIDDLEWARE = [
 
 ALLOWED_HOST = [ # 
     '127.0.0.1', 
+    "192.168.0.107"
 ]
 
-# Email SMTP Configuration
-MAIL_USING_SMTP = False
+# Email Configuration
 
-SMTP_CONFIGURATION = dict(
-    host = None,
-    port = None,
-    username = None,
-    password = None,
-    is_using_ssl = None,
-    is_using_tls = None,
-    options = None
-)
+# Host for sending email.
+EMAIL_HOST = 'smtp.gmail.com'
 
+# Port for sending email.
+EMAIL_PORT = 587
+
+# Whether to send SMTP 'Date' header in the local time zone or in UTC.
+EMAIL_USE_LOCALTIME = False
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'aniketsarkar1998@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 EXTRA_ARGS = None
 

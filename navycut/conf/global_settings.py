@@ -14,7 +14,7 @@ import typing as t
 IMPORT_NAME = __name__
 
 #defining the actual project name:
-PROJECT_NAME = "default_project"
+PROJECT_NAME = "navycut_project"
 
 BASE_DIR = None
 
@@ -37,18 +37,29 @@ INSTALLED_APPS = [
 ALLOWED_HOST = [  
 ]
 
-# Email SMTP Configuration
-MAIL_USING_SMTP = False
+# Email Configuration
+EMAIL_BACKEND = 'navycut.contrib.mail.backends.smtp.EmailBackend'
 
-SMTP_CONFIGURATION = {
-    "host" : None,
-    "post" : None,
-    "username" : None,
-    "password" : None,
-    "is_using_ssl" : None,
-    "is_using_tls" : None,
-    "options" : {}
-} 
+# Host for sending email.
+EMAIL_HOST = 'localhost'
+
+# Port for sending email.
+EMAIL_PORT = 25
+
+# Whether to send SMTP 'Date' header in the local time zone or in UTC.
+EMAIL_USE_LOCALTIME = False
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+EMAIL_TIMEOUT = None
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+EMAIL_FILE_PATH = None
+EMAIL_DEFAULT_CHARSET = 'utf-8'
 
 EXTRA_ARGS = None
 
