@@ -5,14 +5,16 @@ Introduction :
 
 
 """
+version_info = (0, 0, 3)
 
-__version__ = '0.0.3'
+
+__version__ = ".".join([str(v) for v in version_info])
 __author__ = "Aniket Sarkar"
 
 def get_version(ctx=None, param=None):
     """
     returns the default version.
-    """
+    """    
     return __version__
 
 def get_author():
