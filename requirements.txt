@@ -12,6 +12,6 @@ Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.15.1
 munch==2.5.0
 nc-console==0.0.4
-SQLAlchemy==1.4.11
+SQLAlchemy==1.4.22
 SQLAlchemy-JSONField==1.0.0
 WTForms-SQLAlchemy==0.2
