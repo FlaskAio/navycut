@@ -1,5 +1,5 @@
 alembic==1.5.8
-asgiref==3.3.4
+asgiref==3.4.1
 colorama==0.4.4
 Flask==2.0.1
 Flask-Admin==1.5.8
