@@ -1,79 +1,9 @@
-# from flask_mailman import *
-from flask import current_app
 from flask_mailman import *
-from flask_mailman import Mail as OldMail
-from flask_mailman import _MailMixin, _Mail
-
+from flask_mailman import Mail
 import typing as t
-from importlib import import_module
-from navycut.conf import settings
-from navycut.errors.misc import ConfigurationError
 
 
 __all__ = ('mail', 'send_email', 'send_mass_mail')
-
-class MailMixin(_MailMixin):
-
-    def _import_backend(self, backend_name:str):
-        backend_module_name, backend_class = backend_name.rsplit(".", 1)
-        backend_module = import_module(backend_module_name)
-        backend = getattr(backend_module, backend_class)
-        return backend
-
-
-    def get_connection(self, backend=None, fail_silently=False, **kwargs):
-        """Load an email backend and return an instance of it.
-
-        If backend is None (default), use app.config.MAIL_BACKEND.
-
-        Both fail_silently and other keyword arguments are used in the
-        constructor of the backend.
-        """
-        app = getattr(self, "app", None) or current_app
-        try:
-            mailman = app.extensions['mailman']
-        except KeyError:
-            raise ConfigurationError("The current application was not configured properly.")
-
-        try:
-            klass = self._import_backend(settings.EMAIL_BACKEND)
-    
-        except ImportError:
-            raise ConfigurationError("Invalid backend: %s" % settings.EMAIL_BACKEND)
-
-        return klass(mailman=mailman, fail_silently=fail_silently, **kwargs)
-
-class _Mailer(_Mail):
-    """
-    Inherit the default _Mail creator class of flask_mailman.
-    """
-
-class Mail(OldMail, MailMixin):
-    """
-    Inherit the default Mail class of flask_mailman.
-    """
-
-    @staticmethod
-    def init_mail(config, testing=False):
-        # Set default mail backend in different environment
-        mail_backend = config.get('MAIL_BACKEND')
-
-        return _Mailer(
-            config.get('MAIL_SERVER'),
-            config.get('MAIL_PORT'),
-            config.get('MAIL_USERNAME'),
-            config.get('MAIL_PASSWORD'),
-            config.get('MAIL_USE_TLS'),
-            config.get('MAIL_USE_SSL'),
-            config.get('MAIL_DEFAULT_SENDER'),
-            config.get('MAIL_TIMEOUT'),
-            config.get('MAIL_SSL_KEYFILE'),
-            config.get('MAIL_SSL_CERTFILE'),
-            config.get('MAIL_USE_LOCALTIME'),
-            config.get('MAIL_FILE_PATH'),
-            config.get('MAIL_DEFAULT_CHARSET'),
-            mail_backend,
-        )
 
 
 mail:t.Type["Mail"] = Mail()

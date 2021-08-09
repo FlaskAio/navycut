@@ -29,7 +29,7 @@ setup(
         "Flask-Admin>=1.5.8",
         "Flask-Bootstrap>=3.3.7.1",
         "Flask-Cors>=3.0.10",
-        "flask-mailman>=0.2.4",
+        "flask-mailman>=0.3.0",
         "Flask-Login>=0.5.0",
         "Flask-Migrate>=2.7.0",
         "Flask-SQLAlchemy>=2.5.1",
