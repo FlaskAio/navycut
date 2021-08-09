@@ -5,7 +5,6 @@ from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
 from ._helper_decorators import get_main_ctx_view
-from ..datastructures._object import NCObject
 from ..http.response import Response
 from ..errors.misc import ImportNameNotFoundError
 from ..urls import MethodView
@@ -72,8 +71,8 @@ class Navycut(Flask):
         """
         self.import_name = settings.IMPORT_NAME
         self.project_name = settings.PROJECT_NAME
-        self.config['PROJECT_NAME'] = self.project_name
-        self.config['IMPORT_NAME'] = self.import_name
+        self.config['PROJECT_NAME'] = settings.PROJECT_NAME
+        self.config['IMPORT_NAME'] = settings.IMPORT_NAME
         self.config["BASE_DIR"] = settings.BASE_DIR
         self.config['SECRET_KEY'] = settings.SECRET_KEY
         self.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
@@ -81,7 +80,7 @@ class Navycut(Flask):
         self.config['SETTINGS'] = settings
 
         self._configure_database(settings)
-        self._configure_smtp_mail(settings)
+        self._configure_default_mailer(settings)
         self.debugging(settings.DEBUG)
 
         if settings.EXTRA_ARGS is not None:
@@ -96,20 +95,20 @@ class Navycut(Flask):
         :param settings:
             the default settings object from the project directory.
         """
-        db_setting = NCObject(settings.DATABASE)
-
-        db_engine_name:str = db_setting.engine
+        db_engine_name:str = settings.DATABASE['engine']
 
         db_engine_file_name, db_engine_type = db_engine_name.rsplit(".", 1)
-        db_engine_module = import_module(db_engine_file_name)
+        db_engine_module:t.ModuleType = import_module(db_engine_file_name)
+
+        db_engineer:t.Callable[["Navycut", t.Dict[str, str]], None] 
 
         db_engineer = getattr(db_engine_module, db_engine_type)
 
-        db_engineer(self, db_setting.creds)
+        db_engineer(self, settings.DATABASE["creds"])
 
         return True
 
-    def _configure_smtp_mail(self, settings):
+    def _configure_default_mailer(self, settings):
         """
         The default config function to take smtp creds 
         from settings file and attach with the navycut app.

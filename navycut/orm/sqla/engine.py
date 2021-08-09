@@ -8,10 +8,10 @@ the default engine setup for all type
 of databases available for SQLAlchemy.
 """
 
-def _database_url_setter(app, uri):
+def _database_url_setter(app:t.Type["Navycut"], uri:str) -> True:
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-    
+    return True
 
 def mysql(app:t.Type["Navycut"], 
             creds:t.Dict[str, str]
