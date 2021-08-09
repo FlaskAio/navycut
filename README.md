@@ -353,6 +353,17 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 * Write unit test to showcase its functionality
 * Submit a pull request under `develop` branch
 
+### How to run this project on your local machine
+
+* Fork and clone this repository
+* Create a virtual environment using python virtualenv module on the project root directory.
+* Activate the virtual environment and install the package dependencies mentioned on `requirements.txt` file.
+* Now run this command : `python setup.py install`. This command will install `navycut` on the virtual environment. 
+* Make any changes on your local code.
+* Run again the command : `python setup.py install`.
+* Now create a separate project inside the example folder and start testing for your code changes.
+* If you face any difficulties to perform the above steps, then plese contact me at: `aniketsarkar@yahoo.com`.
+
 # License
 
 GNU General Public License v3 or later (GPLv3+)
