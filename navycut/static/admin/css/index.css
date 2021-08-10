@@ -1,0 +1,118 @@
+.nc-logo img{
+    width: 70px;
+    object-fit: contain;
+    height: auto;
+    
+}
+#main_body{
+    padding: 0 6%;
+}
+.header{
+background: #fbfbfb;
+padding: 5 6%;
+}
+.nav-menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+ul{
+    padding: 0;
+    list-style-type: none;
+    font-family: 'Poppins', sans-serif;
+}
+body
+{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    position: relative;
+}
+a{text-decoration: none;}
+.nc-logo{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.pluto-wc{
+    font-size: 50px;
+    margin: 15px 0;
+    line-height: 50px;
+}
+#intro{
+    text-align: center;
+    margin: 100px 0;
+}
+.btn-block{
+    margin-top: 40px;
+}
+.know-btn{
+    background: transparent;
+    border: 1px solid #000;
+    padding: 7px 30px;
+    color: #000;
+    transition: 0.3s all ease;
+}
+.know-btn:hover{
+    background: #000;
+    color: #fff;
+}
+.stat-item-block img{
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+.stat-block{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 25% 25% 25% 25%;
+    margin: 10px;
+}
+.stat-item{
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 20px 15px;
+    margin: 10px 15px;
+}
+.stat-item-block h2{
+    line-height: 20px;
+    font-size: 25px;
+    margin: 20px 0 10px;
+}
+.stat-item-block p{
+    margin: 0;
+
+}
+.footer-list img{
+    width: 30px;
+}
+.footer-ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.footer-list a{
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+}
+.footer-doc h4{
+    margin: 0;
+    color: #000;
+}
+.footer-doc p{
+    margin: 0;
+    font-size: 12px;
+    color: #0000008a;
+}
+.footer-doc{
+    margin-left: 20px;
+}
+.footer{
+    margin: 50px 10px 0;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 20px;
+    
+}
