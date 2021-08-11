@@ -14,4 +14,5 @@ munch==2.5.0
 nc-console==0.0.4
 SQLAlchemy==1.4.22
 SQLAlchemy-JSONField==1.0.0
+WTForms==2.3.3
 WTForms-SQLAlchemy==0.2

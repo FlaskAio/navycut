@@ -39,7 +39,7 @@ setup(
         "python-dotenv>=0.17.1",
         "SQLAlchemy>=1.4.11",
         "SQLAlchemy-JSONField>=1.0.0",
-        "WTForms>=2.3.3",
+        "WTForms<=2.3.3",
         "WTForms-SQLAlchemy>=0.2"
     ],
     extras_require={},
