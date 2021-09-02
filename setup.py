@@ -41,7 +41,8 @@ setup(
         "SQLAlchemy-JSONField>=1.0.0",
         "WTForms<=2.3.3",
         "WTForms-SQLAlchemy>=0.2",
-        "pillow>=8.3.0"
+        "pillow>=8.3.0",
+        "Flask-Express>=0.1.1"
     ],
     extras_require={},
     python_requires=">=3.6,<4",
