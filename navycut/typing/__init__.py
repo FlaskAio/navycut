@@ -1,8 +1,8 @@
 from .http import ncRequest as ncRequest
 from .http import ncResponse as ncResponse
 
-from .urls import urlPattern as ncUrlPattern
-from .urls import urlPatterns as ncUrlPatterns
+from .urls import ncUrlPattern as ncUrlPattern
+from .urls import ncUrlPatterns as ncUrlPatterns
 
 
 __all__ = (
