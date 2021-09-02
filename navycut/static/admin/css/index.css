@@ -70,11 +70,22 @@ a{text-decoration: none;}
     margin: 10px;
 }
 .stat-item{
+    background-color: lightgoldenrodyellow;
     text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border: 1px solid #ccc;
     border-radius: 20px;
     padding: 20px 15px;
     margin: 10px 15px;
+    cursor: pointer;
+}
+.footer-li {
+    background-color: aliceblue;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 20px;
+    padding: 20px 15px;
+    cursor: pointer;
 }
 .stat-item-block h2{
     line-height: 20px;
@@ -90,7 +101,7 @@ a{text-decoration: none;}
 }
 .footer-ul{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: flex-start;
 }
 .footer-list a{
