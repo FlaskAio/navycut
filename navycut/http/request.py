@@ -1,10 +1,9 @@
 from flask.ctx import has_request_context
-from flask.wrappers import Request as RequestBase
-from flask.globals import (session, 
+from flask_express.request import Request as RequestBase
+from flask.globals import ( 
                     current_app, 
                     _request_ctx_stack
                     ) 
-from ..datastructures._object import NCObject
 from werkzeug.local import LocalProxy
 import typing as t
 
@@ -26,19 +25,3 @@ class Request(RequestBase):
     @property
     def user(self) -> t.Type["User"]:
         return LocalProxy(lambda: _get_user())
-
-    @property
-    def json(self) ->t.Type[NCObject]:
-        return NCObject(self.get_json())
-
-    @property
-    def query(self) ->t.Type[NCObject]:
-        return NCObject(self.args)
-
-    @property
-    def body(self) ->t.Type[NCObject]:
-        return NCObject(self.form)
-
-    @property
-    def session():
-        return session
