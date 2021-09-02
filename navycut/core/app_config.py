@@ -6,9 +6,9 @@ from werkzeug.exceptions import MethodNotAllowed, NotFound
 from ._serving import run_simple_wsgi
 from ._helper_decorators import get_main_ctx_view
 from ..http.response import Response
+from ..http.request import Request
 from ..errors.misc import ImportNameNotFoundError
 from ..urls import MethodView
-from ..http.request import Request
 from ..utils import path
 from ..utils.tools import snake_to_camel_case
 

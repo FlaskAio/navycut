@@ -11,6 +11,7 @@ from importlib import import_module
 from asgiref.sync import async_to_sync
 from inspect import iscoroutinefunction as is_async_func
 import typing as t
+import types as types
 
 class MethodView(_MethodView):
     """
@@ -205,12 +206,12 @@ class include:
     """
     def __init__(self, 
                 url_rule:str,
-                url_module_name:str) -> None:
+                url_module_name:t.Union[str, types.ModuleType]) -> None:
 
         self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
         self.url_rule = self.url_rule[:-1] if self.url_rule.endswith("/") else self.url_rule
-        self.url_module = import_module(url_module_name)
-        self.url_patterns = self.url_module.url_patterns
+        self.url_module = import_module(url_module_name) if isinstance(url_module_name, str) else url_module_name
+        self.url_patterns = getattr(self.url_module, "url_patterns")  #self.url_module.url_patterns
 
         for url_pattern in self.url_patterns:
 

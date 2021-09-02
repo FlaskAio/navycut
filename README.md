@@ -351,7 +351,7 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 * Fork and clone this repository
 * Make some changes as required
 * Write unit test to showcase its functionality
-* Submit a pull request under `develop` branch
+* Submit a pull request under `main` branch
 
 ### How to run this project on your local machine
 
