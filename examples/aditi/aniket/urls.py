@@ -1,4 +1,4 @@
-from navycut.urls import path, url
+from navycut.urls import path, url, include
 from . import views
 
 url_patterns = [
@@ -9,5 +9,5 @@ url_patterns = [
     url("/mail", views.send_email, "send-email"),
     path("/hello", views.HelloView, "hello-view"),
     url("/blog/<int:id>", views.get_blog, "get_blog"),
-    url("/blogger", views.blogger, "blogger")
+    url("/blogger", views.blogger, "blogger"),
 ]

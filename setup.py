@@ -40,7 +40,8 @@ setup(
         "SQLAlchemy>=1.4.11",
         "SQLAlchemy-JSONField>=1.0.0",
         "WTForms<=2.3.3",
-        "WTForms-SQLAlchemy>=0.2"
+        "WTForms-SQLAlchemy>=0.2",
+        "pillow>=8.3.0"
     ],
     extras_require={},
     python_requires=">=3.6,<4",
