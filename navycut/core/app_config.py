@@ -1,10 +1,12 @@
-from flask import Flask, Blueprint
+from flask_express import Blueprint
+from flask_express import FlaskExpress
 from flask_bootstrap import Bootstrap
+
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
+
 from ._serving import run_simple_wsgi
-from ._helper_decorators import get_main_ctx_view
 from ..http.response import Response
 from ..http.request import Request
 from ..errors.misc import ImportNameNotFoundError
@@ -27,7 +29,7 @@ class _BaseIndexView(MethodView):
     def get(self):
         return self.render("_index.html")
 
-class Navycut(Flask):
+class Navycut(FlaskExpress):
     """
     The base class of navycut project.
     It's basically inheritaing the services from the class Flask.
@@ -38,7 +40,13 @@ class Navycut(Flask):
 
     request_class = Request
 
-    response_class = Response
+    # If we enable this custom response class that 
+    # it's confliting with the flask-admin and some 
+    # other module's default response system. 
+    # We need to correctify the 
+    # flask-express.response.Response class to solve this issue.
+
+    # response_class = Response
 
     def __init__(self):
         super(Navycut, self).__init__("app_default_name", 
@@ -562,7 +570,7 @@ class AppSister:
                 power.add_url_rule(rule=url_path.url_rule, view_func=url_path.views.as_view(url_path.name), methods=methods)
             
             elif repr(url_path).startswith("url"):
-                view_func = get_main_ctx_view(url_path.views)
+                view_func = url_path.views
                 power.add_url_rule(rule=url_path.url_rule, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             elif repr(url_path).startswith("include"):

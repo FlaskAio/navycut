@@ -1,6 +1,5 @@
-from ..core._helper_decorators import (get_main_ctx_view, 
-                            get_request_ctx_view
-                            )
+from flask_express._helper import get_main_ctx_view
+from ..core._helper_decorators import get_request_ctx_view
 import typing as t
 
 if t.TYPE_CHECKING:
