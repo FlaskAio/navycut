@@ -4,8 +4,9 @@ from ..auth import (login_user,
                 authenticate,
                 has_group
                 )
+from flask_express.typing import Response
 
-def admin_login(req, res):
+def admin_login(_, res:"Response"):
     form = AdminLoginForm()
     
     if form.validate_on_submit():

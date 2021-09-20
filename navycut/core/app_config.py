@@ -7,7 +7,6 @@ from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 
 from ._serving import run_simple_wsgi
-from ..http.response import Response
 from ..http.request import Request
 from ..errors.misc import ImportNameNotFoundError
 from ..urls import MethodView
@@ -39,14 +38,6 @@ class Navycut(FlaskExpress):
     """
 
     request_class = Request
-
-    # If we enable this custom response class that 
-    # it's confliting with the flask-admin and some 
-    # other module's default response system. 
-    # We need to correctify the 
-    # flask-express.response.Response class to solve this issue.
-
-    # response_class = Response
 
     def __init__(self):
         super(Navycut, self).__init__("app_default_name", 
