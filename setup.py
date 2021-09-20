@@ -25,7 +25,6 @@ setup(
     platforms="any",
     install_requires=[ 
         "asgiref>=3.3.4",
-        "Flask>=2.0.1",
         "Flask-Admin>=1.5.8",
         "Flask-Bootstrap>=3.3.7.1",
         "Flask-Cors>=3.0.10",
@@ -42,7 +41,7 @@ setup(
         "WTForms<=2.3.3",
         "WTForms-SQLAlchemy>=0.2",
         "pillow>=8.3.0",
-        "Flask-Express>=0.1.1"
+        "Flask-Express>=0.1.1" # flask-express will maintain the default flask package and it's version.
     ],
     extras_require={},
     python_requires=">=3.6,<4",

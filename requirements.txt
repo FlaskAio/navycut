@@ -1,7 +1,6 @@
 alembic>=1.6.5
 asgiref>=3.4.1
 colorama>=0.4.4
-Flask>=2.0.1
 Flask-Admin>=1.5.8
 Flask-Bootstrap>=3.3.7.1
 Flask-Cors>=3.0.10
