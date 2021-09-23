@@ -1,0 +1,25 @@
+click==8.0.1
+ghp-import==2.0.1
+importlib-metadata==4.8.1
+Jinja2==3.0.1
+Markdown==3.3.4
+MarkupSafe==2.0.1
+mergedeep==1.3.4
+mkdocs==1.2.2
+mkdocs-autorefs==0.2.1
+mkdocs-include-markdown-plugin==3.2.1
+-e git+https://github.com/rosscdh/mkdocs-markdownextradata-plugin@af90d161fd1f1157178dc6f06cafc30851da3d26#egg=mkdocs_markdownextradata_plugin
+mkdocs-material==7.2.6
+mkdocs-material-extensions==1.0.1
+mkdocstrings==0.15.2
+packaging==21.0
+Pygments==2.10.0
+pymdown-extensions==8.2
+pyparsing==2.4.7
+python-dateutil==2.8.2
+pytkdocs==0.11.1
+PyYAML==5.4.1
+pyyaml-env-tag==0.1
+six==1.16.0
+watchdog==2.1.5
+zipp==3.5.0

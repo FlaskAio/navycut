@@ -1,12 +1,16 @@
 from .site.forms import AdminLoginForm
-from ..auth import (login_user, 
-                logout_user, 
-                authenticate,
-                has_group
-                )
-from flask_express.typing import Response
+from ..auth import (
+    login_user, 
+    logout_user, 
+    authenticate,
+    has_group
+    )
+import typing as t
 
-def admin_login(_, res:"Response"):
+if t.TYPE_CHECKING:
+    from navycut.typing.http import ncRequest, ncResponse
+
+async def admin_login(req:"ncRequest", res:"ncResponse"):
     form = AdminLoginForm()
     
     if form.validate_on_submit():
@@ -25,7 +29,7 @@ def admin_login(_, res:"Response"):
     return res.render("admin/_adm_login.html", form=form)
 
 
-def admin_logout(req, res):
+async def admin_logout(req:"ncRequest", res:"ncResponse"):
     if req.user.is_authenticated:
         logout_user()
     return res.flash("User logged out successfully", 'success')\

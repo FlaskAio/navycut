@@ -1,13 +1,18 @@
-from flask_login import (LoginManager as _LoginManager, 
-                    logout_user as _logout_user,
-                    login_user as _login_user
-                    )
-import typing as t
+from flask_login import (
+    LoginManager as _LoginManager, 
+    logout_user as _logout_user,
+    login_user as _login_user
+    )
 from .models import User
 from navycut.utils.security import check_password_hash
 from navycut.errors.misc import DataTypeMismatchError
 
-from .decorators import login_required, group_required
+from .decorators import (
+    login_required as login_required, 
+    group_required as group_required,
+    )
+
+import typing as t
 
 if t.TYPE_CHECKING:
     from navycut.core.app_config import Navycut

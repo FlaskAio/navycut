@@ -1,4 +1,4 @@
-from flask_express import Blueprint
+from flask import Blueprint
 from flask_express import FlaskExpress
 from flask_bootstrap import Bootstrap
 
@@ -8,6 +8,7 @@ from werkzeug.exceptions import MethodNotAllowed, NotFound
 
 from ._serving import run_simple_wsgi
 from ..http.request import Request
+from ..http.response import Response
 from ..errors.misc import ImportNameNotFoundError
 from ..urls import MethodView
 from ..utils import path
@@ -38,6 +39,7 @@ class Navycut(FlaskExpress):
     """
 
     request_class = Request
+    response_class = Response
 
     def __init__(self):
         super(Navycut, self).__init__("app_default_name", 

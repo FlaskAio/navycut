@@ -1,6 +1,6 @@
 # Navycut
 
-<img src="https://raw.githubusercontent.com/navycut/navycut/main/logos/navycut_logo.png">
+<img src="https://raw.githubusercontent.com/flaskAio/navycut/main/logos/navycut_logo.png">
 <br>
 
 # Downloads
@@ -24,7 +24,7 @@ python3 -m pip install navycut
     Install from source code
 
 ```bash
-git clone https://github.com/navycut/navycut.git && cd navycut/
+git clone https://github.com/flaskAio/navycut.git && cd navycut/
 python3 setup.py install
 ```
 
@@ -342,8 +342,8 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 
 ### Contributors
 
-<a href="https://github.com/navycut/navycut/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=navycut/navycut" />
+<a href="https://github.com/flaskAio/navycut/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=flaskAio/navycut" />
 </a>
 
 ### How to contribute
