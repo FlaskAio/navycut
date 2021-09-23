@@ -1,0 +1,63 @@
+site_name: Navycut
+site_description: The Full-stack web framework to meet the developer's expectation.
+site_url: https://navycut.github.io/
+dev_addr: 127.0.0.1:8080
+
+theme:
+  name: material
+  palette:
+  - scheme: default
+    primary: teal
+    accent: amber
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to light mode
+  - scheme: slate
+    primary: teal
+    accent: amber
+    toggle:
+      icon: material/lightbulb
+      name: Switch to dark mode
+  logo: https://raw.githubusercontent.com/flaskAio/navycut/main/logos/navycut_logo.png
+  favicon: https://raw.githubusercontent.com/flaskAio/navycut/main/logos/navycut_logo.png
+  features:
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github-alt
+
+repo_name: FlaskAio/Navycut
+repo_url: https://github.com/flaskAio/navycut
+
+plugins:
+- search
+- markdownextradata:
+    data: data
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  
+  - pymdownx.highlight:
+      linenums: false
+
+  - pymdownx.superfences
+
+nav:
+  - Navycut: index.md
+  - Installation: installation.md
+  - Introduction: introduction.md
+  - Documentation: 
+    - documentation/index.md
+    - documentation/model-layer.md
+    - documentation/view-layer.md
+    - documentation/template-layer.md
+    - documentation/forms.md
+    - documentation/development-process.md
+    - documentation/the-admin.md
+    - documentation/security.md
+    - documentation/internationalization-and-localization.md
+    - documentation/performance-and-optimization.md
+    - documentation/common-web-application-tools.md
+    - documentation/other-core-functionalities.md
