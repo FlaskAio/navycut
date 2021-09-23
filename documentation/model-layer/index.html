@@ -1,0 +1,1319 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Full-stack web framework to meet the developer's expectation.">
+      
+      
+      
+      
+        <link rel="canonical" href="https://navycut.github.io/documentation/model-layer/">
+      
+      <link rel="icon" href="https://raw.githubusercontent.com/flaskAio/navycut/main/logos/navycut_logo.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.6">
+    
+    
+      
+        <title>Model layer - Navycut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.802231af.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Navycut" class="md-header__button md-logo" aria-label="Navycut" data-md-component="logo">
+      
+  <img src="https://raw.githubusercontent.com/flaskAio/navycut/main/logos/navycut_logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Navycut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Model layer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/flaskAio/navycut/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    FlaskAio/Navycut
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Navycut" class="md-nav__button md-logo" aria-label="Navycut" data-md-component="logo">
+      
+  <img src="https://raw.githubusercontent.com/flaskAio/navycut/main/logos/navycut_logo.png" alt="logo">
+
+    </a>
+    Navycut
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/flaskAio/navycut/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    FlaskAio/Navycut
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Navycut
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        Documentation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Documentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Basic Documentation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Model layer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Model layer
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-example" class="md-nav__link">
+    Quick Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-models" class="md-nav__link">
+    Using Models
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fields" class="md-nav__link">
+    Fields
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#field-types" class="md-nav__link">
+    Field Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Field Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#char" class="md-nav__link">
+    Char
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    Text
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#float" class="md-nav__link">
+    Float
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integer" class="md-nav__link">
+    Integer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#biginteger" class="md-nav__link">
+    BigInteger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smallinteger" class="md-nav__link">
+    SmallInteger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    Boolean
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    Json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image" class="md-nav__link">
+    Image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#binary" class="md-nav__link">
+    Binary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#largebinary" class="md-nav__link">
+    LargeBinary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time" class="md-nav__link">
+    Time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#date" class="md-nav__link">
+    Date
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datetime" class="md-nav__link">
+    DateTime
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foriegnkey" class="md-nav__link">
+    ForiegnKey
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#onetoone" class="md-nav__link">
+    OneToOne
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manytoone" class="md-nav__link">
+    ManyToOne
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#field-options" class="md-nav__link">
+    Field Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-primary-key-fields" class="md-nav__link">
+    Automatic primary key fields
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationships" class="md-nav__link">
+    Relationships
+  </a>
+  
+    <nav class="md-nav" aria-label="Relationships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#many-to-one-relationships" class="md-nav__link">
+    Many-to-one relationships
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-to-one-relationship" class="md-nav__link">
+    One-to-one relationship
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#many-to-many-relationship" class="md-nav__link">
+    Many-to-many relationship
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#making-queries" class="md-nav__link">
+    Making Queries
+  </a>
+  
+    <nav class="md-nav" aria-label="Making Queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-object" class="md-nav__link">
+    Create a new object
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete-a-object" class="md-nav__link">
+    Delete a Object
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    Migration
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-commands" class="md-nav__link">
+    The Commands
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../view-layer/" class="md-nav__link">
+        View layer
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template-layer/" class="md-nav__link">
+        Template layer
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../forms/" class="md-nav__link">
+        Forms
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-process/" class="md-nav__link">
+        Development process
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the-admin/" class="md-nav__link">
+        The admin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../internationalization-and-localization/" class="md-nav__link">
+        Internationalization and localization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance-and-optimization/" class="md-nav__link">
+        Performance and optimization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common-web-application-tools/" class="md-nav__link">
+        Common web application tools
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../other-core-functionalities/" class="md-nav__link">
+        Other core functionalities
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-example" class="md-nav__link">
+    Quick Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-models" class="md-nav__link">
+    Using Models
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fields" class="md-nav__link">
+    Fields
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#field-types" class="md-nav__link">
+    Field Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Field Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#char" class="md-nav__link">
+    Char
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    Text
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#float" class="md-nav__link">
+    Float
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integer" class="md-nav__link">
+    Integer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#biginteger" class="md-nav__link">
+    BigInteger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smallinteger" class="md-nav__link">
+    SmallInteger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    Boolean
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    Json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image" class="md-nav__link">
+    Image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#binary" class="md-nav__link">
+    Binary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#largebinary" class="md-nav__link">
+    LargeBinary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time" class="md-nav__link">
+    Time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#date" class="md-nav__link">
+    Date
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datetime" class="md-nav__link">
+    DateTime
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foriegnkey" class="md-nav__link">
+    ForiegnKey
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#onetoone" class="md-nav__link">
+    OneToOne
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manytoone" class="md-nav__link">
+    ManyToOne
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#field-options" class="md-nav__link">
+    Field Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-primary-key-fields" class="md-nav__link">
+    Automatic primary key fields
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationships" class="md-nav__link">
+    Relationships
+  </a>
+  
+    <nav class="md-nav" aria-label="Relationships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#many-to-one-relationships" class="md-nav__link">
+    Many-to-one relationships
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-to-one-relationship" class="md-nav__link">
+    One-to-one relationship
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#many-to-many-relationship" class="md-nav__link">
+    Many-to-many relationship
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#making-queries" class="md-nav__link">
+    Making Queries
+  </a>
+  
+    <nav class="md-nav" aria-label="Making Queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-object" class="md-nav__link">
+    Create a new object
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete-a-object" class="md-nav__link">
+    Delete a Object
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    Migration
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-commands" class="md-nav__link">
+    The Commands
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/flaskAio/navycut/edit/master/docs/documentation/model-layer.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Model layer</h1>
+                
+                <h3 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h3>
+<p>A model is the single, definitive source of information about your data. It contains the essential fields and behaviors of the data you’re storing. Generally, each model maps to a single database table. Here by default we are using Flask-SQLAlchemy ORM for model layer.</p>
+<p><strong>The basics:</strong></p>
+<ul>
+<li>Each model is a Python class that subclasses navycut.orm.sqla.sql.Model.</li>
+<li>Each attribute of the model represents a database field.</li>
+<li>With all of this, Navycut gives you an automatically-generated database-access API.</li>
+</ul>
+<h3 id="quick-example">Quick Example<a class="headerlink" href="#quick-example" title="Permanent link">&para;</a></h3>
+<p>This example model defines a Person, which has a first_name and last_name:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">navycut.orm</span> <span class="kn">import</span> <span class="n">sql</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</code></pre></div>
+<code>first_name</code> and <code>last_name</code> are fields of the model. Each field is specified as a class attribute, and each attribute maps to a database column.</p>
+<p>The above <strong>Person</strong> model would create a database table like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">person</span> <span class="p">(</span>
+    <span class="ss">&quot;id&quot;</span> <span class="nb">serial</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="ss">&quot;first_name&quot;</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="ss">&quot;last_name&quot;</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">);</span>
+</code></pre></div>
+<h3 id="using-models">Using Models<a class="headerlink" href="#using-models" title="Permanent link">&para;</a></h3>
+<p>Once you have defined your models, you need to tell Navycut you’re going to use those models. Do this by editing your settings file and changing the <strong>INSTALLED_APPS</strong> setting to add the name of the module that contains your models.py.</p>
+<p>For example, if the models for your application live in the module <strong>myapp.models</strong> (the package structure that is created for an application by the <strong>manage.py createapp</strong> script), <strong>INSTALLED_APPS</strong> should read, in part:
+<div class="highlight"><pre><span></span><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1">#...</span>
+    <span class="s1">&#39;myapp&#39;</span><span class="p">,</span>
+    <span class="c1">#...</span>
+</code></pre></div>
+When you add new apps to <strong>INSTALLED_APPS</strong>, be sure to run <strong>manage.py migrate</strong>, optionally making migrations for them first with <strong>manage.py makemigrations</strong>.</p>
+<h3 id="fields">Fields<a class="headerlink" href="#fields" title="Permanent link">&para;</a></h3>
+<p>The most important part of a model – and the only required part of a model – is the list of database fields it defines. Fields are specified by class attributes. Be careful not to choose field names that conflict with the models API like <strong>clean</strong>, <strong>save</strong>, or <strong>delete</strong>. 
+Here we are using the sqlalchemy default fields and added some more custom fields like <code>ImageField</code> or <code>JsonField</code>.</p>
+<p>field_class : <code>navycut.orm.sqla.fields.Fields</code></p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">navycut.orm</span> <span class="kn">import</span> <span class="n">sql</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+    <span class="n">author_ptr_id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;Author&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">blog</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">OneToMany</span><span class="p">(</span><span class="s2">&quot;Blog&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="field-types">Field Types<a class="headerlink" href="#field-types" title="Permanent link">&para;</a></h3>
+<p>Each field in your model should be an instance of the appropriate Field class. Navycut uses the field class types to determine a few things:</p>
+<p>The column type, which tells the database what kind of data to store (e.g. <strong>INTEGER, VARCHAR, TEXT</strong>).
+The default HTML widget to use when rendering a form field (e.g. <strong><code>&lt;input type="text"&gt;, &lt;select&gt;</code></strong>).
+The minimal validation requirements, used in Navycut’s admin and in automatically-generated forms.
+Navycut ships with dozens of built-in field types. Internally it's using SQLAlchemy module to deliver the services and apis.</p>
+<h5 id="char">Char<a class="headerlink" href="#char" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Char(max_length:int=255, required:bool=False, pk:bool=False, unique:bool=False, choices:tuple=None,help_text:str=None)</strong><br />
+A string field, for small- to large-sized strings.</p>
+<p>For large amounts of text, use TextField.</p>
+<h5 id="text">Text<a class="headerlink" href="#text" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Text(required:bool=False, unique:bool=False, help_text:str=None, widget:str="ckeditor")</strong><br />
+- wdiget:<br />
+Declare the text widget are box for admin section.
+Default is "ckeditor".
+available options - "ckeditor", "tinymce"</p>
+<h5 id="float">Float<a class="headerlink" href="#float" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Float(required:bool=False, unique:bool=False, pk:bool=False,choices:tuple=None,help_text:str=None)</strong><br />
+The Float fields for sqlalchemy,</p>
+<h5 id="integer">Integer<a class="headerlink" href="#integer" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Integer(required:bool=False, unique:bool=False, pk:bool=False,choices:tuple=None,help_text:str=None)</strong>  </p>
+<h5 id="biginteger">BigInteger<a class="headerlink" href="#biginteger" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.BigInteger(required:bool=False, unique:bool=False, pk:bool=False,choices:tuple=None,help_text:str=None)</strong>  </p>
+<h5 id="smallinteger">SmallInteger<a class="headerlink" href="#smallinteger" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.SmallInteger(required:bool=False, unique:bool=False, pk:bool=False,choices:tuple=None,help_text:str=None)</strong>  </p>
+<h5 id="boolean">Boolean<a class="headerlink" href="#boolean" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Boolean(required:bool=False, unique:bool=False, default:bool=False, help_text:str=None)</strong>  </p>
+<h5 id="json">Json<a class="headerlink" href="#json" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Json(required:bool=False, default={}, help_text:str=None)</strong>  </p>
+<h5 id="image">Image<a class="headerlink" href="#image" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Image(required:bool=False, help_text:str=None)</strong></p>
+<h5 id="binary">Binary<a class="headerlink" href="#binary" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Binary(required:bool=False, default=None, help_text:str=None)</strong> </p>
+<h5 id="largebinary">LargeBinary<a class="headerlink" href="#largebinary" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.LargeBinary(required:bool=False, default=None, help_text:str=None)</strong> </p>
+<h5 id="time">Time<a class="headerlink" href="#time" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Time(required:bool=False, default=None, help_text:str=None, choices:tuple=None)</strong> </p>
+<h5 id="date">Date<a class="headerlink" href="#date" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.Date(required:bool=False, default=None, help_text:str=None, choices:tuple=None)</strong></p>
+<h5 id="datetime">DateTime<a class="headerlink" href="#datetime" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.DateTime(required:bool=False, default=None, help_text:str=None, choices:tuple=None)</strong></p>
+<h5 id="foriegnkey">ForiegnKey<a class="headerlink" href="#foriegnkey" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.ForiegnKey(model:str,unique:bool=False,required:bool=False,help_text:str=None)</strong></p>
+<h5 id="onetoone">OneToOne<a class="headerlink" href="#onetoone" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.OneToOne(model:str, backref:str, uselist:bool = False,)</strong></p>
+<h5 id="manytoone">ManyToOne<a class="headerlink" href="#manytoone" title="Permanent link">&para;</a></h5>
+<p><strong>method =&gt; Fields.ManyToOne(model:str, backref:str, uselist:bool = False,)</strong></p>
+<h3 id="field-options">Field Options<a class="headerlink" href="#field-options" title="Permanent link">&para;</a></h3>
+<p>Each field takes a certain set of field-specific arguments (documented in the model field reference). For example, CharField (and its subclasses) require a max_length argument which specifies the size of the VARCHAR database field used to store the data.</p>
+<p>There’s also a set of common arguments available to all field types. All are optional. They’re fully explained in the reference, but here’s a quick summary of the most often-used ones:</p>
+<p><strong>max_length</strong><br />
+The maximum length of the field. only applicable for Cahr field.
+Default value is 255.</p>
+<p><strong>required</strong><br />
+If False, the field is allowed to be blank. Default is False.</p>
+<p><strong>pk</strong><br />
+If True, this field is the primary key for the model.</p>
+<p><strong>unique</strong><br />
+If True, this field must be unique throughout the table.</p>
+<p><strong>help_text</strong><br />
+Extra <code>help</code> text to be displayed with the form widget. 
+It’s useful for documentation even if your field isn’t used on a form.</p>
+<p><strong>choices</strong><br />
+A sequence consisting itself of iterables of exactly two items 
+(e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
+If choices are given, they’re enforced by model validation and 
+the default form widget will be a select box with these choices 
+instead of the standard text field.</p>
+<p>A choice list should look like this:
+<div class="highlight"><pre><span></span><code><span class="n">YEAR_IN_SCHOOL_CHOICES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;FR&#39;</span><span class="p">,</span> <span class="s1">&#39;Freshman&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;SO&#39;</span><span class="p">,</span> <span class="s1">&#39;Sophomore&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;JR&#39;</span><span class="p">,</span> <span class="s1">&#39;Junior&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;SR&#39;</span><span class="p">,</span> <span class="s1">&#39;Senior&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;GR&#39;</span><span class="p">,</span> <span class="s1">&#39;Graduate&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div>
+The first element in each tuple is the value that will be stored in the database. The second element is displayed by the field’s form widget.</p>
+<p>Given a model instance, the display value for a field with <code>choices</code> can be accessed using the <code>get_FOO_display()</code> method. For example:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">navycut.orm</span> <span class="kn">import</span> <span class="n">sql</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">SHIRT_SIZES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;Small&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;Large&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">shirt_size</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">SHIRT_SIZES</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Fred Flintstone&quot;</span><span class="p">,</span> <span class="n">shirt_size</span><span class="o">=</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">shirt_size</span>
+<span class="s1">&#39;L&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">get_shirt_size_display</span><span class="p">()</span>
+<span class="s1">&#39;Large&#39;</span>
+</code></pre></div></p>
+<h3 id="automatic-primary-key-fields">Automatic primary key fields<a class="headerlink" href="#automatic-primary-key-fields" title="Permanent link">&para;</a></h3>
+<p>By default, Navycut gives each model an auto-incrementing primary key with the type specified per app. For example:
+<div class="highlight"><pre><span></span><code><span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+If you’d like to specify a custom primary key, specify pk=True on one of your fields.</p>
+<h3 id="relationships">Relationships<a class="headerlink" href="#relationships" title="Permanent link">&para;</a></h3>
+<p>Clearly, the power of relational databases lies in relating tables to each other. Navycut offers ways to define the three most common types of database relationships: many-to-one, many-to-many and one-to-one.</p>
+<h4 id="many-to-one-relationships">Many-to-one relationships<a class="headerlink" href="#many-to-one-relationships" title="Permanent link">&para;</a></h4>
+<p>To define a many-to-one relationship, use <code>Navycut.orm.sqla.fields.Fields.ManyToOne</code> You use it just like any other Field type: by including it as a class attribute of your model also you need to add a <code>Navycut.orm.sqla.fields.Fields.ForiegnKey</code> filed with the connectable model class.</p>
+<p>For example, if a Blog model has a Author – that is, a Author makes multiple blogs but each Blog only has one Author – use the following definitions:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">navycut.orm.sqla</span> <span class="kn">import</span> <span class="n">sql</span>
+
+<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">heading</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">ManyToOne</span><span class="p">(</span><span class="s2">&quot;Author&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">blog_id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">ForiegnKey</span><span class="p">(</span><span class="s2">&quot;Blog&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<h4 id="one-to-one-relationship">One-to-one relationship<a class="headerlink" href="#one-to-one-relationship" title="Permanent link">&para;</a></h4>
+<p>To define the OneToOne relationship please use <code>Navycut.orm.sqla.fields.Fields.OneToOne</code> and don't forgot to use <code>Navycut.orm.sqla.fields.Fields.ForiegnKey</code> because it's required for every kind of relation.</p>
+<p>For example, Here we have added two models one is Blog and another one is Author. Now the desired relation is one author can publish only one blog post. Check the below example to check the implementation procedure.
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">navycut.orm.sqla</span> <span class="kn">import</span> <span class="n">sql</span>
+
+<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">heading</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">OneToOne</span><span class="p">(</span><span class="s2">&quot;Author&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">blog_id</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">ForiegnKey</span><span class="p">(</span><span class="s2">&quot;Blog&quot;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></p>
+<h4 id="many-to-many-relationship">Many-to-many relationship<a class="headerlink" href="#many-to-many-relationship" title="Permanent link">&para;</a></h4>
+<p>Curently we don't have any special method tod define the many-to-manu relationship. You can use the default SQLAlchemy process to implement the Many-to-many relationship.</p>
+<h3 id="making-queries">Making Queries<a class="headerlink" href="#making-queries" title="Permanent link">&para;</a></h3>
+<p>Once you’ve created your data models, Navycut automatically gives you a database-abstraction API that lets you create, retrieve, update and delete objects. Since it's using SQLAlchemy module so the queries APIs are same with it.</p>
+<p>We are contiously trying to develop some more features and APIs for the query section. Please be in touch for the latest code update.</p>
+<p>For original documentation of SQLAlchemy quries please <a href="https://docs.sqlalchemy.org/en/14/orm/query.html">click here</a></p>
+<h4 id="create-a-new-object">Create a new object<a class="headerlink" href="#create-a-new-object" title="Permanent link">&para;</a></h4>
+<p>Please check teh below example to learn more about the data creation procedure of Navycut framework:
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Blog</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Blog</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Beatles Blog&#39;</span><span class="p">,</span> <span class="n">tagline</span><span class="o">=</span><span class="s1">&#39;All the latest Beatles news.&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</code></pre></div></p>
+<h4 id="delete-a-object">Delete a Object<a class="headerlink" href="#delete-a-object" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Blog</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Blog</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h3>
+<p>Migrations are Navycut’s way of propagating changes you make to your models (adding a field, deleting a model, etc.) into your database schema. They’re designed to be mostly automatic, but you’ll need to know when to make migrations, when to run them, and the common problems you might run into. Navycut is using <code>flask-migrate</code> module to deliver this service.</p>
+<h4 id="the-commands">The Commands<a class="headerlink" href="#the-commands" title="Permanent link">&para;</a></h4>
+<p>There are several commands which you will use to interact with migrations and Navycut’s handling of database schema:</p>
+<p><strong>migrate</strong>, which is responsible for applying and unapplying migrations.
+<strong>makemigrations</strong>, which is responsible for creating new migrations based on the changes you have made to your models.
+<strong>sqlmigrate</strong>, which displays the SQL statements for a migration.</p>
+<p>You should think of migrations as a version control system for your database schema. makemigrations is responsible for packaging up your model changes into individual migration files - analogous to commits - and migrate is responsible for applying those to your database.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Basic Documentation" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Basic Documentation
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../view-layer/" class="md-footer__link md-footer__link--next" aria-label="Next: View layer" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              View layer
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.409db549.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.756773cc.min.js"></script>
+      
+    
+  </body>
+</html>
