@@ -9,7 +9,7 @@ mkdocs==1.2.2
 mkdocs-autorefs==0.2.1
 mkdocs-include-markdown-plugin==3.2.1
 -e git+https://github.com/rosscdh/mkdocs-markdownextradata-plugin@af90d161fd1f1157178dc6f06cafc30851da3d26#egg=mkdocs_markdownextradata_plugin
-mkdocs-material==7.2.6
+mkdocs-material==7.3.0
 mkdocs-material-extensions==1.0.1
 mkdocstrings==0.15.2
 packaging==21.0
