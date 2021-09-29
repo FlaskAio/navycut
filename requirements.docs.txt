@@ -22,4 +22,4 @@ PyYAML==5.4.1
 pyyaml-env-tag==0.1
 six==1.16.0
 watchdog==2.1.5
-zipp==3.5.0
+zipp==3.5.1
