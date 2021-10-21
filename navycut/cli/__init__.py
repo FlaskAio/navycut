@@ -18,7 +18,5 @@ def version():
     c.echo(get_version())
 
 
-
-
 _execute_from_command_line.add_command(createproject)
 _execute_from_command_line.add_command(version)
