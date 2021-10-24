@@ -16,7 +16,8 @@ It's actually a Full Stack web framework using <a href="https://flask.palletspro
 The official documentation is online at <a href="navycut.github.io">navycut.github.io</a>.
 
 ### Basic installation
-    Use the package manager [pip](https://pypi.org/project/navycut/) to install navycut.
+
+Use the package manager [pip](https://pypi.org/project/navycut/) to install navycut.
 
 ```bash
 python3 -m pip install navycut
