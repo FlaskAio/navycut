@@ -16,7 +16,7 @@ class Blog(sql.Model):
 class Author(sql.Model):
     # id = sql.fields.Integer(pk=True, unique=True)
     name = sql.fields.Char(required=True, unique=True)
-    picture = sql.fields.Image(required=True)
+    picture = sql.fields.Image(required=False)
     is_active = sql.fields.Boolean(default=True)
 
 class ExtraUser(sql.Model):

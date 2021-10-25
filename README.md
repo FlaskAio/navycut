@@ -31,8 +31,8 @@ python3 setup.py install
 
 ### check for installation
 ```bash
-navycut version
-0.0.3
+navycut --version
+0.0.5
 ```
 
 ### Introduction to Navycut
@@ -338,7 +338,7 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 </a>
 <br>
 <a href="https://paytm.me/vA-DF7O">
-    <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Paytm-Logo-With-White-Border-PNG-image.png" height="50px" width="100px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/1200px-Paytm_Logo_%28standalone%29.svg.png" height="50px" width="100px">
 </a>
 
 ### Contributors

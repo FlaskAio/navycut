@@ -1,6 +1,13 @@
 import click as c
 from ._exec_cli import _create_boiler_project
-from navycut import get_version
+from navycut import __version__
+
+def print_version(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+    c.echo(__version__)
+    ctx.exit()
+
 
 @c.group()
 def _execute_from_command_line():
