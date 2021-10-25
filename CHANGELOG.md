@@ -11,5 +11,10 @@
 - Added flask-mailman for the default mail service.
 - Added flask-express for expressJs like service.
 
-#### Bug fixes
+#### Bug Fixes
 - Added flask-express 0.1.2 to fix the issue releated to the admin panel.
+
+## [0.0.5]
+
+#### Bug Fixes
+- Fixed static_server not working issue.
