@@ -57,7 +57,7 @@ class Navycut(FlaskExpress):
         self.settings = settings
 
         self._add_config(settings)
-        self._configure_core_features()
+        self._configure_core_features(settings)
         self._perform_sister_registration(settings)
         self._perform_middleware_registration(settings)
 
@@ -144,7 +144,7 @@ class Navycut(FlaskExpress):
             self.config[key] = value
     
 
-    def _configure_core_features(self):
+    def _configure_core_features(self, settings):
         """
         add all the core features of navycut app here.
         """

@@ -3,7 +3,7 @@ from os import environ
 import typing as t
 from . import global_settings
 from ..errors.server import SettingsFileNotFoundError, ImproperlyConfigured
-from ..errors.misc import DataTypeMismatchError, NCBaseError
+from ..errors.misc import DataTypeMismatchError
 
 __all__ = ("get_settings_module", "settings")
 
