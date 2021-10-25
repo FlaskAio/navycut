@@ -16,5 +16,9 @@
 
 ## [0.0.5]
 
+#### Changed
+- Changed the check version system. Now anybody can get the `Navycut` version by simply executing this command: `navycut -V` or `navycut --version`
+
 #### Bug Fixes
 - Fixed static_server not working issue.
+- Fixed paytm logo not found issue.

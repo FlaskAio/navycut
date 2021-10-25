@@ -5,13 +5,13 @@ Introduction :
 
 
 """
-version_info = (0, 0, 4)
+version_info = (0, 0, 5)
 
 
 __version__ = ".".join([str(v) for v in version_info])
 __author__ = "Aniket Sarkar"
 
-def get_version(ctx=None, param=None):
+def get_version():
     """
     returns the default version.
     """    

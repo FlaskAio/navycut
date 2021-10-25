@@ -30,8 +30,8 @@ python3 setup.py install
 
 ### check for installation
 ```bash
-navycut version
-0.0.3
+navycut --version
+0.0.5
 ```
 
 ### Introduction to Navycut
