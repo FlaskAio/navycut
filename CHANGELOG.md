@@ -5,6 +5,7 @@
 - Removed unwanted and old dependencies.
 - UI change at the default index page.
 - Added the new Organization(FlaskAio) name.
+- Removed GPL and added BSD Based license.
 
 #### Added
 - Added flask-mailman for the default mail service.
