@@ -1,6 +1,6 @@
 click==8.0.3
 ghp-import==2.0.2
-importlib-metadata==4.8.1
+importlib-metadata==4.8.2
 Jinja2==3.0.3
 Markdown==3.3.4
 MarkupSafe==2.0.1
