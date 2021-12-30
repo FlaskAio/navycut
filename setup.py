@@ -39,7 +39,7 @@ setup(
         "nc-console>=0.0.4",
         "python-dotenv>=0.17.1",
         "SQLAlchemy-JSONField>=1.0.0",
-        "WTForms<3.0.1",
+        "WTForms<3.0.2",
         "WTForms-SQLAlchemy>=0.2",
         "pillow>=8.3.0",
         "Flask-Express>=0.1.1" # flask-express will maintain the default flask package and it's version.
