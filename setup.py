@@ -1,11 +1,13 @@
-from navycut import __version__ as version
-from navycut import __author__ as author
-
 from setuptools import setup,find_packages
 
-import os as os
+version_info = (0, 1, 0)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+
+version = ".".join([str(v) for v in version_info])
+author = "Aniket Sarkar"
+
+
+# basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 with open("README.md", "r") as f:
@@ -28,7 +30,7 @@ setup(
     zip_safe=False,
     platforms="any",
     install_requires=[ 
-        "Flask-Admin>=1.5.8",
+        "Flask-Admin>=1.6.0",
         "Flask-Bootstrap>=3.3.7.1",
         "Flask-Cors>=3.0.10",
         "flask-mailman>=0.3.0",
@@ -41,8 +43,8 @@ setup(
         "SQLAlchemy-JSONField>=1.0.0",
         "WTForms<3.0.2",
         "WTForms-SQLAlchemy>=0.2",
-        "pillow>=8.3.0",
-        "Flask-Express>=0.1.1" # flask-express will maintain the default flask package and it's version.
+        "pillow>=8.2.0",
+        "Flask-Express>=0.1.4" # flask-express will maintain the default flask package and it's version.
     ],
     extras_require={},
     python_requires=">=3.6,<4",

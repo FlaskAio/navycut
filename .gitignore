@@ -1,6 +1,6 @@
 #VS Code files:
 .vscode/settings.json 
-examples/*
+# examples/*
 
 # extra files
 

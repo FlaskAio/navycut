@@ -399,7 +399,7 @@ class AppSister:
 
     :param url_pattern:
     :type t.Optional[t.Tuple[t.List[t.Union["urls.url", "urls.path", "urls.include"]]]]:
-        add the default url_patterns for the app.
+        add the default urlpatterns for the app.
 
     :param import_name:
     :type t.Optional[str]:
@@ -439,18 +439,16 @@ class AppSister:
     :for example::
 
         from navycut.core import AppSister
-        from .urls import url_patterns
+        from .urls import urlpatterns
 
         class CustomSister(AppSister):
             import_name = __name__
             name = "custom"
-            url_pattern = (url_patterns, )
+            url_pattern = (urlpatterns, )
             ...
     """
 
     import_app_feature:bool = False
-
-    url_pattern:t.Optional[t.Tuple[t.List[t.Union["urls.url", "urls.path", "urls.include"]]]] = None
 
     import_name: t.Optional[str] = None
 
@@ -461,13 +459,10 @@ class AppSister:
     static_folder: t.Optional[str] = None
 
     static_url_path: t.Optional[str] = None
-
-    url_prefix: t.Optional[str] = None
     
     extra_ins:t.Optional[t.Tuple[object]] = None
 
-    seize_power:bool = False
-    
+
     def init(self, **kwargs) -> None:
         """
         start initializing the sister app features.
@@ -498,9 +493,6 @@ class AppSister:
         if isinstance(self.import_app_feature, tuple):
             self.import_app_feature = self.import_app_feature[0]
 
-        if isinstance(self.seize_power, tuple):
-            self.seize_power = self.seize_power[0]
-
         if self.template_folder is not None:
             kwargs.update(dict(template_folder=self.template_folder,))
         else:
@@ -512,9 +504,6 @@ class AppSister:
         if self.static_url_path is not None:
             kwargs.update(dict(static_url_path=self.static_url_path,))
 
-        if self.url_prefix is not None:
-            kwargs.update(dict(url_prefix=self.url_prefix,))
-
 
         if self.extra_ins is not None:
             for ins in self.extra_ins:
@@ -525,28 +514,28 @@ class AppSister:
             self.import_app_features()
 
         # The default blueprint object for each sister app
-        self.power:t.Optional["Blueprint"] = self._create_power_object(**kwargs)
+        # self.power:t.Optional["Blueprint"] = self._create_power_object(**kwargs)
 
 
-    def _create_power_object(self, **kwargs) -> t.Optional["Blueprint"]:
-        if self.seize_power is not True:
-            power = Blueprint(self.name, self.import_name, **kwargs)
+    # def _create_power_object(self, **kwargs) -> t.Optional["Blueprint"]:
+    #     if self.seize_power is not True:
+    #         power = Blueprint(self.name, self.import_name, **kwargs)
 
-            if self.url_pattern is not None:
-                for up in self.url_pattern:
-                    self.add_url_pattern(power, up)
+    #         if self.url_pattern is not None:
+    #             for up in self.url_pattern:
+    #                 self.add_url_pattern(power, up)
 
-            return power
+    #         return power
         
-        else:
-            return None
+        # else:
+        #     return None
 
-    def get_sister_power(self) -> t.Optional[Blueprint]:
-        """
-        return the default blueprint 
-        object(power) for the selected sister app.
-        """
-        return self.power     
+    # def get_sister_power(self) -> t.Optional[Blueprint]:
+    #     """
+    #     return the default blueprint 
+    #     object(power) for the selected sister app.
+    #     """
+    #     return self.power     
 
     def add_url_pattern(self, power:t.Type["Blueprint"], pattern_list:list) -> None:
         """
@@ -567,7 +556,7 @@ class AppSister:
                 power.add_url_rule(rule=url_path.url_rule, endpoint= url_path.name, view_func=view_func, methods=methods)
             
             elif repr(url_path).startswith("include"):
-                self.add_url_pattern(power, url_path.url_patterns)
+                self.add_url_pattern(power, url_path.urlpatterns)
             
             else:
                 pass

@@ -132,7 +132,7 @@ class path:
         from navycut.urls import path
         from . import views
 
-        url_patterns = [path("/index", views.IndexView, 'index')]
+        urlpatterns = [path("/index", views.IndexView, 'index')]
     """
     def __init__(self, url_rule:str, views, name=None) -> None:
         self.url_rule:str = "/"+url_rule if not url_rule.startswith('/') else url_rule
@@ -169,7 +169,7 @@ class url:
         from navycut.urls import url
         from . import views
 
-        url_patterns = [path("/index", views.indexview, 'index')]
+        urlpatterns = [path("/index", views.indexview, 'index')]
     """
     def __init__(self, url_rule:str, views, name=None) -> None:
         self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
@@ -202,7 +202,7 @@ class include:
 
         from navycut.urls import include
 
-        url_patterns = [include("/blogs", "blogs.urls")]
+        urlpatterns = [include("/blogs", "blogs.urls")]
     """
     def __init__(self, 
                 url_rule:str,
@@ -211,9 +211,9 @@ class include:
         self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
         self.url_rule = self.url_rule[:-1] if self.url_rule.endswith("/") else self.url_rule
         self.url_module = import_module(url_module_name) if isinstance(url_module_name, str) else url_module_name
-        self.url_patterns = getattr(self.url_module, "url_patterns")  #self.url_module.url_patterns
+        self.urlpatterns = getattr(self.url_module, "urlpatterns")  #self.url_module.urlpatterns
 
-        for url_pattern in self.url_patterns:
+        for url_pattern in self.urlpatterns:
 
             url_pattern.url_rule = url_rule+url_pattern.url_rule
             url_pattern.name = url_rule+url_pattern.name

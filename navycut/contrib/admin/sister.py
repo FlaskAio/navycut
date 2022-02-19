@@ -1,6 +1,6 @@
 from navycut.core.app_config import AppSister
 from . import admin
-from .urls import url_patterns
+from .urls import urlpatterns
 import typing as t
 
 if t.TYPE_CHECKING:
@@ -8,5 +8,5 @@ if t.TYPE_CHECKING:
 
 class AdminSister(AppSister):
     name = "admin_auth_sister"
-    url_pattern:"ncUrlPattern" = (url_patterns, )
+    url_pattern:"ncUrlPattern" = (urlpatterns, )
     extra_ins = (admin,) # extra ins shoud have inbuild "init_app" method.

@@ -5,7 +5,7 @@ from pathlib import Path
 if t.TYPE_CHECKING:
     from _typeshed import StrPath, BytesPath
 
-def abspath(*wargs):
+def abspath(*wargs) -> "Path":
     """
     returns the absolute PosixPath of then given file object.
 
@@ -18,7 +18,7 @@ def abspath(*wargs):
     """
     return Path(os.path.abspath(*wargs))
 
-def realpath(*wargs):
+def realpath(*wargs) -> "Path":
     """
     returns the real PosixPath of then given file object.
 
