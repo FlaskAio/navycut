@@ -1,1 +1,0 @@
-from check2.wsgi import application as app

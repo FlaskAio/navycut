@@ -1,1 +1,0 @@
-__projectname__ = 'dip'

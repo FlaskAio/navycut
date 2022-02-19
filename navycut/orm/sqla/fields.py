@@ -60,7 +60,7 @@ class Fields:
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :param wdiget:
             Declare the text widget are box for admin section.
@@ -109,13 +109,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -157,13 +157,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -204,13 +204,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -251,13 +251,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -298,13 +298,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -343,7 +343,7 @@ class Fields:
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -378,7 +378,7 @@ class Fields:
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -394,32 +394,23 @@ class Fields:
             )
 
     @classmethod
-    def Image(cls, required:bool=True,
-            help_text:str = None
-            ) -> Column:
+    def Image(cls, help_text:str=None) -> Column:
 
         """
-        The Charecter fields for sqlalchemy,
-        if No maximum_length, it will seted to max_val.
-        
-        
-        :param required:
-            If False, the field is allowed to be blank. Default is False.
-
+        The Image field for sqlalchemy,
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
             from navycut.orm.sqla import sql
-            name = sql.fields.Image(required=True, help_text="insert the image here")
+            name = sql.fields.Image(help_text="insert the image here")
         """
 
         return Column(
                 ImageType(255),
-                nullable= True if not required else False,
                 help_text=help_text
         )
 
@@ -441,7 +432,7 @@ class Fields:
 
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -474,7 +465,7 @@ class Fields:
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -511,13 +502,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -555,13 +546,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -599,13 +590,13 @@ class Fields:
         :param choices:
             A sequence consisting itself of iterables of exactly two items 
             (e.g. [(A, B), (A, B) ...]) to use as choices for this field. 
-            If choices are given, they’re enforced by model validation and 
+            If choices are given, they're enforced by model validation and 
             the default form widget will be a select box with these choices 
             instead of the standard text field.
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -644,7 +635,7 @@ class Fields:
         
         :param help_text:
             Extra “help” text to be displayed with the form widget. 
-            It’s useful for documentation even if your field isn’t used on a form.
+            It's useful for documentation even if your field isn't used on a form.
 
         :for example::
 
@@ -670,69 +661,13 @@ class Fields:
         )
 
     @classmethod
-    def OneToOne(cls, 
-                model:str, 
-                backref:str,
-                uselist:bool = False,
-                ) -> Column:
-
+    def Relationship(
+        cls,
+        *args,
+        **kwargs
+        ) -> "Column":
         """
-        The OneToOne relation for navycut orm.
-        
-        :param model: 
-            Mention the name of the Model class here in str format only.
-
-        :param backref: 
-            Define the back reference for the relation.
-            If no value, then it will default to provided model's name
-
-        :for example::
-
-            from navycut.orm.sqla import sql
-
-            class Blog(sql.Model):
-                id = sql.fields.Integer(pk=True, unique=True)
-                heading = sql.fields.Char(required=True, unique=True)
-                author = sql.fields.OneToOne("Author")
-            
-            class Author(sql.Model):
-                id = sql.fields.Integer(pk=True, unique=True)
-                name = sql.fields.Char(required=True, unique=True)
-                blog_id = sql.fields.ForiegnKey("Blog", unique=True)
+        ### the default `relationship` callable object of SQLAlchemy module.
+        It takes all the arguments as same as the `relationship` callable object.
         """
-        _table_name:str = camel_to_snake_case(model)
-        
-        return relationship(model, backref=backref_func(backref, uselist=False))
-
-    @classmethod
-    def ManyToOne(cls, 
-                model:str, 
-                backref:str,
-                uselist:bool = True,
-                ) -> Column:
-        """
-        The OneToMany relation for navycut orm.
-        
-        :param model: 
-            Mention the name of the Model class here in str format only.
-
-        :param backref: 
-            Define the back reference for the relation.
-            If no value, then it will default to provided model's name
-
-        :for example::
-
-            from navycut.orm.sqla import sql
-
-            class Blog(sql.Model):
-                id = sql.fields.Integer(pk=True, unique=True)
-                heading = sql.fields.Char(required=True, unique=True)
-                author = sql.fields.OneToMany("Author")
-            
-            class Author(sql.Model):
-                id = sql.fields.Integer(pk=True, unique=True)
-                name = sql.fields.Char(required=True, unique=True)
-                blog_id = sql.fields.ForiegnKey("Blog")
-        """
-
-        return relationship(model, uselist=uselist, backref=backref)
+        return relationship(*args, **kwargs)

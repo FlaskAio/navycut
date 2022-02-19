@@ -9,12 +9,16 @@ class ImageType(TypeDecorator):
     cache_ok = True
     
     def process_bind_param(self, value, dialect):
-        try: return value
-        except: return None
+        try: 
+            return value
+        except: 
+            return None
 
     def process_result_value(self, value, dialect):
-        try: return f"/static_upload/images/{value}/"
-        except: return None
+        try: 
+            return f"/static_upload/images/{value}/"
+        except: 
+            return None
 
     def copy(self, **kw):
         return ImageType(self.impl.length)

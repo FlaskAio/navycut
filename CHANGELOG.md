@@ -22,3 +22,9 @@
 #### Bug Fixes
 - Fixed static_server not working issue.
 - Fixed paytm logo not found issue.
+
+## [0.1.0] [Upcomming]
+- Several bug fix.
+- Removed the support of the relation field like Django.
+- Added the default SQLAlchemy based relation system.
+- Removed the `required` argument from the `Image` field.

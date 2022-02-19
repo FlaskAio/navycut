@@ -69,4 +69,4 @@ class NavycutAdmin(Admin):
         
         return True
 
-admin:t.Type["NavycutAdmin"] = NavycutAdmin()
+admin:"NavycutAdmin" = NavycutAdmin()

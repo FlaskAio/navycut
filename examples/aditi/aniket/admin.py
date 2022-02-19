@@ -2,13 +2,13 @@ from navycut.contrib import admin
 from .models import *
 from navycut.contrib.admin.site.views import NCAdminModelView
 
-# admin.register_model(Blog)
-admin.register_model(Author)
-admin.register_model(ExtraUser)
+admin.register_model(Blog)
+# admin.register_model(Author)
+# admin.register_model(ExtraUser)
 
 class BlogAdminView(NCAdminModelView):
     pass
-    excluded_fields = ["name", "body"]
+    # excluded_fi/seslds = ["name", "body"]
 
 
-admin.register_model(Blog, BlogAdminView)
+# admin.register_model(Blog, BlogAdminView)
