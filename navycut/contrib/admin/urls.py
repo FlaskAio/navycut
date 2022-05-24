@@ -7,6 +7,6 @@ if t.TYPE_CHECKING:
 
 urlpatterns:"ncUrlPatterns" = [
 
-    url("/admin/login/", views.admin_login, "admin_login"),
-    url("/admin/logout/", views.admin_logout, "admin_logout")
+    url("/login/", views.admin_login, "admin_login"),
+    url("/logout/", views.admin_logout, "admin_logout")
 ]

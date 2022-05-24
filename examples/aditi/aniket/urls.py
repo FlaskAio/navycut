@@ -1,7 +1,7 @@
 from navycut.urls import path, url, include
 from . import views
 
-url_patterns = [
+urlpatterns = [
     # path("" , views.IndexView, "index"),
     url("", views.homepage, "index"),
     url("/another", views.another_page, "another"),

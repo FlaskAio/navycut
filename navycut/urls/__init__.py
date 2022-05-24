@@ -135,8 +135,7 @@ class path:
         urlpatterns = [path("/index", views.IndexView, 'index')]
     """
     def __init__(self, url_rule:str, views, name=None) -> None:
-        self.url_rule:str = "/"+url_rule if not url_rule.startswith('/') else url_rule
-        self.url_rule = self.url_rule+"/" if not self.url_rule.endswith("/") else self.url_rule
+        self.url_rule = f"/{url_rule.strip('/')}/"
         self.views = views
         self.name:str = name or self.views.__name__
     
@@ -172,8 +171,7 @@ class url:
         urlpatterns = [path("/index", views.indexview, 'index')]
     """
     def __init__(self, url_rule:str, views, name=None) -> None:
-        self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
-        self.url_rule = self.url_rule+"/" if not self.url_rule.endswith("/") else self.url_rule
+        self.url_rule = f"/{url_rule.strip('/')}/"
         self.views = views
         self.name = name or self.views.__name__
 
@@ -208,8 +206,7 @@ class include:
                 url_rule:str,
                 url_module_name:t.Union[str, types.ModuleType]) -> None:
 
-        self.url_rule = "/"+url_rule if not url_rule.startswith('/') else url_rule
-        self.url_rule = self.url_rule[:-1] if self.url_rule.endswith("/") else self.url_rule
+        self.url_rule = f"/{url_rule.strip('/')}"
         self.url_module = import_module(url_module_name) if isinstance(url_module_name, str) else url_module_name
         self.urlpatterns = getattr(self.url_module, "urlpatterns")  #self.url_module.urlpatterns
 
