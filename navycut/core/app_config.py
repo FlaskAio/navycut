@@ -462,6 +462,12 @@ class AppSister:
     
     extra_ins:t.Optional[t.Tuple[object]] = None
 
+    url_prefix = None
+
+    seize_power = None
+
+    url_pattern = None
+
 
     def init(self, **kwargs) -> None:
         """
@@ -514,28 +520,28 @@ class AppSister:
             self.import_app_features()
 
         # The default blueprint object for each sister app
-        # self.power:t.Optional["Blueprint"] = self._create_power_object(**kwargs)
+        self.power:t.Optional["Blueprint"] = self._create_power_object(**kwargs)
 
 
-    # def _create_power_object(self, **kwargs) -> t.Optional["Blueprint"]:
-    #     if self.seize_power is not True:
-    #         power = Blueprint(self.name, self.import_name, **kwargs)
+    def _create_power_object(self, **kwargs) -> t.Optional["Blueprint"]:
+        if self.seize_power is not True:
+            power = Blueprint(self.name, self.import_name, **kwargs)
 
-    #         if self.url_pattern is not None:
-    #             for up in self.url_pattern:
-    #                 self.add_url_pattern(power, up)
+            if self.url_pattern is not None:
+                for up in self.url_pattern:
+                    self.add_url_pattern(power, up)
 
-    #         return power
+            return power
         
-        # else:
-        #     return None
+        else:
+            return None
 
-    # def get_sister_power(self) -> t.Optional[Blueprint]:
-    #     """
-    #     return the default blueprint 
-    #     object(power) for the selected sister app.
-    #     """
-    #     return self.power     
+    def get_sister_power(self) -> t.Optional[Blueprint]:
+        """
+        return the default blueprint 
+        object(power) for the selected sister app.
+        """
+        return self.power     
 
     def add_url_pattern(self, power:t.Type["Blueprint"], pattern_list:list) -> None:
         """

@@ -31,3 +31,4 @@
 - Removed the support of the relation field like Django.
 - Added the default SQLAlchemy based relation system.
 - Removed the `required` argument from the `Image` field.
+- Version update fix of `werkzeug` & `flask-wtf`

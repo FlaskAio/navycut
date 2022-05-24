@@ -24,6 +24,6 @@ class Author(sql.Model):
 
 class ExtraUser(sql.Model):
     # id = sql.fields.Integer(pk=True, unique=True)
-    user = sql.fields.OneToOne("User", backref="extra_user")
+    user = sql.fields.Relationship("User", backref="extra_user")
     user_id = sql.fields.ForeignKey("User")
     father_name = sql.fields.Char(required=True, unique=True)
