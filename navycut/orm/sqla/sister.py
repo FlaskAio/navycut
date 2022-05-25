@@ -8,5 +8,5 @@ migrate.db = sql
 
 class SqlaSister(AppSister):
     seize_power = True
-    name="sqla_orm_service"
+    name="sqla"
     extra_ins = (sql, migrate)

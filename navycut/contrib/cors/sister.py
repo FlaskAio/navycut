@@ -4,5 +4,5 @@ from . import cors
 
 class CorsSister(AppSister):
     seize_power = True
-    name = "cors_custom_sister"
+    name = "cors"
     extra_ins = (cors, )

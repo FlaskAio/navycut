@@ -5,7 +5,6 @@ from flask_bootstrap import Bootstrap
 from importlib import import_module
 from werkzeug.routing import RequestRedirect
 from werkzeug.exceptions import MethodNotAllowed, NotFound
-from werkzeug.serving import run_simple
 
 from ._serving import run_simple_wsgi
 from ..http.request import Request
@@ -47,6 +46,8 @@ class Navycut(FlaskExpress):
                     template_folder=_basedir / 'templates',
                     static_folder=str(_basedir / "static"),
                     static_url_path="/static")
+
+        self.__registeredSisterName:t.List['str'] = []
 
     def _attach_settings_modules(self):
         """
@@ -242,14 +243,23 @@ class Navycut(FlaskExpress):
         ins.init_app(self)
         return True
 
-    def _import_sister(self, sister_name:str):
+    def __is_sister_name_registered(self, str_sister_name:str) -> bool:
         """
-        import the app by app_name.
+        This function will return True if the provided 
+        sister is registered. Else return False.
 
-        :param app_name:
-            string type full name fo the app.
-        """ 
-        try: 
+        :param `str_sister_name`: The name of the app sister.
+        """
+        
+        return True if str_sister_name in self.__registeredSisterName else False
+
+    def _get_proper_sister_name(self, sister_name:str) -> t.Optional[str]:
+        """
+        This function will return the full name of the app sister.
+
+        :param `sister_name`: The name of the app sister.
+        """
+        try:
             if not sister_name.endswith("Sister"):
                 _pure_sister_name = sister_name.rsplit(".", 1)
 
@@ -259,18 +269,31 @@ class Navycut(FlaskExpress):
                     _pure_sister_name = _pure_sister_name[1]
 
                 sister_name = f"{sister_name}.sister.{snake_to_camel_case(_pure_sister_name)}Sister"
+            return sister_name
+        except:
+            return None
+
+    def _import_sister(self, sister_name:str) -> "AppSister":
+        """
+        import the app by app_name.
+
+        :param app_name:
+            string type full name fo the app.
+        """ 
+        try: 
+            sister_name = self._get_proper_sister_name(sister_name)
             sister_location, sister_class_name = sister_name.rsplit(".", 1)
             sister_file = import_module(sister_location)
             real_sister_class = getattr(sister_file, sister_class_name)
-            sister = real_sister_class()
+            sister:"AppSister" = real_sister_class()
 
             if getattr(sister, "import_name", None) is None:
                 sister.import_name = sister_file.__name__
 
             return sister
 
-        except AttributeError: 
-            raise AttributeError(f"{sister_name} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {sister_name} ?")
+        except Exception as e: 
+            raise AttributeError(f"{sister_name} not installed at {self.config.get('BASE_DIR')}. Dobule check the app name. is it really {sister_name} ?") from e
 
     def _registerSister(self, _sisters:list):
         """
@@ -282,11 +305,12 @@ class Navycut(FlaskExpress):
         ## here i need to add the urls too.
         for str_sister in _sisters: 
             sister:t.Type["AppSister"] = self._import_sister(str_sister)  
+            self.__registeredSisterName.append(sister.name)
             sister.init() #init the core features of the sister app.
             sister_power:t.Type["Blueprint"] = sister.get_sister_power()
             if sister_power is not None:
                 self.register_blueprint(sister_power, url_prefix=sister.url_prefix)
-
+        
 
     def _import_middleware(self, mw_name:str) -> t.Type["MiddlewareMixin"]:
         """
@@ -374,7 +398,8 @@ class Navycut(FlaskExpress):
                     )
             
             elif repr(url_path).startswith("include"):
-                self._add_url_pattern(url_path.urlpatterns)
+                if self.__is_sister_name_registered(url_path.sister_name) is True:
+                    self._add_url_pattern(url_path.urlpatterns)
             
             else:
                 pass
@@ -416,7 +441,7 @@ class Navycut(FlaskExpress):
 
         options.setdefault("threaded", True)
 
-        run_simple(
+        run_simple_wsgi(
             host, 
             port, 
             self, 
@@ -519,24 +544,6 @@ class AppSister:
 
         if self.name is None:
             self.name = "_".join(self.import_name.split("."))
-
-        # if isinstance(self.import_name, tuple):
-        #     self.import_name = self.import_name[0]
-
-        # if isinstance(self.template_folder, tuple):
-        #     self.template_folder = self.template_folder[0]
-
-        # if isinstance(self.static_folder, tuple):
-        #     self.static_folder = self.static_folder[0]
-
-        # if isinstance(self.static_url_path, tuple):
-        #     self.static_url_path = self.static_url_path[0]
-
-        # if isinstance(self.url_prefix, tuple):
-        #     self.url_prefix = self.url_prefix[0]
-
-        # if isinstance(self.import_app_feature, tuple):
-        #     self.import_app_feature = self.import_app_feature[0]
 
         if self.template_folder is not None:
             kwargs.update(dict(template_folder=self.template_folder,))

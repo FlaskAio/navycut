@@ -3,5 +3,5 @@ from . import login_manager
 
 class AuthSister(AppSister):
     seize_power = True
-    name = "auth_service_sister"
+    name = "auth"
     extra_ins = (login_manager, )

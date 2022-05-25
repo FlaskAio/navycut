@@ -206,14 +206,15 @@ class include:
                 url_rule:str,
                 url_module_name:t.Union[str, types.ModuleType]) -> None:
 
-        self.url_rule = f"/{url_rule.strip('/')}"
-        self.url_module = import_module(url_module_name) if isinstance(url_module_name, str) else url_module_name
+        self.url_rule:str = f"/{url_rule.strip('/')}/"
+        self.url_module_name:str = url_module_name
+        self.url_module:t.ModuleType = import_module(self.url_module_name) if isinstance(self.url_module_name, str) else self.url_module_name
+        self.sister_name:str = self.url_module.__file__.split("/")[-2]
         self.urlpatterns = getattr(self.url_module, "urlpatterns")  #self.url_module.urlpatterns
 
         for url_pattern in self.urlpatterns:
-
-            url_pattern.url_rule = url_rule+url_pattern.url_rule
-            url_pattern.name = url_rule+url_pattern.name
+            url_pattern.url_rule = f'{self.url_rule}{url_pattern.url_rule.strip("/")}/'
+            url_pattern.name = self.url_rule+url_pattern.name
 
     def __repr__(self) -> str:
         """

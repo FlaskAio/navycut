@@ -8,7 +8,6 @@ from argparse import Namespace
 class Config(AlembicConfig):
     def get_template_directory(self):
         template_dir = path.join(path.abspath(path.dirname(__file__)), "templates")
-        print ("template_dir:", template_dir)
         return template_dir
 
 class Migrate(_Migrate):

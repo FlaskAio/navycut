@@ -144,7 +144,7 @@ def run_simple_wsgi(
         srv.log_startup()
 
     if use_reloader:
-        from ._reloader import run_with_reloader
+        from werkzeug._reloader import run_with_reloader
 
         run_with_reloader(
             srv.serve_forever,
