@@ -42,7 +42,7 @@ Navycut promises to deliver the fullstack service using the following features:
     <li>Customished ORM using SQLAlchemy.</li>
         <ul>
             <li>It's comes with all the sqlalchemy features with some extra features.</li>
-            <li>It's have the own Image, Json, Text, Integer, String and many others fileds like Django ORM has.</li>
+            <li>It's have the own Image, Json, Text, Integer, String and many other fields like Django ORM has.</li>
             <li>Some fileds have the default choices system to add value by providing a tuple data like Django ORM.</li>
         </ul>
     <li>Inbuild Admin system using flask-admin. So all the flask-admin features are applicable here.</li>
@@ -85,7 +85,7 @@ blog
 
 ```bash
 python manage.py runserver
-or 
+or
 python manage.py runserver 0.0.0.0:8000 # to start a server on different port
 ```
 This command will start the development server on localhost:8888 or the provided address.
@@ -359,7 +359,7 @@ admin.register_model(Author, AuthorAdminModelView)  # Use the customized options
 * Fork and clone this repository
 * Create a virtual environment using python virtualenv module on the project root directory.
 * Activate the virtual environment and install the package dependencies mentioned on `requirements.txt` file.
-* Now run this command : `python setup.py install`. This command will install `navycut` on the virtual environment. 
+* Now run this command : `python setup.py install`. This command will install `navycut` on the virtual environment.
 * Make any changes on your local code.
 * Run again the command : `python setup.py install`.
 * Now create a separate project inside the example folder and start testing for your code changes.
